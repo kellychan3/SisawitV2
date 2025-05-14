@@ -1,6 +1,6 @@
 <?php
 
-class Produktivitas_model extends CI_Model
+class Log_panen_model extends CI_Model
 {
 
     public $table = 'monitoring';
@@ -37,23 +37,5 @@ class Produktivitas_model extends CI_Model
             return $query->result_array()[0];
         }
         return null;
-    }
-
-    public function update($id, $data)
-    {
-        $this->db->where($this->id, $id);
-        $this->db->update($this->table, $data);
-        return $this->fetch_single($id);
-    }
-
-    public function delete($id)
-    {
-        $this->db->where($this->id, $id);
-        $this->db->delete($this->table);
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

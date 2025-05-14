@@ -8,7 +8,7 @@
                     <ol class="breadcrumb mb-0 p-0">
                         <li class="breadcrumb-item"><a href="<?= base_url('Dashboard'); ?>"><i class="bx bx-home-alt"></i></a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Produktivitas</li>
+                        <li class="breadcrumb-item active" aria-current="page">Log Panen</li>
                     </ol>
                 </nav>
             </div>
