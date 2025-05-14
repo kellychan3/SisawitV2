@@ -22,7 +22,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                    <img src="<?= base_url(); ?>assets/images/avatars/avatar-1.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                                    <img src="<?= base_url(); ?>assets/images/avatars/default.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                                     <div class="mt-3">
                                         <h4><?= $user['name']; ?></h4>
                                         <p class="text-secondary mb-1"><?= $user['email'] ?></p>
@@ -37,7 +37,7 @@
                                 <div class="card-body">
                                     <div class="row mb-3">
                                         <div class="mt-0 mb-2 ">
-                                            <h4 style="text-align: center;">Change Password</h4>
+                                            <h4 style="text-align: center;">Ubah Password</h4>
                                         </div>
                                         <div class="col-sm-3">
                                             <h6 class="mt-2">Password</h6>
@@ -49,7 +49,7 @@
                                     <div class="row">
                                         <div class="col-sm-3"></div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4" value="Change Password" />
+                                            <input type="submit" class="btn btn-primary px-4" value="Ubah Password" />
                                         </div>
                                     </div>
                                 </div>
