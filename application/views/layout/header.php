@@ -70,11 +70,11 @@
 					<ul>
 						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-sun"></i>Log Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Prediksi Hasil Panen</a>
+						<li> <a href="<?= base_url('Prediksi'); ?>"><i class="bx bx-aperture"></i>Prediksi Hasil Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
+						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
 						</li>
-						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Log Kesehatan Pohon</a>
+						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-aperture"></i>Log Kesehatan Pohon</a>
 						</li>
 					</ul>
 				</li>
@@ -83,7 +83,7 @@
 					<ul>
 						<li> <a href="<?= base_url('User'); ?>"><i class="bx bx-coin-stack"></i>Daftar Pengguna</a>
 						</li>
-						<li> <a href="<?= base_url('SystemLog'); ?>"><i class="bx bx-world"></i>Log Aktivitas Pengguna</a>
+						<li> <a href="<?= base_url('Log_pengguna'); ?>"><i class="bx bx-world"></i>Log Aktivitas Pengguna</a>
 						</li>
 					</ul>
 				</li>
