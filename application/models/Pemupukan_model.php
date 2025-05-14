@@ -1,11 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kebun_model extends CI_Model
+class Pemupukan_model extends CI_Model
 {
-    public $table = 'kebun';
-    public $id = 'kebun.id_kebun';
-
+    public $table = 'asset';
+    public $id = 'aset.id';
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function get()
     {
         $this->db->from($this->table);
@@ -19,10 +22,5 @@ class Kebun_model extends CI_Model
         $query = $this->db->get();
         return $query->row_array();
     }
-    public function insert($data)
-    {
-        $this->db->insert($this->table, $data);
-        return $this->db->insert_id();
-    }
-   
+
 }

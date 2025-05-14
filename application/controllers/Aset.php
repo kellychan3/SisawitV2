@@ -1,38 +1,38 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Asset extends CI_Controller
+class Aset extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
         {
             is_logged_in();
-            $this->load->model("Asset_model");
+            $this->load->model("Aset_model");
         }
     }
 
     public function index()
 	{
-        $data['asset'] = $this->Asset_model->get();
+        $data['asset'] = $this->Aset_model->get();
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		$this->load->view('layout/header', $data);
-		$this->load->view('asset/asset', $data);
+		$this->load->view('aset/aset', $data);
 		$this->load->view('layout/footer', $data);
 	}
 
-    public function addAsset()
+    public function addAset()
     {
         $data = [
             'namaaset' => $this->input->post('namaaset'),
             'lokasiaset' => $this->input->post('lokasiaset'),
             'jumlahaset' => $this->input->post('jumlahaset'),
         ];
-        $this->Asset_model->insert($data);
-        redirect('Asset');
+        $this->Aset_model->insert($data);
+        redirect('Aset');
     }
 
-    public function editAsset($id)
+    public function editAset($id)
     {
         $data['user'] = $this->db->get_where('user', ['email' =>$this->session->userdata('email')])->row_array();
         $data = [
@@ -41,14 +41,14 @@ class Asset extends CI_Controller
             'jumlahaset' => $this->input->post('jumlahaset'),
         ];
         $id = $this->input->post('id');
-        $this->Asset_model->update(['id' => $id], $data);
-        redirect('Asset');
+        $this->Aset_model->update(['id' => $id], $data);
+        redirect('Aset');
     }
 
-    public function deleteAsset($id)
+    public function deleteAset($id)
     {
-        $this->Asset_model->delete($id);
+        $this->Aset_model->delete($id);
         $error = $this->db->error();
-        redirect('Asset');
+        redirect('Aset');
     }
 }
