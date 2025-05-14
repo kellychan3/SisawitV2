@@ -68,7 +68,7 @@
 				<li class="menu-label mt-0">Monitoring</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Produktivitas'); ?>"><i class="bx bx-sun"></i>Log Panen</a>
+						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-sun"></i>Log Panen</a>
 						</li>
 						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Prediksi Hasil Panen</a>
 						</li>
