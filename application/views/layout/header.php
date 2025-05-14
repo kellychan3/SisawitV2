@@ -39,59 +39,64 @@
 					<img src="<?= base_url(); ?>assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
-					<h4 class="logo-text">Sisawit</h4>
+					<h4 class="logo-text">Sisawit V2</h4>
 				</div>
 			</div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
-				<!-- <li>
-					<a href="<?= base_url('Dashboard'); ?>">
-						<div class="parent-icon"><i class='bx bx-cookie'></i>
-						</div>
-						<div class="menu-title">Dashboard</div>
-					</a>
-				</li> -->
 				<li>
 					<ul>
 						<li> <a href="<?= base_url('Dashboard'); ?>"><i class="bx bx-world"></i>Dashboard</a>
 						</li>
 					</ul>
 				</li>
-				<li class="menu-label mt-0">Data</li>
+				<li class="menu-label mt-0">Data Perkebunan</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Asset'); ?>"><i class="bx bx-trim"></i>Aset Barang</a>
+						<li> <a href="<?= base_url('Asset'); ?>"><i class="bx bx-trim"></i>Data Aset Barang</a>
 						</li>
-						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Panen</a>
+						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Panen</a>
+						</li>
+						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Penanaman</a>
+						</li>
+						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Pemupukan</a>
+						</li>
+						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Kebun</a>
 						</li>
 					</ul>
 				</li>
 				<li class="menu-label mt-0">Monitoring</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Produktivitas'); ?>"><i class="bx bx-sun"></i>Produktivitas</a>
+						<li> <a href="<?= base_url('Produktivitas'); ?>"><i class="bx bx-sun"></i>Log Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Forecast</a>
+						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Prediksi Hasil Panen</a>
 						</li>
-					</ul>
-				</li>
-				<li class="menu-label mt-0">Master Data</li>
-				<li>
-					<ul>
-						<li> <a href="<?= base_url('Sawit'); ?>"><i class="bx bx-coin-stack"></i>Blok Sawit</a>
+						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
 						</li>
-						<li> <a href="<?= base_url('SystemLog'); ?>"><i class="bx bx-world"></i>System Log</a>
-						</li>
-						<li> <a href="<?= base_url('User'); ?>"><i class="bx bx-user"></i>User List</a>
+						<li> <a href="<?= base_url('Forecast'); ?>"><i class="bx bx-aperture"></i>Log Kesehatan Pohon</a>
 						</li>
 					</ul>
 				</li>
-				<li class="menu-label mt-0">User</li>
+				<li class="menu-label mt-0">Data Pengguna</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Profile'); ?>"><i class="bx bx-happy"></i>Profile</a>
+						<li> <a href="<?= base_url('User'); ?>"><i class="bx bx-coin-stack"></i>Daftar Pengguna</a>
 						</li>
-						<li> <a href="<?= base_url('Authentication/logout'); ?>"><i class="bx bx-log-out"></i>Logout</a>
+						<li> <a href="<?= base_url('SystemLog'); ?>"><i class="bx bx-world"></i>Log Aktivitas Pengguna</a>
+						</li>
+					</ul>
+				</li>
+	
+				<li>
+					<ul>
+						<li> <a href="<?= base_url('Profile'); ?>"><i class="bx bx-happy"></i>Profil</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<ul>
+						<li> <a href="<?= base_url('Authentication/logout'); ?>"><i class="bx bx-log-out"></i>Keluar</a>
 						</li>
 					</ul>
 				</li>
