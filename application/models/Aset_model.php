@@ -1,11 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Sawit_model extends CI_Model
+class Aset_model extends CI_Model
 {
-    public $table = 'kebun';
-    public $id = 'kebun.id_kebun';
-
+    public $table = 'asset';
+    public $id = 'aset.id';
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function get()
     {
         $this->db->from($this->table);
@@ -34,20 +37,5 @@ class Sawit_model extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
         return $this->db->affected_rows();
-    }
-
-    public function qr($name, $value)
-    {
-        if ($name) {
-            $filename = 'qr/kebun/' . $name . ".jpg";
-            if (!file_exists($filename)) {
-                $this->load->library('ciqrcode');
-                $params['data'] = $value;
-                $params['level'] = 'H';
-                $params['size'] = 10;
-                $params['savename'] = FCPATH . 'qr/kebun/' . $name . ".jpg";
-                return $this->ciqrcode->generate($params);
-            }
-        }
     }
 }

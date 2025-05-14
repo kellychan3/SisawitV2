@@ -53,15 +53,15 @@
 				<li class="menu-label mt-0">Data Perkebunan</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Asset'); ?>"><i class="bx bx-trim"></i>Data Aset Barang</a>
+						<li> <a href="<?= base_url('Aset'); ?>"><i class="bx bx-trim"></i>Data Aset Barang</a>
 						</li>
 						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Penanaman</a>
+						<li> <a href="<?= base_url('Penanaman'); ?>"><i class="bx bx-cookie"></i>Data Penanaman</a>
 						</li>
-						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Pemupukan</a>
+						<li> <a href="<?= base_url('Pemupukan'); ?>"><i class="bx bx-cookie"></i>Data Pemupukan</a>
 						</li>
-						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Kebun</a>
+						<li> <a href="<?= base_url('Kebun'); ?>"><i class="bx bx-cookie"></i>Data Kebun</a>
 						</li>
 					</ul>
 				</li>
