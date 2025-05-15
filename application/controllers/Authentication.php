@@ -7,7 +7,7 @@ class Authentication extends CI_Controller
     {
         parent::__construct();
         $this->load->model('User_model', 'userrole');
-        $this->load->model('SystemLog_model');
+        $this->load->model('Log_pengguna_model');
     }
 
     public function index()
@@ -29,7 +29,7 @@ class Authentication extends CI_Controller
                     'email' => $user['email'],
                 ];
                 $currentDate = date('Y-m-d H:i:s');
-                $this->SystemLog_model->insert([
+                $this->Log_pengguna_model->insert([
                     'id_user' => $user['id_user'],
                     'value' => date('d/m/Y H:i:s : ', strtotime($currentDate)) . $user['name'] . ' login',
                     'date' => $currentDate,
@@ -54,7 +54,7 @@ class Authentication extends CI_Controller
         $data = [
             'email' => $user['email'],
         ];
-        $this->SystemLog_model->insert([
+        $this->Log_pengguna_model->insert([
             'id_user' => $user['id_user'],
             'value' => date('d/m/Y H:i:s : ', strtotime($currentDate)) . $user['name'] . ' Logout ',
             'date' => $currentDate,
@@ -62,5 +62,12 @@ class Authentication extends CI_Controller
         $this->session->unset_userdata($data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Logout Successful</div>');
         redirect('Authentication');
+    }
+
+    public function lupa_sandi()
+    {
+        $this->load->view('layout/auth_header');
+        $this->load->view('auth/lupa_sandi');
+        $this->load->view('layout/auth_footer');
     }
 }

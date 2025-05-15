@@ -50,6 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |        my-controller/my-method    -> my_controller/my_method
  */
 $route['default_controller'] = 'Authentication';
+$route['lupa_sandi'] = 'authentication/lupa_sandi';
 
 // CRUD Kebun
 $route['api/kebun']['get'] = 'api/kebun/index';

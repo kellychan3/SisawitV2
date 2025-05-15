@@ -22,6 +22,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 	<link href="<?= base_url('assets/'); ?>/css/app.css" rel="stylesheet">
 	<link href="<?= base_url('assets/'); ?>/css/icons.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 	<!-- Theme Style CSS -->
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>css/dark-theme.css" />
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>css/semi-dark.css" />
@@ -46,57 +48,57 @@
 			<ul class="metismenu" id="menu">
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Dashboard'); ?>"><i class="bx bx-world"></i>Dashboard</a>
+						<li> <a href="<?= base_url('Dashboard'); ?>"><i class="fa-solid fa-square-poll-vertical"></i>Dashboard</a>
 						</li>
 					</ul>
 				</li>
 				<li class="menu-label mt-0">Data Perkebunan</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Aset'); ?>"><i class="bx bx-trim"></i>Data Aset Barang</a>
+						<li> <a href="<?= base_url('Aset'); ?>"><i class="fa-solid fa-bars"></i>Data Aset Barang</a>
 						</li>
-						<li> <a href="<?= base_url('Panen'); ?>"><i class="bx bx-cookie"></i>Data Panen</a>
+						<li> <a href="<?= base_url('Panen'); ?>"><i class="fa-solid fa-bars"></i>Data Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Penanaman'); ?>"><i class="bx bx-cookie"></i>Data Penanaman</a>
+						<li> <a href="<?= base_url('Penanaman'); ?>"><i class="fa-solid fa-bars"></i>Data Penanaman</a>
 						</li>
-						<li> <a href="<?= base_url('Pemupukan'); ?>"><i class="bx bx-cookie"></i>Data Pemupukan</a>
+						<li> <a href="<?= base_url('Pemupukan'); ?>"><i class="fa-solid fa-bars"></i>Data Pemupukan</a>
 						</li>
-						<li> <a href="<?= base_url('Kebun'); ?>"><i class="bx bx-cookie"></i>Data Kebun</a>
+						<li> <a href="<?= base_url('Kebun'); ?>"><i class="fa-solid fa-bars"></i>Data Kebun</a>
 						</li>
 					</ul>
 				</li>
 				<li class="menu-label mt-0">Monitoring</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-sun"></i>Log Panen</a>
+						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="fa-solid fa-list-ul"></i>Log Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Prediksi'); ?>"><i class="bx bx-aperture"></i>Prediksi Hasil Panen</a>
+						<li> <a href="<?= base_url('Prediksi'); ?>"><i class="fa-solid fa-chart-line"></i></i>Prediksi Hasil Panen</a>
 						</li>
 						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
 						</li>
-						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-aperture"></i>Log Kesehatan Pohon</a>
+						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="fa-solid fa-list-ul"></i>Log Kesehatan Pohon</a>
 						</li>
 					</ul>
 				</li>
 				<li class="menu-label mt-0">Data Pengguna</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('User'); ?>"><i class="bx bx-coin-stack"></i>Daftar Pengguna</a>
+						<li> <a href="<?= base_url('User'); ?>"><i class="fa-solid fa-bars"></i>Daftar Pengguna</a>
 						</li>
-						<li> <a href="<?= base_url('Log_pengguna'); ?>"><i class="bx bx-world"></i>Log Aktivitas Pengguna</a>
+						<li> <a href="<?= base_url('Log_pengguna'); ?>"><i class="fa-solid fa-list-ul"></i>Log Aktivitas Pengguna</a>
 						</li>
 					</ul>
 				</li>
 	
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Profile'); ?>"><i class="bx bx-happy"></i>Profil</a>
+						<li> <a href="<?= base_url('Profile'); ?>"><i class="fa-solid fa-user"></i>Profil</a>
 						</li>
 					</ul>
 				</li>
 				<li>
 					<ul>
-						<li> <a href="<?= base_url('Authentication/logout'); ?>"><i class="bx bx-log-out"></i>Keluar</a>
+						<li> <a href="<?= base_url('Authentication/logout'); ?>"><i class="fa-solid fa-arrow-right-from-bracket"></i>Keluar</a>
 						</li>
 					</ul>
 				</li>
