@@ -24,16 +24,36 @@ class Dashboard_model extends CI_Model
 
     // Function Filter
     public function get_tahun_list()
-    {
-        $sql = "SELECT DISTINCT tahun FROM dim_waktu ORDER BY tahun";
-        return $this->dw->query($sql)->result_array();
-    }
+{
+    $sql = "SELECT DISTINCT w.tahun 
+            FROM fact_panen f
+            JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            ORDER BY w.tahun";
+    return $this->dw->query($sql)->result_array();
+}
+
 
     public function get_bulan_list()
     {
-        $sql = "SELECT DISTINCT bulan FROM dim_waktu ORDER BY bulan";
-        return $this->dw->query($sql)->result_array();
-    }
+    $sql = "SELECT DISTINCT w.bulan 
+            FROM fact_panen f
+            JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            ORDER BY w.bulan";
+    return [
+        ['bulan' => '1', 'nama' => 'Januari'],
+        ['bulan' => '2', 'nama' => 'Februari'],
+        ['bulan' => '3', 'nama' => 'Maret'],
+        ['bulan' => '4', 'nama' => 'April'],
+        ['bulan' => '5', 'nama' => 'Mei'],
+        ['bulan' => '6', 'nama' => 'Juni'],
+        ['bulan' => '7', 'nama' => 'Juli'],
+        ['bulan' => '8', 'nama' => 'Agustus'],
+        ['bulan' => '9', 'nama' => 'September'],
+        ['bulan' => '10', 'nama' => 'Oktober'],
+        ['bulan' => '11', 'nama' => 'November'],
+        ['bulan' => '12', 'nama' => 'Desember'],
+    ];
+}
 
     public function get_kebun_list()
     {
@@ -75,8 +95,13 @@ class Dashboard_model extends CI_Model
             $this->dw->where('w.tahun', $tahun);
         }
         if (!empty($bulan)) {
-            $this->dw->where('w.bulan', $bulan);
-        }
+    if (is_array($bulan)) {
+        $this->dw->where_in('w.bulan', $bulan);
+    } else {
+        $this->dw->where('w.bulan', $bulan);
+    }
+}
+
 
         $this->dw->group_by(['w.tahun', 'w.bulan']);
         $this->dw->order_by('w.tahun, w.bulan');
@@ -92,7 +117,11 @@ class Dashboard_model extends CI_Model
         $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
         $this->filter_by_kebun($kebun);
         $this->dw->where('w.tahun', $tahun);
-        $this->dw->where('w.bulan', $bulan);
+        if (is_array($bulan)) {
+            $this->dw->where_in('w.bulan', $bulan);
+        } else {
+            $this->dw->where('w.bulan', $bulan);
+        }
 
         return $this->dw->get()->row()->total ?? 0;
     }
@@ -213,4 +242,34 @@ class Dashboard_model extends CI_Model
 
         return $this->dw->query($sql, $params)->result();
     }
+
+    public function get_persen_panen_per_kebun($tahun, $bulan_arr)
+{
+    $bulan_in = implode(',', array_map('intval', $bulan_arr)); // pastikan integer
+    $tahun = (int)$tahun;
+
+    $subquery = "
+        SELECT SUM(jumlah_panen) AS total_panen
+        FROM fact_panen fp2
+        JOIN dim_waktu dw2 ON fp2.sk_waktu = dw2.sk_waktu
+        WHERE dw2.tahun = {$tahun} AND dw2.bulan IN ({$bulan_in})
+    ";
+
+    $this->dw->select('
+        dk.nama_kebun,
+        SUM(fp.jumlah_panen) AS total_panen_kebun,
+        (SUM(fp.jumlah_panen) / total.total_panen) * 100 AS persentase
+    ', false);
+    $this->dw->from('fact_panen fp');
+    $this->dw->join('dim_kebun dk', 'fp.sk_kebun = dk.sk_kebun');
+    $this->dw->join('dim_waktu dw', 'fp.sk_waktu = dw.sk_waktu');
+    $this->dw->join("($subquery) total", '1=1', 'inner', false);
+    $this->dw->where('dw.tahun', $tahun);
+    $this->dw->where_in('dw.bulan', $bulan_arr);
+    $this->dw->group_by('dk.nama_kebun, total.total_panen');
+    $this->dw->order_by('total_panen_kebun', 'DESC');
+    
+    return $this->dw->get()->result();
+}
+
 }
