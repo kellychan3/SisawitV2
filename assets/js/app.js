@@ -24,6 +24,7 @@ $(function() {
 			}))
 		}),
 		$(document).ready(function() {
+			
 			$(window).on("scroll", function() {
 				$(this).scrollTop() > 300 ? $(".back-to-top").fadeIn() : $(".back-to-top").fadeOut()
 			}), $(".back-to-top").on("click", function() {
