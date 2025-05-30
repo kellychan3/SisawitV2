@@ -31,31 +31,37 @@
 
         <div class="field">
             <label for="bulan">Bulan</label>
-            <select id="bulan" name="bulan" onchange="this.form.submit()">
-                <option value="">Semua</option>
-                <?php foreach($bulan_list as $b): ?>
-                    <option value="<?= $b['bulan']; ?>" <?= ($filter['bulan'] == $b['bulan']) ? 'selected' : ''; ?>>
-                        <?= $b['bulan']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <div class="custom-dropdown">
+                <div class="dropdown-label" onclick="toggleDropdown('bulan')">Semua ▾</div>
+                <div class="dropdown-checkboxes" id="dropdown-bulan">
+                    <?php foreach($bulan_list as $b): ?>
+    <label>
+        <input type="checkbox" name="bulan[]" value="<?= $b['bulan']; ?>"
+        <?= (is_array($filter['bulan']) && in_array($b['bulan'], $filter['bulan'])) ? 'checked' : ''; ?>>
+        <?= $b['nama']; ?>
+    </label>
+<?php endforeach; ?>
+
+                </div>
+            </div>
         </div>
+
 
         <div class="field">
             <label for="kebun">Kebun</label>
-        <div class="custom-dropdown">
-    <div class="dropdown-label" onclick="toggleDropdown()">Semua ▾</div>
-    <div class="dropdown-checkboxes" id="dropdown-kebun">
-        <?php foreach($kebun_list as $k): ?>
-            <label>
-                <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['nama_kebun']; ?>"
-                    <?= (is_array($filter['kebun']) && in_array($k['nama_kebun'], $filter['kebun'])) ? 'checked' : ''; ?>>
-                <?= $k['nama_kebun']; ?>
-            </label>
-        <?php endforeach; ?>
-    </div>
-    </div>
-</div>
+                <div class="custom-dropdown">
+            <div class="dropdown-label" onclick="toggleDropdown('kebun')">Semua ▾</div>
+            <div class="dropdown-checkboxes" id="dropdown-kebun">
+                <?php foreach($kebun_list as $k): ?>
+                    <label>
+                        <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['nama_kebun']; ?>"
+                            <?= (is_array($filter['kebun']) && in_array($k['nama_kebun'], $filter['kebun'])) ? 'checked' : ''; ?>>
+                        <?= $k['nama_kebun']; ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+            </div>
+        </div>
 
 
     </div>
@@ -108,13 +114,13 @@
                 </div>
 
                 <!-- Grafik Luas Kebun -->
-                <div class="dashboard-box chart-box">
-                    <h3>Luas Kebun</h3>
+                <div class="dashboard-box chart-box piechart">
+                    <h3 style="text-align: center;">Luas Kebun</h3>
                     <canvas id="kebunPieChart"></canvas>
                 </div>
 
                 <!-- Tabel Persediaan Pupuk -->
-                <div class="dashboard-box chart-box">
+                <div class="dashboard-box chart-box pupuk">
                     <h3>Data Persediaan Pupuk</h3>
                     <div class="scrollable-table">
                         <table>
@@ -140,9 +146,9 @@
             <div class="dashboard-container-row">
                 
                 <!-- Grafik Persentase Panen per Kebun -->
-                <div class="dashboard-box chart-box">
+                <div class="dashboard-box chart-box donut">
                     <h3>Persentase Panen per Kebun</h3>
-                 
+                 <canvas id="persentasePanenKebunChart"></canvas>
                 </div>
 
                 <!-- Grafik Panen Mingguan-->
@@ -153,22 +159,23 @@
             </div>
     </div>
 </div>
+
 <script>
-function toggleDropdown() {
-    var dropdown = document.getElementById('dropdown-kebun');
+function toggleDropdown(type) {
+    const dropdown = document.getElementById('dropdown-' + type);
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
 document.addEventListener('click', function(event) {
-    var dropdown = document.getElementById('dropdown-kebun');
-    var label = document.querySelector('.dropdown-label');
-    if (!label.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.style.display = 'none';
-    }
+    ['kebun', 'bulan'].forEach(type => {
+        const dropdown = document.getElementById('dropdown-' + type);
+        const label = document.querySelector(`.dropdown-label[onclick="toggleDropdown('${type}')"]`);
+        if (dropdown && label && !label.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
 });
 </script>
-
-
 
 <script>
     // Cek dan inisialisasi grafik panen bulanan
@@ -181,7 +188,7 @@ document.addEventListener('click', function(event) {
                 5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agt',
                 9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
             ][$bulan];
-            return $namaBulan . ' ' . $row->tahun;
+            return $namaBulan;
         }, $panen_per_bulan)); ?>;
 
         const panenData = <?= json_encode(array_map(fn($row) => (float)$row->total_panen, $panen_per_bulan)); ?>;
@@ -221,11 +228,14 @@ document.addEventListener('click', function(event) {
                 datasets: [{
                     data: pieData,
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(255, 99, 132, 0.6)'
-                    ]
+                        'rgb(31, 4, 154)',     // Biru tua (warna utama Anda)
+                        'rgb(0, 149, 255)',    // Biru terang
+                        'rgb(105, 118, 235)',  // Biru keunguan
+                        'rgb(66, 148, 196)',    // Ungu gelap
+                        'rgb(73, 144, 226)',   // Biru sedang
+                        'rgb(88, 106, 204)'    // Biru violet
+                    ],
+                    borderWidth: 0 
                 }]
             },
             options: {
@@ -236,7 +246,10 @@ document.addEventListener('click', function(event) {
                         position: 'bottom',
                         labels: {
                             usePointStyle: true,
-                            pointStyle: 'circle'
+                            pointStyle: 'circle',
+                            font: {
+                                size: 11
+            }
                         }
                     },
                     datalabels: {
@@ -244,10 +257,9 @@ document.addEventListener('click', function(event) {
                             const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                             return ((value / total) * 100).toFixed(1) + '%';
                         },
-                        color: '#000',
+                        color: 'white',
                         font: {
-                            weight: 'bold',
-                            size: 14
+                            size: 12
                         }
                     }
                 }
@@ -257,6 +269,58 @@ document.addEventListener('click', function(event) {
     }
 </script>
 
+<script>
+    const persentaseCanvas = document.getElementById('persentasePanenKebunChart');
+    if (persentaseCanvas) {
+        const kebunLabels = <?= json_encode(array_map(fn($row) => $row->nama_kebun, $persentase_panen_kebun)); ?>;
+        const kebunData = <?= json_encode(array_map(fn($row) => (float)$row->persentase, $persentase_panen_kebun)); ?>;
+
+        new Chart(persentaseCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: kebunLabels,
+                datasets: [{
+                    data: kebunData,
+                    backgroundColor: [
+                        'rgb(31, 4, 154)',
+                        'rgb(0, 149, 255)',
+                        'rgb(105, 118, 235)',
+                        'rgb(66, 148, 196)',
+                        'rgb(73, 144, 226)',
+                        'rgb(88, 106, 204)',
+                        // Tambahkan warna lain jika perlu
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%', // Ukuran lubang donut
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 11 }
+                        }
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            const total = ctx.chart.data.datasets[0].data.reduce((a,b) => a+b, 0);
+                            const percentage = (value / total) * 100;
+                            return percentage.toFixed(1) + '%';
+                        },
+                        color: 'white',
+                        font: { size: 12 }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    }
+</script>
 
 
 </body>
