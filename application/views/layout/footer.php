@@ -23,13 +23,13 @@
 <!--app JS-->
 <script src="<?= base_url('assets/'); ?>/js/app.js"></script>
 
-<script>
+<!-- <script>
 	$(document).ready(function() {
 		$('#example').DataTable();
 	});
-</script>
+</script> -->
 
-<script>
+<!-- <script>
 	$(document).ready(function() {
 		var table = $('#aset').DataTable();
 	});
@@ -69,51 +69,9 @@
 		table.buttons().container()
 			.appendTo('#tahun_wrapper .col-md-6:eq(0)');
 	});
-</script>
-
-<!--app JS-->
-<script src="<?= base_url(); ?>assets/js/app.js"></script>
-<!-- <script>
-	$(document).ready(function() {
-		//Link Code : https://stackoverflow.com/questions/50836008/jquery-datatable-sort-not-working-for-date-column
-		$('#panenTable').DataTable({
-			scrollY: '50vh',
-			scrollCollapse: true,
-			"aaData": response,
-			"pagingType": "full_numbers",
-			"dom": '<"top"i>rt<"bottom"flp><"clear">',
-			"sDom": 'Rfrtlip',
-			"bInfo": true,
-			"lengthMenu": [
-				[10, 20, 30, -1],
-				[10, 20, 30, "All"]
-			],
-			"columnDefs": [{
-				"searchable": false,
-				"orderable": false,
-				"targets": [0, 1, 2, 3, 4],
-				"type": 'natural'
-			}],
-			"order": [
-				[1, 'asc']
-			],
-			"aoColumns": [{
-					"mData": null
-				},
-				{
-					"mData": "Date",
-					'bSortable': true,
-					"sType": "natural"
-				},
-			],
-			"searching": true,
-			"paging": true,
-			"bAutoWidth": false,
-			"fixedColumns": false,
-			//order: [],
-		});
-	});
 </script> -->
+
+<script src="<?= base_url(); ?>assets/js/app.js"></script>
 </body>
 <footer class="page-footer">
 	<p class="mb-0">Copyright ©<?php echo date('Y'); ?>. All right reserved.</p>

@@ -1,6 +1,5 @@
 		<div class="page-wrapper">
 			<div class="page-content">
-				<!--breadcrumb-->
 				<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
 					<div class="breadcrumb-title pe-3">Data Perkebunan</div>
 					<div class="ps-3">
@@ -13,7 +12,6 @@
 						</nav>
 					</div>
 				</div>
-				<!--end breadcrumb-->
 				
 <!-- TABEL DATA -->
 <div class="card mt-4">
