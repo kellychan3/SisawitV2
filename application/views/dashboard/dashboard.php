@@ -36,7 +36,7 @@
                 <div class="dropdown-checkboxes" id="dropdown-bulan">
                     <?php foreach($bulan_list as $b): ?>
     <label>
-        <input type="checkbox" name="bulan[]" value="<?= $b['bulan']; ?>"
+        <input type="checkbox" onchange="this.form.submit()"  name="bulan[]" value="<?= $b['bulan']; ?>"
         <?= (is_array($filter['bulan']) && in_array($b['bulan'], $filter['bulan'])) ? 'checked' : ''; ?>>
         <?= $b['nama']; ?>
     </label>
@@ -154,6 +154,7 @@
                 <!-- Grafik Panen Mingguan-->
                 <div class="dashboard-box chart-box">
                     <h3>Total Panen per Minggu per Kebun (Kg)</h3>
+                 <canvas id="panenMingguanKebunChart"></canvas>
                    
                 </div>
             </div>
@@ -321,6 +322,62 @@ document.addEventListener('click', function(event) {
         });
     }
 </script>
+
+<script>
+    const ctx = document.getElementById('panenMingguanKebunChart').getContext('2d');
+
+const labels = <?= json_encode($labels); ?>;
+const datasets = <?= json_encode($datasets); ?>;
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: datasets
+    },
+    options: {
+        indexAxis: 'x', // horizontal bar
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                beginAtZero: true,
+                title: {
+                    display: false,
+                    text: 'Minggu'
+                }
+            },
+            y: {
+                title: {
+                    display: false,
+                    text: 'Total Panen (Kg)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    font: {
+                        size: 11
+                    }
+                }
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                color: 'black',
+                font: {
+                    size: 10
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+</script>
+
 
 
 </body>

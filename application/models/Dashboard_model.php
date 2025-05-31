@@ -243,33 +243,91 @@ class Dashboard_model extends CI_Model
         return $this->dw->query($sql, $params)->result();
     }
 
-    public function get_persen_panen_per_kebun($tahun, $bulan_arr)
+   public function get_persen_panen_per_kebun($tahun, $bulan_arr, $kebun = null)
 {
-    $bulan_in = implode(',', array_map('intval', $bulan_arr)); // pastikan integer
     $tahun = (int)$tahun;
+    $bulan_in = implode(',', array_map('intval', $bulan_arr));
 
+    // Subquery total panen, dengan filter kebun jika ada
     $subquery = "
-        SELECT SUM(jumlah_panen) AS total_panen
+        SELECT SUM(fp2.jumlah_panen) AS total_panen
         FROM fact_panen fp2
         JOIN dim_waktu dw2 ON fp2.sk_waktu = dw2.sk_waktu
-        WHERE dw2.tahun = {$tahun} AND dw2.bulan IN ({$bulan_in})
+        JOIN dim_kebun dk2 ON fp2.sk_kebun = dk2.sk_kebun
+        WHERE dw2.tahun = {$tahun}
+          AND dw2.bulan IN ({$bulan_in})
     ";
+
+    // Tambahkan filter kebun ke subquery jika ada
+    if ($kebun) {
+        if (is_array($kebun)) {
+            // Escape & wrap nama kebun untuk SQL injection (harus hati-hati)
+            $escaped_kebun = array_map(function($k){ return "'" . $this->dw->escape_str($k) . "'"; }, $kebun);
+            $kebun_list = implode(',', $escaped_kebun);
+            $subquery .= " AND dk2.nama_kebun IN ({$kebun_list})";
+        } else {
+            $escaped_kebun = $this->dw->escape_str($kebun);
+            $subquery .= " AND dk2.nama_kebun = '{$escaped_kebun}'";
+        }
+    }
 
     $this->dw->select('
         dk.nama_kebun,
         SUM(fp.jumlah_panen) AS total_panen_kebun,
-        (SUM(fp.jumlah_panen) / total.total_panen) * 100 AS persentase
+        (SUM(fp.jumlah_panen) / NULLIF(total.total_panen, 0)) * 100 AS persentase
     ', false);
     $this->dw->from('fact_panen fp');
     $this->dw->join('dim_kebun dk', 'fp.sk_kebun = dk.sk_kebun');
     $this->dw->join('dim_waktu dw', 'fp.sk_waktu = dw.sk_waktu');
     $this->dw->join("($subquery) total", '1=1', 'inner', false);
+
     $this->dw->where('dw.tahun', $tahun);
     $this->dw->where_in('dw.bulan', $bulan_arr);
-    $this->dw->group_by('dk.nama_kebun, total.total_panen');
+
+    // Filter kebun di outer query juga supaya konsisten
+    if ($kebun) {
+        if (is_array($kebun)) {
+            $this->dw->where_in('dk.nama_kebun', $kebun);
+        } else {
+            $this->dw->where('dk.nama_kebun', $kebun);
+        }
+    }
+
+    $this->dw->group_by('dk.nama_kebun');
     $this->dw->order_by('total_panen_kebun', 'DESC');
-    
+
     return $this->dw->get()->result();
 }
+public function get_panen_per_minggu_per_kebun($tahun, $bulan = null, $kebun = null)
+{
+    $this->dw->select('w.bulan, w.minggu_ke_dalam_bulan AS minggu_ke, k.nama_kebun, SUM(f.jumlah_panen) as total_panen');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->join('dim_kebun k', 'f.sk_kebun = k.sk_kebun');
+    $this->dw->where('w.tahun', $tahun);
+
+    if (!empty($bulan)) {
+        if (is_array($bulan)) {
+            $this->dw->where_in('w.bulan', $bulan);
+        } else {
+            $this->dw->where('w.bulan', $bulan);
+        }
+    }
+
+    if (!empty($kebun)) {
+        if (is_array($kebun)) {
+            $this->dw->where_in('k.nama_kebun', $kebun);
+        } else {
+            $this->dw->where('k.nama_kebun', $kebun);
+        }
+    }
+
+    $this->dw->group_by(['w.bulan', 'w.minggu_ke_dalam_bulan', 'k.nama_kebun']);
+    $this->dw->order_by('w.bulan ASC, w.minggu_ke_dalam_bulan ASC, k.nama_kebun ASC');
+
+    return $this->dw->get()->result();
+}
+
+
 
 }
