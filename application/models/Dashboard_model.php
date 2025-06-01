@@ -111,88 +111,107 @@ class Dashboard_model extends CI_Model
     }
 
     public function get_total_panen_bulan_ini($tahun, $bulan, $kebun = null)
-    {
-        $this->dw->select('SUM(f.jumlah_panen) as total');
-        $this->dw->from('fact_panen f');
-        $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
-        $this->filter_by_kebun($kebun);
-        $this->dw->where('w.tahun', $tahun);
-        if (is_array($bulan)) {
-            $this->dw->where_in('w.bulan', $bulan);
-        } else {
-            $this->dw->where('w.bulan', $bulan);
-        }
+{
+    $this->dw->select_sum('f.jumlah_panen', 'total');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
 
-        return $this->dw->get()->row()->total ?? 0;
+    $this->dw->where('w.tahun', $tahun);
+    $this->dw->where('w.bulan', $bulan);
+
+    if ($kebun !== null && is_array($kebun)) {
+        $this->dw->where_in('f.sk_kebun', $kebun);
     }
+
+    $query = $this->dw->get();
+    $result = $query->row();
+    return $result ? (float)$result->total : 0;
+}
 
     public function get_rata2_panen_bulanan_tahun_ini($tahun, $kebun = null)
-    {
-        $sql = "SELECT AVG(bulanan.total) as rata2
-                FROM (
-                    SELECT w.bulan, SUM(f.jumlah_panen) as total
-                    FROM fact_panen f
-                    JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
-                    JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
-                    WHERE w.tahun = ?";
+{
+    // Ambil bulan terakhir berdasarkan data yang ada
+    $this->dw->select_max('w.bulan');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->where('w.tahun', $tahun);
 
-        $params = [$tahun];
-
-        if ($kebun) {
-            if (is_array($kebun)) {
-                $placeholders = implode(',', array_fill(0, count($kebun), '?'));
-                $sql .= " AND k.nama_kebun IN ($placeholders)";
-                $params = array_merge($params, $kebun);
-            } else {
-                $sql .= " AND k.nama_kebun = ?";
-                $params[] = $kebun;
-            }
-        }
-
-        $sql .= " GROUP BY w.bulan) as bulanan";
-
-        return $this->dw->query($sql, $params)->row()->rata2 ?? 0;
+    if ($kebun !== null && is_array($kebun)) {
+        $this->dw->where_in('f.sk_kebun', $kebun);
     }
 
-    public function get_total_panen_minggu_ini($tahun, $minggu, $kebun = null)
-    {
-        $this->dw->select('SUM(f.jumlah_panen) as total');
-        $this->dw->from('fact_panen f');
-        $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
-        $this->filter_by_kebun($kebun);
-        $this->dw->where('w.tahun', $tahun);
-        $this->dw->where('w.minggu', $minggu);
+    $bulan_terakhir = $this->dw->get()->row()->bulan;
 
-        return $this->dw->get()->row()->total ?? 0;
+    // Hitung total panen dari Januari sampai bulan terakhir
+    $this->dw->select_sum('f.jumlah_panen', 'total');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->where('w.tahun', $tahun);
+    $this->dw->where('w.bulan <=', $bulan_terakhir);
+
+    if ($kebun !== null && is_array($kebun)) {
+        $this->dw->where_in('f.sk_kebun', $kebun);
     }
 
-    public function get_rata2_panen_mingguan_tahun_ini($tahun, $kebun = null)
-    {
-        $sql = "SELECT AVG(mingguan.total) as rata2
-                FROM (
-                    SELECT w.minggu, SUM(f.jumlah_panen) as total
-                    FROM fact_panen f
-                    JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
-                    JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
-                    WHERE w.tahun = ?";
+    $total_panen = $this->dw->get()->row()->total;
 
-        $params = [$tahun];
+    if (!$total_panen || !$bulan_terakhir) return 0;
 
-        if ($kebun) {
-            if (is_array($kebun)) {
-                $placeholders = implode(',', array_fill(0, count($kebun), '?'));
-                $sql .= " AND k.nama_kebun IN ($placeholders)";
-                $params = array_merge($params, $kebun);
-            } else {
-                $sql .= " AND k.nama_kebun = ?";
-                $params[] = $kebun;
-            }
-        }
+    return $total_panen / $bulan_terakhir;
+}
 
-        $sql .= " GROUP BY w.minggu) as mingguan";
+public function get_minggu_terakhir_bulan($tahun, $bulan)
+{
+    $this->dw->select_max('minggu_ke_dalam_bulan', 'max_minggu');
+    $this->dw->from('dim_waktu');
+    $this->dw->where('tahun', $tahun);
+    $this->dw->where('bulan', $bulan);
 
-        return $this->dw->query($sql, $params)->row()->rata2 ?? 0;
+    $query = $this->dw->get();
+    $row = $query->row();
+    return $row ? (int)$row->max_minggu : 1;
+}
+
+
+    public function get_total_panen_minggu_ini($tahun, $bulan, $minggu_ke, $kebun = null)
+{
+    $this->dw->select_sum('f.jumlah_panen', 'total');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->where('w.tahun', $tahun);
+    $this->dw->where('w.bulan', $bulan);
+    $this->dw->where('w.minggu_ke_dalam_bulan', $minggu_ke);
+
+    if ($kebun !== null && is_array($kebun)) {
+        $this->dw->where_in('f.sk_kebun', $kebun);
     }
+
+    $query = $this->dw->get();
+    $result = $query->row();
+    return $result ? (float)$result->total : 0;
+}
+
+public function get_rata2_panen_mingguan_bulan_ini($tahun, $bulan, $kebun = null)
+{
+    $this->dw->select('w.minggu_ke_dalam_bulan, SUM(f.jumlah_panen) as total');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->where('w.tahun', $tahun);
+    $this->dw->where('w.bulan', $bulan);
+
+    if ($kebun !== null && is_array($kebun)) {
+        $this->dw->where_in('f.sk_kebun', $kebun);
+    }
+
+    $this->dw->group_by('w.minggu_ke_dalam_bulan');
+    $query = $this->dw->get();
+    $rows = $query->result();
+
+    if (count($rows) === 0) return 0;
+
+    $total = array_sum(array_column($rows, 'total'));
+    return $total / count($rows);
+}
 
     public function get_luas_kebun_persentase($kebun = null)
     {
