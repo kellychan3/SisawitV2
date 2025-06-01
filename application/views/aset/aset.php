@@ -23,12 +23,12 @@
         <!-- end breadcrumb -->
 
         <?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
-<?php endif; ?>
+            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+        <?php endif; ?>
 
-<?php if ($this->session->flashdata('error')): ?>
-    <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
-<?php endif; ?>
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+        <?php endif; ?>
 
 
         <button type="button" class="btn btn-primary px-5 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addAssetModal">
@@ -48,36 +48,33 @@
                             <div class="col-md-6">
                                 <label for="namaaset" class="form-label">Nama Aset</label>
                                 <select class="form-control" id="namaaset" name="namaaset" required oninvalid="this.setCustomValidity('Nama aset wajib dipilih')" oninput="this.setCustomValidity('')">
-    <option value="">--Pilih Aset--</option>
-    
-                                <option value="Urea">Urea</option>
-    <option value="MOP">MOP</option>
-    <option value="NPK">NPK</option>
-    <option value="TSP">TSP</option>
-    <option value="Dolomite">Dolomite</option>
-    <option value="Traktor">Traktor</option>
-</select>
-
+                                  <option value="">--Pilih Aset--</option>
+                                  <option value="Urea">Urea</option>
+                                  <option value="MOP">MOP</option>
+                                  <option value="NPK">NPK</option>
+                                  <option value="TSP">TSP</option>
+                                  <option value="Dolomite">Dolomite</option>
+                                  <option value="Traktor">Traktor</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="jenisaset" class="form-label">Jenis Aset</label>
                                 <select class="form-control" id="kategori_id" name="kategori_id" disabled>
-    <option value="">--</option>
-    <?php foreach ($kategori as $k): ?>
-        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kategori']); ?></option>
-    <?php endforeach; ?>
-</select>
-
+                                    <option value="">--</option>
+                                    <?php foreach ($kategori as $k): ?>
+                                        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kategori']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
-                           
+                          
                             <div class="col-md-6">
                                 <label for="lokasiaset" class="form-label">Kebun</label>
                                 <select class="form-control" id="kebun_id" name="kebun_id" required oninvalid="this.setCustomValidity('Kebun wajib dipilih')" oninput="this.setCustomValidity('')">
-    <option value="">--Pilih Kebun--</option>
-    <?php foreach ($kebun as $k): ?>
-        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kebun']); ?></option>
-    <?php endforeach; ?>
-</select>
+                                    <option value="">--Pilih Kebun--</option>
+                                    <?php foreach ($kebun as $k): ?>
+                                        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kebun']); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                              <div class="col-md-6">
                                 <label for="jumlahaset" class="form-label">Jumlah Aset</label>
