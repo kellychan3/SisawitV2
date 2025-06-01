@@ -1,77 +1,148 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class Aset extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        is_logged_in(); // Pastikan fungsi ini ada dan bekerja
+        is_logged_in();
+    }
+
+    private function getKategori()
+    {
+        $token = $this->session->userdata('token');
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "http://103.150.101.10/api/kategori-aset",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $token",
+                "Accept: application/json"
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return json_decode($response, true) ?: [];
+    }
+
+    private function getKebun()
+    {
+        $token = $this->session->userdata('token');
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "http://103.150.101.10/api/kebun",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $token",
+                "Accept: application/json"
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return json_decode($response, true) ?: [];
     }
 
     public function index()
     {
         $token = $this->session->userdata('token');
         $organisasi_id = $this->session->userdata('organisasi_id');
+        if (!$token || !$organisasi_id) redirect('authentication');
 
-        if (!$token || !$organisasi_id) {
-            redirect('authentication');
-        }
-
-        // Ambil data aset dari API
+        // Ambil data aset
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => "http://103.150.101.10/api/organisasi/$organisasi_id/aset",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",
-                "Accept: application/json",
+                "Accept: application/json"
             ],
         ]);
         $response = curl_exec($curl);
-        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
+        $allAssets = json_decode($response, true) ?: [];
 
-        $allAssets = $httpcode == 200 ? json_decode($response, true) : [];
-
-        // Ambil query search dari GET
-        $search = $this->input->get('search');
-
-        if ($search) {
-            $searchLower = strtolower($search);
-            $allAssets = array_filter($allAssets, function ($item) use ($searchLower) {
-                $nama_aset = strtolower($item['nama_aset'] ?? '');
-                $nama_kategori = strtolower($item['kategori']['nama_kategori'] ?? '');
-                $nama_kebun = strtolower($item['kebun']['nama_kebun'] ?? '');
-
-                return strpos($nama_aset, $searchLower) !== false ||
-                       strpos($nama_kategori, $searchLower) !== false ||
-                       strpos($nama_kebun, $searchLower) !== false;
-            });
-        }
-
-        // Pagination setup
-        $perPage = 20;
-        $page = (int) $this->input->get('page');
-        if ($page < 1) $page = 1;
-
-        $totalAssets = count($allAssets);
-        $start = ($page - 1) * $perPage;
-        $assets = array_slice($allAssets, $start, $perPage);
-
-        // Data untuk view
-        $data['asset'] = $assets;
-        $data['pagination'] = [
-            'current' => $page,
-            'perPage' => $perPage,
-            'total' => $totalAssets,
-            'lastPage' => ceil($totalAssets / $perPage),
-        ];
+        $data['asset'] = $allAssets;
+        $data['kategori'] = $this->getKategori();
+        $data['kebun'] = $this->getKebun();
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        // Load views
         $this->load->view('layout/header', $data);
         $this->load->view('aset/aset', $data);
         $this->load->view('layout/footer', $data);
     }
+
+    public function addAset()
+{
+    $token = $this->session->userdata('token');
+    $organisasi_id = $this->session->userdata('organisasi_id');
+    if (!$token || !$organisasi_id) redirect('authentication');
+
+    $nama_aset = $this->input->post('namaaset');
+    $kategori_aset_id = $this->input->post('kategori_id');
+    $kebun_id = $this->input->post('kebun_id');
+    $jumlah_aset = (int) $this->input->post('jumlahaset');
+
+    // Ambil semua aset dulu
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/organisasi/$organisasi_id/aset",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $token",
+            "Accept: application/json"
+        ],
+    ]);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $existingAssets = json_decode($response, true) ?: [];
+
+    // Cek duplikasi
+    foreach ($existingAssets as $aset) {
+        if (
+            strtolower($aset['nama_aset']) === strtolower($nama_aset) &&
+            $aset['kategori_aset_id'] == $kategori_aset_id &&
+            $aset['kebun_id'] == $kebun_id
+        ) {
+            $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
+            redirect('Aset');
+            return;
+        }
+    }
+
+    // Lanjut tambah aset jika tidak duplikat
+    $postData = json_encode([
+        'nama_aset' => $nama_aset,
+        'kategori_aset_id' => $kategori_aset_id,
+        'kebun_id' => $kebun_id,
+        'jumlah_aset' => $jumlah_aset
+    ]);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/aset",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $postData,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $token",
+            "Accept: application/json",
+            "Content-Type: application/json"
+        ],
+    ]);
+    $result = curl_exec($curl);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($status == 201 || $status == 200) {
+        $this->session->set_flashdata('success', 'Aset berhasil ditambahkan.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menambahkan aset.');
+    }
+
+    redirect('Aset');
+}
+
 }

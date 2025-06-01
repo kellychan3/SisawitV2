@@ -1,3 +1,11 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+  .dataTables_wrapper .dataTables_length select {
+    min-width: 50px;
+    padding-right: 1.8em; 
+}
+
+</style>
 <div class="page-wrapper">
     <div class="page-content">
         <!-- breadcrumb -->
@@ -13,6 +21,15 @@
             </div>
         </div>
         <!-- end breadcrumb -->
+
+        <?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+    <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+<?php endif; ?>
+
 
         <button type="button" class="btn btn-primary px-5 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addAssetModal">
             <i class='bx bx-plus me-2 align-middle'></i>Tambah Data
@@ -30,19 +47,41 @@
                         <form class="row g-3" method="post" action="<?= base_url('Aset/addAset'); ?>">
                             <div class="col-md-6">
                                 <label for="namaaset" class="form-label">Nama Aset</label>
-                                <input type="text" class="form-control" id="namaaset" name="namaaset" required>
+                                <select class="form-control" id="namaaset" name="namaaset" required oninvalid="this.setCustomValidity('Nama aset wajib dipilih')" oninput="this.setCustomValidity('')">
+    <option value="">--Pilih Aset--</option>
+    
+                                <option value="Urea">Urea</option>
+    <option value="MOP">MOP</option>
+    <option value="NPK">NPK</option>
+    <option value="TSP">TSP</option>
+    <option value="Dolomite">Dolomite</option>
+    <option value="Traktor">Traktor</option>
+</select>
+
                             </div>
                             <div class="col-md-6">
                                 <label for="jenisaset" class="form-label">Jenis Aset</label>
-                                <input type="text" class="form-control" id="jenisaset" name="jenisaset" required>
+                                <select class="form-control" id="kategori_id" name="kategori_id" disabled>
+    <option value="">--</option>
+    <?php foreach ($kategori as $k): ?>
+        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kategori']); ?></option>
+    <?php endforeach; ?>
+</select>
+
                             </div>
-                            <div class="col-md-6">
-                                <label for="jumlahaset" class="form-label">Jumlah Aset</label>
-                                <input type="number" class="form-control" id="jumlahaset" name="jumlahaset" required>
-                            </div>
+                           
                             <div class="col-md-6">
                                 <label for="lokasiaset" class="form-label">Kebun</label>
-                                <input type="text" class="form-control" id="lokasiaset" name="lokasiaset" required>
+                                <select class="form-control" id="kebun_id" name="kebun_id" required oninvalid="this.setCustomValidity('Kebun wajib dipilih')" oninput="this.setCustomValidity('')">
+    <option value="">--Pilih Kebun--</option>
+    <?php foreach ($kebun as $k): ?>
+        <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kebun']); ?></option>
+    <?php endforeach; ?>
+</select>
+                            </div>
+                             <div class="col-md-6">
+                                <label for="jumlahaset" class="form-label">Jumlah Aset</label>
+                                <input type="number" class="form-control" id="jumlahaset" name="jumlahaset" required oninvalid="this.setCustomValidity('Jumlah aset wajib diisi')" oninput="this.setCustomValidity('')">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -58,14 +97,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <form method="get" action="<?= base_url('Aset'); ?>" class="mb-3 d-flex justify-content-end align-items-center" id="searchForm" style="gap: 0.5rem;">
-  <label for="searchInput" class="mb-0">Cari:</label>
-  <input type="text" name="search" id="searchInput" class="form-control" placeholder="Cari aset..." value="<?= htmlspecialchars($this->input->get('search')); ?>" style="width: 200px;">
-</form>
-
-
-
-                    <table id="aset" class="table table-striped table-bordered">
+         <table id="aset" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Nama Aset</th>
@@ -94,50 +126,68 @@
                             <?php endif; ?>
                         </tbody>
                     </table>
-
-                    <!-- PAGINATION NAVIGATION -->
-                    <?php
-                    $current = (int) $pagination['current'];
-                    $last = (int) $pagination['lastPage'];
-                    $prev = $current > 1 ? $current - 1 : 1;
-                    $next = $current < $last ? $current + 1 : $last;
-                    $searchQuery = $this->input->get('search') ? '&search=' . urlencode($this->input->get('search')) : '';
-                    ?>
-                    <div class="d-flex justify-content-end mt-3">
-                        <nav>
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item <?= $current == 1 ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="<?= base_url('Aset?page=' . $prev . $searchQuery); ?>"> < Sebelumnya</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#"><?= $current; ?></a>
-                                </li>
-                                <li class="page-item <?= $current == $last ? 'disabled' : ''; ?>">
-                                    <a class="page-link" href="<?= base_url('Aset?page=' . $next . $searchQuery); ?>">Berikutnya ></a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
+$(document).ready(function() {
+    $('#aset').DataTable({
+        columnDefs: [
+            { targets: 1, searchable: false }
+        ],
+        language: {
+            lengthMenu: "Menampilkan _MENU_ entri",
+            zeroRecords: "Data tidak ditemukan",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+            infoFiltered: "(disaring dari _MAX_ total entri)",
+            search: "Cari:",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya >",
+                previous: "< Sebelumnya"
+            }
+        }
+    });
+});
 
-    let timeout = null;
-    searchInput.addEventListener('input', function() {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            const query = searchInput.value.trim();
-            const baseUrl = '<?= base_url('Aset'); ?>';
-            const url = query ? `${baseUrl}?search=${encodeURIComponent(query)}&page=1` : `${baseUrl}`;
-            window.location.href = url;
-        }, 500); // delay 500ms setelah user berhenti ketik
+
+</script>
+
+<script>
+$(document).ready(function() {
+    const kategoriMap = {
+        'Dolomite': 'Pupuk',
+        'MOP': 'Pupuk',
+        'NPK': 'Pupuk',
+        'RP': 'Pupuk',
+        'Traktor': 'Alat Berat',
+        'TSP': 'Pupuk',
+        'Urea': 'Pupuk'
+    };
+
+    // Buat mapping nama_kategori ke id dari data kategori yang ada di PHP
+    const kategoriIdMap = {};
+    <?php foreach ($kategori as $k): ?>
+        kategoriIdMap["<?= addslashes($k['nama_kategori']) ?>"] = "<?= $k['id'] ?>";
+    <?php endforeach; ?>
+
+    $('#namaaset').on('change', function() {
+        const selectedAset = $(this).val();
+        const namaKategori = kategoriMap[selectedAset];
+
+        if (namaKategori && kategoriIdMap[namaKategori]) {
+            $('#kategori_id').val(kategoriIdMap[namaKategori]).trigger('change');
+        } else {
+            $('#kategori_id').val('');
+        }
     });
 });
 </script>
+
