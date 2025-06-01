@@ -18,51 +18,74 @@ class Authentication extends CI_Controller
     }
 
     public function ceklogin()
-    {
-        $email = $this->input->post('email');
-        $password = md5($this->input->post('password'));
-        $user = $this->db->get_where('user', ['email' => $email])->row_array();
+{
+    $email = $this->input->post('email');
+    $password = $this->input->post('password');
 
-        if ($user) {
-            if ($password == $user['password']) {
-                $data = [
-                    'email' => $user['email'],
-                ];
-                $currentDate = date('Y-m-d H:i:s');
-                $this->Log_pengguna_model->insert([
-                    'id_user' => $user['id_user'],
-                    'value' => date('d/m/Y H:i:s : ', strtotime($currentDate)) . $user['name'] . ' login',
-                    'date' => $currentDate,
-                ]);
-                $this->session->set_userdata($data);
-                redirect('Dashboard');
-                
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Wrong Password</div>');
-                redirect('Authentication');
-            }
-        }
-        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Account is not registered</div>');
+    // Setup CURL untuk call API login eksternal
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/login",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => json_encode([
+            "no_hp" => $email,
+            "password" => $password,
+        ]),
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    curl_close($curl);
+
+    if ($err) {
+        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Koneksi ke server gagal!</div>');
         redirect('Authentication');
+    } else {
+        $result = json_decode($response, true);
+
+        if (isset($result['message']) && $result['message'] == "Success") {
+            $user = $result['user'];
+            $this->session->set_userdata([
+                'email' => $user['email'],
+                'nama' => $user['nama'],
+                'id_user' => $user['id'],
+                'role' => $user['role'],
+                'token' => $result['token'],
+                'organisasi_id' => $user['organisasi_id'],
+            ]);
+
+            $currentDate = date('Y-m-d H:i:s');
+            $this->Log_pengguna_model->insert([
+                'id_user' => $user['id'],
+                'value' => date('d/m/Y H:i:s', strtotime($currentDate)) . ' ' . $user['nama'] . ' login',
+                'date' => $currentDate,
+            ]);
+
+            redirect('Dashboard');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email atau Password salah!</div>');
+            redirect('Authentication');
+        }
     }
+}
+
+
 
     public function logout()
-    {
-        $email = $this->session->userdata('email');
-        $user = $this->db->get_where('user', ['email' => $email])->row_array();
-        $currentDate = date('Y-m-d H:i:s');
-        $data = [
-            'email' => $user['email'],
-        ];
-        $this->Log_pengguna_model->insert([
-            'id_user' => $user['id_user'],
-            'value' => date('d/m/Y H:i:s : ', strtotime($currentDate)) . $user['name'] . ' Logout ',
-            'date' => $currentDate,
-        ]);
-        $this->session->unset_userdata($data);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Logout Successful</div>');
-        redirect('Authentication');
-    }
+{
+    $this->session->sess_destroy();
+    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Logout berhasil</div>');
+    redirect('Authentication');
+}
+
 
     public function lupa_sandi()
     {
