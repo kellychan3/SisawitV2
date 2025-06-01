@@ -38,11 +38,13 @@ class Dashboard extends CI_Controller
     $minggu = date('W');
 
     $kebun = $this->input->get('kebun');
-    if (empty($kebun)) {
-        $kebun = null;
-    } elseif (!is_array($kebun)) {
-        $kebun = [$kebun];
-    }
+
+if (empty($kebun)) {
+    $semua_kebun = $this->Dashboard_model->get_kebun_list();
+    $kebun = array_column($semua_kebun, 'sk_kebun'); // default: semua kebun terpilih
+} elseif (!is_array($kebun)) {
+    $kebun = [$kebun];
+}
 
     $data['filter'] = [
         'tahun' => $tahun,
@@ -56,7 +58,7 @@ class Dashboard extends CI_Controller
 
     $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($tahun, $bulan, $kebun);
     $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($kebun);
-    $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($kebun);
+    $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun();
     $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($kebun);
     $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($tahun, $bulan, $kebun);
     $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan,  $kebun);
@@ -73,14 +75,18 @@ class Dashboard extends CI_Controller
     $kebun_list = [];
 
     foreach ($panen_data as $row) {
+    // Tambah label hanya jika ada panen
+    if ((float)$row->total_panen > 0) {
         $label = $bulan_nama[(int)$row->bulan] . ' Minggu ' . $row->minggu_ke;
         if (!in_array($label, $minggu_labels)) {
             $minggu_labels[] = $label;
         }
-        if (!in_array($row->nama_kebun, $kebun_list)) {
-            $kebun_list[] = $row->nama_kebun;
-        }
     }
+
+    if (!in_array($row->nama_kebun, $kebun_list)) {
+        $kebun_list[] = $row->nama_kebun;
+    }
+}
 
     $datasets = [];
     $warna = [
@@ -92,52 +98,58 @@ class Dashboard extends CI_Controller
         'rgb(88, 106, 204)'
     ];
 
-    foreach ($kebun_list as $index => $kebun_nama) {
-        $data_per_kebun = [];
+    foreach ($kebun_list as $index => $kebun) {
+    $data_per_kebun = [];
 
-        foreach ($minggu_labels as $label) {
-            $panen = null;
-            foreach ($panen_data as $row) {
-                $row_label = $bulan_nama[(int)$row->bulan] . ' Minggu ' . $row->minggu_ke;
-                if ($row_label == $label && $row->nama_kebun == $kebun_nama) {
-                    if ((float)$row->total_panen > 0) {
-                        $panen = (float)$row->total_panen;
-                    }
-                    break;
-                }
+    foreach ($minggu_labels as $label) {
+        $panen = null;
+        foreach ($panen_data as $row) {
+            $row_label = $bulan_nama[(int)$row->bulan] . ' Minggu ' . $row->minggu_ke;
+            if ($row_label == $label && $row->nama_kebun == $kebun && (float)$row->total_panen > 0) {
+                $panen = (float)$row->total_panen;
+                break;
             }
-            $data_per_kebun[] = $panen;
         }
-
-        $datasets[] = [
-            'label' => $kebun_nama,
-            'data' => $data_per_kebun,
-            'backgroundColor' => $warna[$index % count($warna)]
-        ];
+        $data_per_kebun[] = $panen;
     }
+
+    $datasets[] = [
+        'label' => $kebun,
+        'data' => $data_per_kebun,
+        'backgroundColor' => $warna[$index % count($warna)],
+    ];
+}
 
     $data['labels'] = $minggu_labels;
     $data['datasets'] = $datasets;
 
-    $total_bulan_ini = $this->Dashboard_model->get_total_panen_bulan_ini($tahun, $bulan, $kebun);
-    $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $minggu, $kebun);
+    // total bulan ini & rata-rata
+    $bulan_terakhir = max($bulan);
+    $total_bulan_ini = $this->Dashboard_model->get_total_panen_bulan_ini($tahun, $bulan_terakhir, $kebun);
 
     $rata_bulanan = $this->Dashboard_model->get_rata2_panen_bulanan_tahun_ini($tahun, $kebun);
-    $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_tahun_ini($tahun, $kebun);
-
     $selisih_persen_bulan = $rata_bulanan ? (($total_bulan_ini - $rata_bulanan) / $rata_bulanan * 100) : 0;
+
     $data['indikator_panen'] = [
         'nilai' => number_format($total_bulan_ini, 2, ',', '.'),
         'persen' => round(abs($selisih_persen_bulan), 1),
         'naik' => $selisih_persen_bulan >= 0
     ];
 
-    $selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
-    $data['indikator_panen_mingguan'] = [
-        'nilai' => number_format($total_minggu_ini, 2, ',', '.'),
-        'persen' => round(abs($selisih_persen_minggu), 1),
-        'naik' => $selisih_persen_minggu >= 0
-    ];
+    // total minggu ini & rata-rata
+    // Tentukan minggu terakhir dari bulan terakhir yang difilter
+$minggu_terakhir = $this->Dashboard_model->get_minggu_terakhir_bulan($tahun, $bulan_terakhir);
+
+$total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $bulan_terakhir, $minggu_terakhir, $kebun);
+$rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan_ini($tahun, $bulan_terakhir, $kebun);
+$selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
+
+$data['indikator_panen_mingguan'] = [
+    'nilai' => number_format($total_minggu_ini, 2, ',', '.'),
+    'persen' => round(abs($selisih_persen_minggu), 1),
+    'naik' => $selisih_persen_minggu >= 0
+];
+
 
     $this->load->view('layout/header', $data);
     $this->load->view('dashboard/dashboard', $data);
