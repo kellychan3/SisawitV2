@@ -8,16 +8,24 @@ class Profile extends CI_Controller
         parent::__construct();
         {
             is_logged_in();
-            $this->load->model("User_model");
         }
     }
+
 	public function index()
-	{
-		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-		$this->load->view('layout/header', $data);
-		$this->load->view('profile/profile', $data);
-		$this->load->view('layout/footer', $data);
-	}
+{
+    // Ambil data dari session
+    $user = [
+        'name' => $this->session->userdata('nama'),
+        'email' => $this->session->userdata('email'),
+        'role' => $this->session->userdata('role'),
+        'id_user' => $this->session->userdata('id_user'),
+    ];
+
+    // Kirim data ke view
+    $this->load->view('layout/header'); // jika kamu pakai layout
+    $this->load->view('profile/profile', ['user' => $user]);
+    $this->load->view('layout/footer');
+}
 
     public function changePassword($id)
     {
