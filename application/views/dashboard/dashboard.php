@@ -253,11 +253,20 @@ document.addEventListener('click', function(event) {
             }
                         }
                     },
+                    tooltip: {
+        callbacks: {
+            label: function(context) {
+                let label = context.label || '';
+                let value = context.parsed;
+                return value.toLocaleString('id-ID') + ' HA';
+            }
+        }
+    },
                     datalabels: {
                         formatter: (value, ctx) => {
-                            const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                            return ((value / total) * 100).toFixed(1) + '%';
-                        },
+            const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            return ((value / total) * 100).toFixed(1) + '%';
+        },
                         color: 'white',
                         font: {
                             size: 12
@@ -274,52 +283,64 @@ document.addEventListener('click', function(event) {
     const persentaseCanvas = document.getElementById('persentasePanenKebunChart');
     if (persentaseCanvas) {
         const kebunLabels = <?= json_encode(array_map(fn($row) => $row->nama_kebun, $persentase_panen_kebun)); ?>;
+        const kebunTotalPanen = <?= json_encode(array_map(fn($row) => (float)$row->total_panen_kebun, $persentase_panen_kebun)); ?>;
         const kebunData = <?= json_encode(array_map(fn($row) => (float)$row->persentase, $persentase_panen_kebun)); ?>;
 
+
         new Chart(persentaseCanvas, {
-            type: 'doughnut',
-            data: {
-                labels: kebunLabels,
-                datasets: [{
-                    data: kebunData,
-                    backgroundColor: [
-                        'rgb(31, 4, 154)',
-                        'rgb(0, 149, 255)',
-                        'rgb(105, 118, 235)',
-                        'rgb(66, 148, 196)',
-                        'rgb(73, 144, 226)',
-                        'rgb(88, 106, 204)',
-                        // Tambahkan warna lain jika perlu
-                    ],
-                    borderWidth: 0
-                }]
+    type: 'doughnut',
+    data: {
+        labels: kebunLabels,
+        datasets: [{
+            data: kebunData,
+            backgroundColor: [
+                'rgb(31, 4, 154)',
+                'rgb(0, 149, 255)',
+                'rgb(105, 118, 235)',
+                'rgb(66, 148, 196)',
+                'rgb(73, 144, 226)',
+                'rgb(88, 106, 204)',
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    font: { size: 11 }
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%', // Ukuran lubang donut
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            font: { size: 11 }
-                        }
-                    },
-                    datalabels: {
-                        formatter: (value, ctx) => {
-                            const total = ctx.chart.data.datasets[0].data.reduce((a,b) => a+b, 0);
-                            const percentage = (value / total) * 100;
-                            return percentage.toFixed(1) + '%';
-                        },
-                        color: 'white',
-                        font: { size: 12 }
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const index = context.dataIndex;
+                        const label = context.label || '';
+                        const totalPanen = kebunTotalPanen?.[index] ?? 0;
+                        return `${totalPanen.toLocaleString('id-ID')} Kg`;
                     }
                 }
             },
-            plugins: [ChartDataLabels]
-        });
+            datalabels: {
+                formatter: (value, ctx) => {
+                    const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                    const percentage = (value / total) * 100;
+                    return percentage.toFixed(1) + '%';
+                },
+                color: 'white',
+                font: { size: 12 }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
     }
 </script>
 
@@ -345,7 +366,13 @@ new Chart(ctx, {
                 title: {
                     display: false,
                     text: 'Minggu'
-                }
+                },
+                ticks: {
+            callback: function(val, index) {
+                // Biarkan default parsing \n sebagai line break
+                return this.getLabelForValue(val).split('\n');
+            }
+        }
             },
             y: {
                 title: {
@@ -366,7 +393,7 @@ new Chart(ctx, {
             datalabels: {
                 anchor: 'end',
                 align: 'end',
-                color: 'black',
+                color: 'grey',
                 font: {
                     size: 10
                 }

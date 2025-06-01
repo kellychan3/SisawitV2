@@ -74,7 +74,7 @@
             color: #1A0066;
             padding: 6px;
             margin-bottom: 10px;
-            text-align: center;
+            text-align: left;
             border: 1px solid #CCCCCC;
         }
         .resume-box .info-box .label {
@@ -147,13 +147,13 @@
         .filter-box .field {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: left;
         }
 
         .filter-box label {
             color: white;
             font-weight: bold;
-            text-align: center;
+            text-align: left;
         }
 
         .filter-box select {
