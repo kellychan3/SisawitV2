@@ -1,19 +1,38 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+use Dompdf\Dompdf;
 
 class KebunPdf extends CI_Controller
 {
     public function index()
     {
-	$this->load->model("Sawit_model");
-        $this->load->library('pdf');
-	$data['kebun'] = $this->Sawit_model->get();
-        foreach ($data['kebun'] as $kebun) {
-            $id = $kebun['id_kebun'];
-            $value = array('type' => 'kebun', 'id' => intval($id));
-            $this->Sawit_model->qr($id, json_encode($value));
-        }
-        $html = $this->load->view('pdf/GeneratePdfKebunView', $data, true);
-        $this->pdf->createPDF($html, 'sisawit_kebun', false);
+        $token = $this->session->userdata('token');
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "http://103.150.101.10/api/kebun",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $token",
+                "Accept: application/json"
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $data['kebun'] = json_decode($response, true) ?: [];
+
+        // Load view ke dalam string
+        $html = $this->load->view('kebun/kebunpdf', $data, true);
+
+        // Load Dompdf
+        require_once FCPATH . 'vendor/autoload.php';
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Outputkan PDF
+        $dompdf->stream("data_kebun.pdf", array("Attachment" => 1));
     }
 }
