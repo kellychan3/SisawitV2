@@ -71,6 +71,7 @@
 <script>
 $(document).ready(function() {
     $('#aset').DataTable({
+        order: [[3, 'desc']],
         columnDefs: [
             { targets: 1, searchable: false }
         ],

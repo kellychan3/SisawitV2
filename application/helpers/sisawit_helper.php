@@ -13,6 +13,4 @@ function is_logged_in() // batasi akses ke halaman admin
         }
     }
 }
-
-
 ?>

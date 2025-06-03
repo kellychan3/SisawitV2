@@ -6,7 +6,7 @@ class Dashboard extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        is_logged_in(); // Pastikan fungsi helper ini tersedia untuk cek login user
+        is_logged_in(); 
         $this->load->model('Dashboard_model');
     }
 
