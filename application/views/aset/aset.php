@@ -106,7 +106,7 @@
                         </thead>
                         <tbody>
                             <?php if (empty($asset)): ?>
-                                <tr><td colspan="5" class="text-center">Tidak ada data aset.</td></tr>
+                                <tr><td colspan="5" class="text-center">Aset belum pernah ditambahkan, silahkan tambahkan aset.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($asset as $a): ?>
                                     <tr>
