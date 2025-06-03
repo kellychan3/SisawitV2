@@ -1,3 +1,11 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+  .dataTables_wrapper .dataTables_length select {
+    min-width: 50px;
+    padding-right: 1.8em; 
+}
+
+</style>
 <div class="page-wrapper">
     <div class="page-content">
         <!--breadcrumb-->
@@ -14,38 +22,74 @@
             </div>
         </div>
         <!--end breadcrumb-->
-        <hr />
-        <div class="card">
+        
+        <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+        <?php endif; ?>
+
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+        <?php endif; ?>
+
+         <!-- TABEL DATA -->
+        <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered" style="width:100%">
-                        <?php if ($produktivitas) : ?>
-                            <thead>
-                                <th>Tanggal Log</th>
-                                <th>Nama Log</th>
-                            </thead>
-                            <?php foreach ($produktivitas as $p) : ?>
-                                <tr>
-                                    <td><?= $p['tanggal_update']; ?></td>
-                                    <td><?= $p['status']; ?></td>
-                                <?php endforeach; ?>
-                                </tr>
-                            <?php else : ?>
-                                <tr style="text-align:center">
-                                    <th>Tidak Ada Data Monitoring Yang Tersedia</th>
-                                </tr>
-                            <?php endif ?>
+         <table id="aset" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Tanggal Panen</th>
+                <th>Log Aktivitas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (empty($pemanenan)): ?>
+                                <tr><td colspan="5" class="text-center">Tidak ada data aset.</td></tr>
+                            <?php else: ?>
+            <?php foreach ($pemanenan as $p) : ?>
+                <tr>
+                    <td><?= htmlspecialchars($p['tanggal_panen']); ?></td>
+                    <td>
+                        <?= htmlspecialchars($p['kebun']['nama_kebun'] ?? '-') ?>
+                        panen sebesar
+                        <?= htmlspecialchars($p['jumlah_panen']); ?> kg oleh
+                        <?= htmlspecialchars($p['kebun']['user']['nama'] ?? 'Pengguna Tidak Diketahui'); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!--end page wrapper -->
-<!--start overlay-->
-<div class="overlay toggle-icon"></div>
-<!--end overlay-->
-<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
-<!--End Back To Top Button-->
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#aset').DataTable({
+        order: [[0, 'desc']],
+        columnDefs: [
+            { targets: 1, searchable: false }
+        ],
+        language: {
+            lengthMenu: "Menampilkan _MENU_ entri",
+            zeroRecords: "Data tidak ditemukan",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+            infoFiltered: "(disaring dari _MAX_ total entri)",
+            search: "Cari:",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya >",
+                previous: "< Sebelumnya"
+            }
+        }
+    });
+});
+</script>
