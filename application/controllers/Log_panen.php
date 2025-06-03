@@ -8,7 +8,6 @@ class Log_panen extends CI_Controller
         parent::__construct();
         {
             is_logged_in();
-            $this->load->model("Log_panen_model");
         }
     }
 	public function index()

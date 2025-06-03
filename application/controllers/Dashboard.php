@@ -136,7 +136,6 @@ if (empty($kebun)) {
         'naik' => $selisih_persen_bulan >= 0
     ];
 
-    // total minggu ini & rata-rata
     // Tentukan minggu terakhir dari bulan terakhir yang difilter
 $minggu_terakhir = $this->Dashboard_model->get_minggu_terakhir_bulan($tahun, $bulan_terakhir);
 

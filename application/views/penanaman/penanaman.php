@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>
                             <?php if (empty($penanaman)): ?>
-                                <tr><td colspan="5" class="text-center">Tidak ada data aset.</td></tr>
+                                <tr><td colspan="5" class="text-center">Data penanaman belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($penanaman as $a): ?>
                                     <tr>

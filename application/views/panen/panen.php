@@ -62,6 +62,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php if (empty($asset)): ?>
+                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
+                            <?php else: ?>
                                             <?php foreach ($panenPerTanggal['data'] as $data): ?>
                                                 <tr>
                                                     <?php foreach ($panenPerTanggal['title'] as $title): ?>
@@ -77,7 +80,8 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        </tbody>
+                                        <?php endif; ?>
+                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -94,6 +98,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php if (empty($asset)): ?>
+                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
                                             <?php foreach ($panenPerBulan['data'] as $data): ?>
                                                 <tr>
                                                     <?php foreach ($panenPerBulan['title'] as $title): ?>
@@ -109,6 +115,7 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                             <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -126,6 +133,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php if (empty($asset)): ?>
+                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
                                             <?php foreach ($panenPerTahun['data'] as $data): ?>
                                                 <tr>
                                                     <?php foreach ($panenPerTahun['title'] as $title): ?>
@@ -133,6 +142,7 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                             <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
