@@ -16,6 +16,7 @@ class Dashboard extends CI_Controller
     $data['user'] = $this->db->get_where('user', [
         'email' => $this->session->userdata('email')
     ])->row_array();
+         $organisasi_id = $this->session->userdata('organisasi_id');
 
     // Ambil filter dari URL, gunakan default tahun sekarang
     $tahun = $this->input->get('tahun') ?? date('Y');
@@ -58,7 +59,7 @@ if (empty($kebun)) {
 
     $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($tahun, $bulan, $kebun);
     $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($kebun);
-    $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun();
+    $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($organisasi_id);
     $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($kebun);
     $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($tahun, $bulan, $kebun);
     $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan,  $kebun);

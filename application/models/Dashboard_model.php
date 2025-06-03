@@ -61,15 +61,21 @@ class Dashboard_model extends CI_Model
         return $this->dw->query($sql)->result_array();
     }
 
-    public function get_summary_kebun($kebun = null)
+    public function get_summary_kebun($organisasi_id = null, $kebun = null)
     {
         $sql = "SELECT COUNT(DISTINCT f.sk_kebun) as jumlah_kebun, SUM(f.luas_kebun_ha) as total_luas
                 FROM fact_luas_kebun f
                 JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
+JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
                 WHERE 1=1";
 
         $params = [];
 
+if ($organisasi_id !== null) {
+        $sql .= " AND o.id_organisasi = ?";
+        $params[] = $organisasi_id;
+    }
         if ($kebun) {
             if (is_array($kebun)) {
                 $placeholders = implode(',', array_fill(0, count($kebun), '?'));
@@ -95,14 +101,12 @@ class Dashboard_model extends CI_Model
             $this->dw->where('w.tahun', $tahun);
         }
         if (!empty($bulan)) {
-    if (is_array($bulan)) {
-        $this->dw->where_in('w.bulan', $bulan);
-    } else {
-        $this->dw->where('w.bulan', $bulan);
-    }
-}
-
-
+            if (is_array($bulan)) {
+                $this->dw->where_in('w.bulan', $bulan);
+            } else {
+                $this->dw->where('w.bulan', $bulan);
+            }
+        }
         $this->dw->group_by(['w.tahun', 'w.bulan']);
         $this->dw->order_by('w.tahun, w.bulan');
 
