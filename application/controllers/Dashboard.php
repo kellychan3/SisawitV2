@@ -41,8 +41,8 @@ class Dashboard extends CI_Controller
     $kebun = $this->input->get('kebun');
 
 if (empty($kebun)) {
-    $semua_kebun = $this->Dashboard_model->get_kebun_list();
-    $kebun = array_column($semua_kebun, 'sk_kebun'); // default: semua kebun terpilih
+    $semua_kebun = $this->Dashboard_model->get_kebun_list($organisasi_id);
+    $kebun = array_column($semua_kebun ?? [], 'sk_kebun');
 } elseif (!is_array($kebun)) {
     $kebun = [$kebun];
 }
@@ -53,14 +53,14 @@ if (empty($kebun)) {
         'kebun' => $kebun,
     ];
 
-    $data['tahun_list'] = $this->Dashboard_model->get_tahun_list();
-    $data['bulan_list'] = $this->Dashboard_model->get_bulan_list();
-    $data['kebun_list'] = $this->Dashboard_model->get_kebun_list();
+    $data['tahun_list'] = $this->Dashboard_model->get_tahun_list($organisasi_id);
+    $data['bulan_list'] = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
+    $data['kebun_list'] = $this->Dashboard_model->get_kebun_list($organisasi_id);
 
-    $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($tahun, $bulan, $kebun);
+    $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($organisasi_id, $tahun, $bulan, $kebun);
     $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($kebun);
     $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($organisasi_id);
-    $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($kebun);
+    $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($organisasi_id, $kebun);
     $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($tahun, $bulan, $kebun);
     $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan,  $kebun);
 
@@ -155,5 +155,14 @@ $data['indikator_panen_mingguan'] = [
     $this->load->view('dashboard/dashboard', $data);
     $this->load->view('layout/footer');
 }
+
+public function get_bulan_by_tahun()
+{
+    $organisasi_id = $this->session->userdata('organisasi_id');
+    $tahun = $this->input->post('tahun');
+    $bulan_list = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
+    echo json_encode($bulan_list);
+}
+
 
 }
