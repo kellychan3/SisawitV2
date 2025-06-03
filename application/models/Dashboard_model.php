@@ -9,57 +9,63 @@ class Dashboard_model extends CI_Model
         $this->dw = $this->load->database('dw', TRUE); // db 'dw_sawit'
     }
 
-    // Helper untuk filter kebun
-    private function filter_by_kebun($kebun)
-    {
-        if ($kebun) {
-            $this->dw->join('dim_kebun k', 'f.sk_kebun = k.sk_kebun');
-            if (is_array($kebun)) {
-                $this->dw->where_in('k.nama_kebun', $kebun);
-            } else {
-                $this->dw->where('k.nama_kebun', $kebun);
-            }
-        }
-    }
-
-    // Function Filter
-    public function get_tahun_list()
+    public function get_tahun_list($organisasi_id)
 {
     $sql = "SELECT DISTINCT w.tahun 
             FROM fact_panen f
             JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE o.id_organisasi = ?
             ORDER BY w.tahun";
-    return $this->dw->query($sql)->result_array();
+
+    return $this->dw->query($sql, [$organisasi_id])->result_array();
 }
 
-
-    public function get_bulan_list()
-    {
+    public function get_bulan_list($organisasi_id, $tahun)
+{
     $sql = "SELECT DISTINCT w.bulan 
             FROM fact_panen f
             JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE o.id_organisasi = ? AND w.tahun = ?
             ORDER BY w.bulan";
-    return [
-        ['bulan' => '1', 'nama' => 'Januari'],
-        ['bulan' => '2', 'nama' => 'Februari'],
-        ['bulan' => '3', 'nama' => 'Maret'],
-        ['bulan' => '4', 'nama' => 'April'],
-        ['bulan' => '5', 'nama' => 'Mei'],
-        ['bulan' => '6', 'nama' => 'Juni'],
-        ['bulan' => '7', 'nama' => 'Juli'],
-        ['bulan' => '8', 'nama' => 'Agustus'],
-        ['bulan' => '9', 'nama' => 'September'],
-        ['bulan' => '10', 'nama' => 'Oktober'],
-        ['bulan' => '11', 'nama' => 'November'],
-        ['bulan' => '12', 'nama' => 'Desember'],
+
+    $result = $this->dw->query($sql, [$organisasi_id, $tahun])->result_array();
+
+    $bulan_map = [
+        '1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April',
+        '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus',
+        '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember',
     ];
+
+    $bulan_list = [];
+    foreach ($result as $row) {
+        $bulan_num = (string)$row['bulan'];
+        $bulan_list[] = [
+            'bulan' => $bulan_num,
+            'nama' => $bulan_map[$bulan_num],
+        ];
+    }
+
+    return $bulan_list;
 }
 
-    public function get_kebun_list()
-    {
-        $sql = "SELECT nama_kebun FROM dim_kebun ORDER BY nama_kebun";
-        return $this->dw->query($sql)->result_array();
-    }
+
+    public function get_kebun_list($organisasi_id)
+{
+    $sql = "SELECT DISTINCT k.nama_kebun 
+            FROM dim_kebun k
+            JOIN fact_panen f ON k.sk_kebun = f.sk_kebun
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE o.id_organisasi = ?
+            ORDER BY k.nama_kebun";
+
+    return $this->dw->query($sql, [$organisasi_id])->result_array();
+}
+
 
     public function get_summary_kebun($organisasi_id = null, $kebun = null)
     {
@@ -90,29 +96,45 @@ if ($organisasi_id !== null) {
         return $this->dw->query($sql, $params)->row();
     }
 
-    public function get_total_panen_per_bulan($tahun = null, $bulan = null, $kebun = null)
-    {
-        $this->dw->select('w.bulan, w.tahun, SUM(f.jumlah_panen) as total_panen');
-        $this->dw->from('fact_panen f');
-        $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
-        $this->filter_by_kebun($kebun);
+    public function get_total_panen_per_bulan($organisasi_id = null, $tahun = null, $bulan = null, $kebun = null)
+{
+    $this->dw->select('w.bulan, w.tahun, SUM(f.jumlah_panen) as total_panen');
+    $this->dw->from('fact_panen f');
+    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
+    $this->dw->join('dim_user u', 'f.sk_user = u.sk_user');
+    $this->dw->join('dim_organisasi o', 'u.sk_organisasi = o.sk_organisasi');
+    $this->dw->join('dim_kebun k', 'f.sk_kebun = k.sk_kebun');
 
-        if (!empty($tahun)) {
-            $this->dw->where('w.tahun', $tahun);
-        }
-        if (!empty($bulan)) {
-            if (is_array($bulan)) {
-                $this->dw->where_in('w.bulan', $bulan);
-            } else {
-                $this->dw->where('w.bulan', $bulan);
-            }
-        }
-        $this->dw->group_by(['w.tahun', 'w.bulan']);
-        $this->dw->order_by('w.tahun, w.bulan');
-
-        $query = $this->dw->get();
-        return $query->result();
+    if (!empty($organisasi_id)) {
+        $this->dw->where('o.id_organisasi', $organisasi_id);
     }
+
+    if (!empty($kebun)) {
+        if (is_array($kebun)) {
+            $this->dw->where_in('k.nama_kebun', $kebun);
+        } else {
+            $this->dw->where('k.nama_kebun', $kebun);
+        }
+    }
+
+    if (!empty($tahun)) {
+        $this->dw->where('w.tahun', $tahun);
+    }
+
+    if (!empty($bulan)) {
+        if (is_array($bulan)) {
+            $this->dw->where_in('w.bulan', $bulan);
+        } else {
+            $this->dw->where('w.bulan', $bulan);
+        }
+    }
+
+    $this->dw->group_by(['w.tahun', 'w.bulan']);
+    $this->dw->order_by('w.tahun, w.bulan');
+
+    return $this->dw->get()->result();
+}
+
 
     public function get_total_panen_bulan_ini($tahun, $bulan, $kebun = null)
 {
@@ -242,29 +264,36 @@ public function get_rata2_panen_mingguan_bulan_ini($tahun, $bulan, $kebun = null
         return $this->dw->query($sql, $params)->result();
     }
 
-    public function get_persediaan_pupuk($kebun = null)
-    {
-        $sql = "SELECT a.nama_aset, a.jumlah_aset, k.nama_kebun
-                FROM dim_aset a
-                JOIN dim_kategori_aset ka ON a.sk_kategori_aset = ka.sk_kategori_aset
-                JOIN dim_kebun k ON a.sk_kebun = k.sk_kebun
-                WHERE ka.nama_kategori = 'Pupuk'";
+    public function get_persediaan_pupuk($organisasi_id = null, $kebun = null)
+{
+    $sql = "SELECT a.nama_aset, a.jumlah_aset, k.nama_kebun
+            FROM dim_aset a
+            JOIN dim_kategori_aset ka ON a.sk_kategori_aset = ka.sk_kategori_aset
+            JOIN dim_kebun k ON a.sk_kebun = k.sk_kebun
+            WHERE ka.nama_kategori = 'Pupuk'";
+    
+    $params = [];
 
-        $params = [];
-
-        if ($kebun) {
-            if (is_array($kebun)) {
-                $placeholders = implode(',', array_fill(0, count($kebun), '?'));
-                $sql .= " AND k.nama_kebun IN ($placeholders)";
-                $params = array_merge($params, $kebun);
-            } else {
-                $sql .= " AND k.nama_kebun = ?";
-                $params[] = $kebun;
-            }
-        }
-
-        return $this->dw->query($sql, $params)->result();
+    // Filter berdasarkan organisasi (jika ada)
+    if ($organisasi_id) {
+        $sql .= " AND k.sk_organisasi = ?";
+        $params[] = $organisasi_id;
     }
+
+    // Filter berdasarkan kebun (jika ada)
+    if ($kebun) {
+        if (is_array($kebun)) {
+            $placeholders = implode(',', array_fill(0, count($kebun), '?'));
+            $sql .= " AND k.nama_kebun IN ($placeholders)";
+            $params = array_merge($params, $kebun);
+        } else {
+            $sql .= " AND k.nama_kebun = ?";
+            $params[] = $kebun;
+        }
+    }
+
+    return $this->dw->query($sql, $params)->result();
+}
 
    public function get_persen_panen_per_kebun($tahun, $bulan_arr, $kebun = null)
 {

@@ -405,7 +405,23 @@ new Chart(ctx, {
 
 </script>
 
+<script>
+    $('#tahun_select').change(function() {
+    var tahun = $(this).val();
+    $.ajax({
+        url: 'dashboard/get_bulan_by_tahun',
+        type: 'POST',
+        data: { tahun: tahun },
+        success: function(data) {
+            $('#bulan_select').empty();
+            $.each(JSON.parse(data), function(index, value) {
+                $('#bulan_select').append('<option value="' + value.bulan + '">' + value.nama + '</option>');
+            });
+        }
+    });
+});
 
+</script>
 
 </body>
 </html>
