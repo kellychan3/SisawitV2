@@ -53,7 +53,7 @@
                         <?= htmlspecialchars($p['kebun']['nama_kebun'] ?? '-') ?>
                         panen sebesar
                         <?= htmlspecialchars($p['jumlah_panen']); ?> kg oleh
-                        <?= htmlspecialchars($p['kebun']['user']['nama'] ?? 'Pengguna Tidak Diketahui'); ?>
+                        <?= htmlspecialchars($p['added_by']['nama'] ?? 'Pengguna Tidak Diketahui'); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

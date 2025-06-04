@@ -50,11 +50,11 @@
                             <?php else: ?>
                                 <?php foreach ($penanaman as $a): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($a['nama_kebun']); ?></td>
-                                        <td><?= htmlspecialchars($a['nama_varietas_bibit']); ?></td>
+                                        <td><?= htmlspecialchars($a['kebun']['nama_kebun']); ?></td>
+                                        <td><?= htmlspecialchars($a['varietas_bibit']); ?></td>
                                         <td><?= htmlspecialchars($a['jumlah_bibit']); ?></td>
                                         <td><?= htmlspecialchars($a['tanggal_penanaman']); ?></td>
-                                        <td><?= htmlspecialchars($a['nama_user']); ?></td>
+                                        <td><?= htmlspecialchars($a['added_by']['nama']); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
