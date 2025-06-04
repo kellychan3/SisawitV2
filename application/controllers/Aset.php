@@ -53,7 +53,7 @@ class Aset extends CI_Controller
         // Ambil data aset
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/organisasi/$organisasi_id/aset",
+            CURLOPT_URL => "http://103.150.101.10/api/aset",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",
@@ -88,7 +88,7 @@ class Aset extends CI_Controller
     // Ambil semua aset dulu
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/organisasi/$organisasi_id/aset",
+        CURLOPT_URL => "http://103.150.101.10/api/aset",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             "Authorization: Bearer $token",
@@ -99,18 +99,26 @@ class Aset extends CI_Controller
     curl_close($curl);
     $existingAssets = json_decode($response, true) ?: [];
 
-    // Cek duplikasi
-    foreach ($existingAssets as $aset) {
-        if (
-            strtolower($aset['nama_aset']) === strtolower($nama_aset) &&
-            $aset['kategori_aset_id'] == $kategori_aset_id &&
-            $aset['kebun_id'] == $kebun_id
-        ) {
-            $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
-            redirect('Aset');
-            return;
-        }
+if (!is_array($existingAssets)) {
+    log_message('error', 'Format response tidak sesuai: ' . $response);
+    $this->session->set_flashdata('error', 'Gagal mengambil data aset dari server.');
+    redirect('Aset');
+    return;
+}
+
+foreach ($existingAssets as $aset) {
+    if (
+        is_array($aset) &&
+        isset($aset['nama_aset'], $aset['kategori_aset']['id'], $aset['kebun']['id']) &&
+        strtolower($aset['nama_aset']) === strtolower($nama_aset) &&
+        $aset['kategori_aset']['id'] == $kategori_aset_id &&
+        $aset['kebun']['id'] == $kebun_id
+    ) {
+        $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
+        redirect('Aset');
+        return;
     }
+}
 
     // Lanjut tambah aset jika tidak duplikat
     $postData = json_encode([
