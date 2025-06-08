@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <table id="aset" class="table table-striped table-bordered">
                         <?php if ($SystemLog) : ?>
                             <thead>
                                 <th>Tanggal Log</th>
@@ -41,11 +41,33 @@
         </div>
     </div>
 </div>
-
-<!--end page wrapper -->
-<!--start overlay-->
-<div class="overlay toggle-icon"></div>
-<!--end overlay-->
-<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
-<!--End Back To Top Button-->
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#aset').DataTable({
+        order: [[0, 'desc']],
+        search: {
+            smart: false,
+            regex: false,
+            caseInsensitive: true
+        },
+        language: {
+            lengthMenu: "Menampilkan _MENU_ entri",
+            zeroRecords: "Data tidak ditemukan",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+            infoFiltered: "(disaring dari _MAX_ total entri)",
+            search: "Cari:",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya >",
+                previous: "< Sebelumnya"
+            }
+        }
+    });
+});
+</script>

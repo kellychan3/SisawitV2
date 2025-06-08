@@ -166,7 +166,9 @@
                                 <th>Jumlah Aset</th>
                                 <th>Jenis Aset</th>
                                 <th>Kebun</th>
-                                <th>Aksi</th>
+                                <?php if ($this->session->userdata('role') !== 'mandor'): ?>
+                                    <th>Aksi</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -179,6 +181,7 @@
                                         <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
                                         <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
                                         <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
+                                        <?php if ($this->session->userdata('role') !== 'mandor'): ?>
                                         <td>
                                             <button class="btn btn-warning edit-btn"
                                                     data-id="<?= $a['id']; ?>"
@@ -194,6 +197,7 @@
                                             <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
 
                                         </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>

@@ -6,7 +6,7 @@ class Dashboard_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->dw = $this->load->database('dw', TRUE); // db 'dw_sawit'
+        $this->dw = $this->load->database('dw', TRUE); 
     }
 
     public function get_tahun_list($organisasi_id)

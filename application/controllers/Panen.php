@@ -78,68 +78,70 @@ class Panen extends CI_Controller
     ];
 
     // Data bulanan dan tahunan
-$monthlyData = [];
-$yearlyData = [];
+    $monthlyData = [];
+    $yearlyData = [];
 
-foreach ($allPemanenan as $panen) {
-    if (!$panen['kebun'] || !$panen['tanggal_panen']) continue;
+    foreach ($allPemanenan as $panen) {
+        if (!$panen['kebun'] || !$panen['tanggal_panen']) continue;
 
-    $bulan = date('Y-m', strtotime($panen['tanggal_panen'])); // format YYYY-MM untuk bulan
-    $tahun = date('Y', strtotime($panen['tanggal_panen']));
-    $nama_kebun = $panen['kebun']['nama_kebun'];
-    $jumlah = (int) $panen['jumlah_panen'];
+        $bulan = date('Y-m', strtotime($panen['tanggal_panen'])); // format YYYY-MM untuk bulan
+        $tahun = date('Y', strtotime($panen['tanggal_panen']));
+        $nama_kebun = $panen['kebun']['nama_kebun'];
+        $jumlah = (int) $panen['jumlah_panen'];
 
-    // Bulanan
-    if (!isset($monthlyData[$bulan])) $monthlyData[$bulan] = [];
-    if (!isset($monthlyData[$bulan][$nama_kebun])) $monthlyData[$bulan][$nama_kebun] = 0;
-    $monthlyData[$bulan][$nama_kebun] += $jumlah;
+        // Bulanan
+        if (!isset($monthlyData[$bulan])) $monthlyData[$bulan] = [];
+        if (!isset($monthlyData[$bulan][$nama_kebun])) $monthlyData[$bulan][$nama_kebun] = 0;
+        $monthlyData[$bulan][$nama_kebun] += $jumlah;
 
-    // Tahunan
-    if (!isset($yearlyData[$tahun])) $yearlyData[$tahun] = [];
-    if (!isset($yearlyData[$tahun][$nama_kebun])) $yearlyData[$tahun][$nama_kebun] = 0;
-    $yearlyData[$tahun][$nama_kebun] += $jumlah;
-}
-
-// Susun data untuk view Monthly
-$tableDataBulan = [];
-foreach ($monthlyData as $bulan => $kebunPanen) {
-    $row = ['Bulan Panen' => $bulan];
-    foreach ($kebunNames as $kebun) {
-        $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+        // Tahunan
+        if (!isset($yearlyData[$tahun])) $yearlyData[$tahun] = [];
+        if (!isset($yearlyData[$tahun][$nama_kebun])) $yearlyData[$tahun][$nama_kebun] = 0;
+        $yearlyData[$tahun][$nama_kebun] += $jumlah;
     }
-    $tableDataBulan[] = $row;
-}
-usort($tableDataBulan, function ($a, $b) {
-    return strtotime($b['Bulan Panen'] . '-01') - strtotime($a['Bulan Panen'] . '-01');
-});
 
-// Susun data untuk view Yearly
-$tableDataTahun = [];
-foreach ($yearlyData as $tahun => $kebunPanen) {
-    $row = ['Tahun Panen' => $tahun];
-    foreach ($kebunNames as $kebun) {
-        $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+    // Susun data untuk view Monthly
+    $tableDataBulan = [];
+    foreach ($monthlyData as $bulan => $kebunPanen) {
+        $row = ['Bulan Panen' => $bulan];
+        foreach ($kebunNames as $kebun) {
+            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+        }
+        $tableDataBulan[] = $row;
     }
-    $tableDataTahun[] = $row;
-}
-usort($tableDataTahun, function ($a, $b) {
-    return $b['Tahun Panen'] - $a['Tahun Panen'];
-});
+    usort($tableDataBulan, function ($a, $b) {
+        return strtotime($b['Bulan Panen'] . '-01') - strtotime($a['Bulan Panen'] . '-01');
+    });
 
-// Assign ke data untuk view
-$data['panenPerBulan'] = [
-    'title' => array_merge(['Bulan Panen'], $kebunNames),
-    'data' => $tableDataBulan
-];
-$data['panenPerTahun'] = [
-    'title' => array_merge(['Tahun Panen'], $kebunNames),
-    'data' => $tableDataTahun
-];
+    // Susun data untuk view Yearly
+    $tableDataTahun = [];
+    foreach ($yearlyData as $tahun => $kebunPanen) {
+        $row = ['Tahun Panen' => $tahun];
+        foreach ($kebunNames as $kebun) {
+            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+        }
+        $tableDataTahun[] = $row;
+    }
+    usort($tableDataTahun, function ($a, $b) {
+        return $b['Tahun Panen'] - $a['Tahun Panen'];
+    });
+
+    // Assign ke data untuk view
+    $data['panenPerBulan'] = [
+        'title' => array_merge(['Bulan Panen'], $kebunNames),
+        'data' => $tableDataBulan
+    ];
+    $data['panenPerTahun'] = [
+        'title' => array_merge(['Tahun Panen'], $kebunNames),
+        'data' => $tableDataTahun
+    ];
 
 
-    $data['user'] = $this->db->get_where('user', [
-        'email' => $this->session->userdata('email')
-    ])->row_array();
+    $data['user'] = [
+            'email' => $this->session->userdata('email'),
+            'nama' => $this->session->userdata('nama'),
+            'role' => $this->session->userdata('role'),
+        ];
 
     $this->load->view('layout/header', $data);
     $this->load->view('panen/panen', $data);

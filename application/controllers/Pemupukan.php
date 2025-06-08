@@ -40,9 +40,12 @@ class Pemupukan extends CI_Controller
         }
 
         $data['pemupukan'] = $pemupukan;
-        $data['user'] = $this->db->get_where('user', [
-            'email' => $this->session->userdata('email')
-        ])->row_array();
+        
+        $data['user'] = [
+            'email' => $this->session->userdata('email'),
+            'nama' => $this->session->userdata('nama'),
+            'role' => $this->session->userdata('role'),
+        ];
 
         $this->load->view('layout/header', $data);
         $this->load->view('pemupukan/pemupukan', $data);

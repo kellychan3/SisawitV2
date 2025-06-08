@@ -56,7 +56,6 @@ class Authentication extends CI_Controller
             $this->session->set_userdata([
                 'email' => $user['email'],
                 'nama' => $user['nama'],
-                'id_user' => $user['id'],
                 'role' => $user['role'],
                 'token' => $result['token'],
                 'organisasi_id' => $user['organisasi_id'],
@@ -64,8 +63,7 @@ class Authentication extends CI_Controller
 
             $currentDate = date('Y-m-d H:i:s');
             $this->Log_pengguna_model->insert([
-                'id_user' => $user['id'],
-                'value' => date('d/m/Y H:i:s', strtotime($currentDate)) . ' ' . $user['nama'] . ' login',
+                'value' => $user['nama'] . ' login',
                 'date' => $currentDate,
             ]);
 

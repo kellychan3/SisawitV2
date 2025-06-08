@@ -12,7 +12,12 @@ class Prediksi extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['user'] = [
+            'email' => $this->session->userdata('email'),
+            'nama' => $this->session->userdata('nama'),
+            'role' => $this->session->userdata('role'),
+        ];
+        
         $this->load->view('layout/header', $data);
         $this->load->view('prediksi/prediksi', $data);
         $this->load->view('layout/footer', $data);
