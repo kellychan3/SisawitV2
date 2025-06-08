@@ -73,8 +73,13 @@ $(document).ready(function() {
     $('#aset').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
-            { targets: 1, searchable: false }
+            { targets: 2, searchable: false } // kolom Jumlah Bibit gak bisa dicari
         ],
+        search: {
+            smart: false,
+            regex: false,
+            caseInsensitive: true
+        },
         language: {
             lengthMenu: "Menampilkan _MENU_ entri",
             zeroRecords: "Data tidak ditemukan",
@@ -86,12 +91,10 @@ $(document).ready(function() {
                 first: "Pertama",
                 last: "Terakhir",
                 next: "Berikutnya >",
-                previous: "< Sebelumnya"
+                previous: "<script Sebelumnya"
             }
         }
     });
 });
 
-
 </script>
-

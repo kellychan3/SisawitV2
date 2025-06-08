@@ -69,9 +69,11 @@
 <script>
 $(document).ready(function() {
     $('#aset').DataTable({
-        columnDefs: [
-            { targets: 1, searchable: false }
-        ],
+        search: {
+            smart: false,
+            regex: false,
+            caseInsensitive: true
+        },
         language: {
             lengthMenu: "Menampilkan _MENU_ entri",
             zeroRecords: "Data tidak ditemukan",

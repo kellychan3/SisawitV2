@@ -12,11 +12,15 @@ class Dashboard extends CI_Controller
 
     public function index()
 {
-    // Ambil data user login
-    $data['user'] = $this->db->get_where('user', [
-        'email' => $this->session->userdata('email')
-    ])->row_array();
-         $organisasi_id = $this->session->userdata('organisasi_id');
+    if ($this->session->userdata('email')) {
+        $data['user'] = [
+            'email' => $this->session->userdata('email'),
+            'nama' => $this->session->userdata('nama'),
+            'role' => $this->session->userdata('role'),
+        ];
+    }
+
+    $organisasi_id = $this->session->userdata('organisasi_id'); // <--- tambahkan ini
 
     // Ambil filter dari URL, gunakan default tahun sekarang
     $tahun = $this->input->get('tahun') ?? date('Y');

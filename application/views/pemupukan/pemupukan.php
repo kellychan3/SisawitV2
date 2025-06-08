@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                             <?php if (empty($pemupukan)): ?>
-                                <tr><td colspan="5" class="text-center">Data pemupukan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
+                                <tr><td colspan="7" class="text-center">Data pemupukan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($pemupukan as $a): ?>
                                     <tr>
@@ -77,8 +77,13 @@ $(document).ready(function() {
     $('#aset').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
-            { targets: 1, searchable: false }
+            { targets: 2, searchable: false } // kolom Jumlah Bibit gak bisa dicari
         ],
+        search: {
+            smart: false,
+            regex: false,
+            caseInsensitive: true
+        },
         language: {
             lengthMenu: "Menampilkan _MENU_ entri",
             zeroRecords: "Data tidak ditemukan",
