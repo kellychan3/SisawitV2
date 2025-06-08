@@ -181,7 +181,7 @@
                                         <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
                                         <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
                                         <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
-                                        <?php if ($this->session->userdata('role') !== 'mandor'): ?>
+                                        <?php if ($this->session->userdata('role') == 'pemilik'): ?>
                                         <td>
                                             <button class="btn btn-warning edit-btn"
                                                     data-id="<?= $a['id']; ?>"
@@ -192,8 +192,6 @@
                                                     data-jumlah="<?= $a['jumlah_aset']; ?>">
                                                 Ubah
                                             </button>
-
-
                                             <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
 
                                         </td>

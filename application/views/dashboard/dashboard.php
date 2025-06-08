@@ -222,23 +222,18 @@ document.addEventListener('click', function(event) {
         const pieLabels = <?= json_encode(array_map(fn($row) => $row->nama_kebun, $luas_kebun)); ?>;
         const pieData = <?= json_encode(array_map(fn($row) => (float)$row->total_luas, $luas_kebun)); ?>;
 
+        const warnaKebun = <?= json_encode($warna_kebun); ?>;
+        const backgroundColors = pieLabels.map(label => warnaKebun[label] || 'gray');
+
         new Chart(kebunCanvas, {
             type: 'pie',
             data: {
-                labels: pieLabels,
-                datasets: [{
-                    data: pieData,
-                    backgroundColor: [
-                        'rgb(31, 4, 154)',     // Biru tua (warna utama Anda)
-                        'rgb(0, 149, 255)',    // Biru terang
-                        'rgb(105, 118, 235)',  // Biru keunguan
-                        'rgb(66, 148, 196)',    // Ungu gelap
-                        'rgb(73, 144, 226)',   // Biru sedang
-                        'rgb(88, 106, 204)'    // Biru violet
-                    ],
-                    borderWidth: 0 
-                }]
-            },
+            labels: pieLabels,
+            datasets: [{
+                data: pieData,
+                backgroundColor: backgroundColors
+            }]
+        },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -282,28 +277,23 @@ document.addEventListener('click', function(event) {
 <script>
     const persentaseCanvas = document.getElementById('persentasePanenKebunChart');
     if (persentaseCanvas) {
-        const kebunLabels = <?= json_encode(array_map(fn($row) => $row->nama_kebun, $persentase_panen_kebun)); ?>;
+        const donutLabels = <?= json_encode(array_map(fn($row) => $row->nama_kebun, $persentase_panen_kebun)); ?>;
         const kebunTotalPanen = <?= json_encode(array_map(fn($row) => (float)$row->total_panen_kebun, $persentase_panen_kebun)); ?>;
-        const kebunData = <?= json_encode(array_map(fn($row) => (float)$row->persentase, $persentase_panen_kebun)); ?>;
+        const donutData = <?= json_encode(array_map(fn($row) => (float)$row->persentase, $persentase_panen_kebun)); ?>;
 
+        const warnaKebun = <?= json_encode($warna_kebun); ?>;
+
+    const donutColors = donutLabels.map(label => warnaKebun[label] || 'gray');
 
         new Chart(persentaseCanvas, {
     type: 'doughnut',
     data: {
-        labels: kebunLabels,
-        datasets: [{
-            data: kebunData,
-            backgroundColor: [
-                'rgb(31, 4, 154)',
-                'rgb(0, 149, 255)',
-                'rgb(105, 118, 235)',
-                'rgb(66, 148, 196)',
-                'rgb(73, 144, 226)',
-                'rgb(88, 106, 204)',
-            ],
-            borderWidth: 0
-        }]
-    },
+            labels: donutLabels,
+            datasets: [{
+                data: donutData,
+                backgroundColor: donutColors
+            }]
+        },
     options: {
         responsive: true,
         maintainAspectRatio: false,

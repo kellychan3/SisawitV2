@@ -20,9 +20,8 @@ class Dashboard extends CI_Controller
         ];
     }
 
-    $organisasi_id = $this->session->userdata('organisasi_id'); // <--- tambahkan ini
+    $organisasi_id = $this->session->userdata('organisasi_id'); 
 
-    // Ambil filter dari URL, gunakan default tahun sekarang
     $tahun = $this->input->get('tahun') ?? date('Y');
     $bulan = $this->input->get('bulan');
 
@@ -40,16 +39,14 @@ class Dashboard extends CI_Controller
         $bulan = array_map('intval', $bulan);
     }
 
-    $minggu = date('W');
-
     $kebun = $this->input->get('kebun');
 
-if (empty($kebun)) {
-    $semua_kebun = $this->Dashboard_model->get_kebun_list($organisasi_id);
-    $kebun = array_column($semua_kebun ?? [], 'sk_kebun');
-} elseif (!is_array($kebun)) {
-    $kebun = [$kebun];
-}
+    if (empty($kebun)) {
+        $semua_kebun = $this->Dashboard_model->get_kebun_list($organisasi_id);
+        $kebun = array_column($semua_kebun ?? [], 'sk_kebun');
+    } elseif (!is_array($kebun)) {
+        $kebun = [$kebun];
+    }
 
     $data['filter'] = [
         'tahun' => $tahun,
@@ -60,13 +57,13 @@ if (empty($kebun)) {
     $data['tahun_list'] = $this->Dashboard_model->get_tahun_list($organisasi_id);
     $data['bulan_list'] = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
     $data['kebun_list'] = $this->Dashboard_model->get_kebun_list($organisasi_id);
-
+    
     $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($organisasi_id, $tahun, $bulan, $kebun);
-    $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($kebun);
+    $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($organisasi_id, $kebun);
     $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($organisasi_id);
     $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($organisasi_id, $kebun);
-    $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($tahun, $bulan, $kebun);
-    $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan,  $kebun);
+    $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($organisasi_id, $tahun, $bulan, $kebun);
+    $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan, $organisasi_id, $kebun);
 
     $panen_data = $data['panen_mingguan_kebun'];
 
@@ -94,14 +91,25 @@ if (empty($kebun)) {
 }
 
     $datasets = [];
-    $warna = [
-        'rgb(31, 4, 154)',
-        'rgb(0, 149, 255)',
-        'rgb(105, 118, 235)',
-        'rgb(66, 148, 196)',
-        'rgb(73, 144, 226)',
-        'rgb(88, 106, 204)'
-    ];
+    
+    $warna_preset = [
+    'rgb(31, 4, 154)',    // Biru tua
+    'rgb(0, 149, 255)',   // Biru muda
+    'rgb(105, 118, 235)',
+    'rgb(66, 148, 196)',
+    'rgb(73, 144, 226)',
+    'rgb(88, 106, 204)',
+    'rgb(54, 89, 255)',
+    'rgb(90, 130, 255)',
+    'rgb(125, 160, 255)',
+    'rgb(160, 190, 255)', // Tambah sesuai kebutuhan
+];
+
+
+$warna_kebun = [];
+foreach ($kebun_list as $i => $nama_kebun) {
+    $warna_kebun[$nama_kebun] = $warna_preset[$i % count($warna_preset)];
+}
 
     foreach ($kebun_list as $index => $kebun) {
     $data_per_kebun = [];
@@ -121,7 +129,7 @@ if (empty($kebun)) {
     $datasets[] = [
         'label' => $kebun,
         'data' => $data_per_kebun,
-        'backgroundColor' => $warna[$index % count($warna)],
+        'backgroundColor' => $warna_kebun[$kebun],
     ];
 }
 
@@ -130,9 +138,9 @@ if (empty($kebun)) {
 
     // total bulan ini & rata-rata
     $bulan_terakhir = max($bulan);
-    $total_bulan_ini = $this->Dashboard_model->get_total_panen_bulan_ini($tahun, $bulan_terakhir, $kebun);
+    $total_bulan_ini = $this->Dashboard_model->get_total_panen_bulan_ini($tahun, $bulan_terakhir,$organisasi_id, $kebun);
 
-    $rata_bulanan = $this->Dashboard_model->get_rata2_panen_bulanan_tahun_ini($tahun, $kebun);
+    $rata_bulanan = $this->Dashboard_model->get_rata2_panen_bulanan_tahun_ini( $tahun, $organisasi_id, $kebun);
     $selisih_persen_bulan = $rata_bulanan ? (($total_bulan_ini - $rata_bulanan) / $rata_bulanan * 100) : 0;
 
     $data['indikator_panen'] = [
@@ -142,31 +150,32 @@ if (empty($kebun)) {
     ];
 
     // Tentukan minggu terakhir dari bulan terakhir yang difilter
-$minggu_terakhir = $this->Dashboard_model->get_minggu_terakhir_bulan($tahun, $bulan_terakhir);
+    $minggu_terakhir = $this->Dashboard_model->get_minggu_terakhir_bulan($tahun, $bulan_terakhir);
 
-$total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $bulan_terakhir, $minggu_terakhir, $kebun);
-$rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan_ini($tahun, $bulan_terakhir, $kebun);
-$selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
+    $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $bulan_terakhir, $minggu_terakhir, $organisasi_id, $kebun);
+    $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan_ini($tahun, $bulan_terakhir, $organisasi_id, $kebun);
+    $selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
 
-$data['indikator_panen_mingguan'] = [
-    'nilai' => number_format($total_minggu_ini, 2, ',', '.'),
-    'persen' => round(abs($selisih_persen_minggu), 1),
-    'naik' => $selisih_persen_minggu >= 0
-];
+    $data['indikator_panen_mingguan'] = [
+        'nilai' => number_format($total_minggu_ini, 2, ',', '.'),
+        'persen' => round(abs($selisih_persen_minggu), 1),
+        'naik' => $selisih_persen_minggu >= 0
+    ];
 
+    $data['warna_kebun'] = $warna_kebun;
 
     $this->load->view('layout/header', $data);
     $this->load->view('dashboard/dashboard', $data);
     $this->load->view('layout/footer');
-}
+    }
 
-public function get_bulan_by_tahun()
-{
-    $organisasi_id = $this->session->userdata('organisasi_id');
-    $tahun = $this->input->post('tahun');
-    $bulan_list = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
-    echo json_encode($bulan_list);
-}
+    public function get_bulan_by_tahun()
+    {
+        $organisasi_id = $this->session->userdata('organisasi_id');
+        $tahun = $this->input->post('tahun');
+        $bulan_list = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
+        echo json_encode($bulan_list);
+    }
 
 
 }
