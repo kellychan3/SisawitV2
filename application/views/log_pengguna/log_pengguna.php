@@ -14,27 +14,38 @@
             </div>
         </div>
         <!--end breadcrumb-->
-        <hr />
-        <div class="card">
+         <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+        <?php endif; ?>
+
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+        <?php endif; ?>
+
+        <!-- TABEL DATA -->
+        <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="aset" class="table table-striped table-bordered">
-                        <?php if ($SystemLog) : ?>
-                            <thead>
+         <table id="aset" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
                                 <th>Tanggal Log</th>
                                 <th>Nama Log</th>
-                            </thead>
-                            <?php foreach ($SystemLog as $sl) : ?>
-                                <tr>
-                                    <td><?= $sl['date']; ?></td>
-                                    <td><?= $sl['value']; ?></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($log_pengguna)): ?>
+                                <tr><td colspan="5" class="text-center">Data login belum ada.</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($log_pengguna as $a): ?>
+                                    <tr>
+                                        <td><?= date('Y-m-d', strtotime($a['created_at'])); ?></td>
+                                        <td><?= htmlspecialchars($a['user']['nama']) . ' Login'; ?></td>
+                                    </tr>
                                 <?php endforeach; ?>
-                                </tr>
-                            <?php else : ?>
-                                <tr style="text-align:center">
-                                    <th>Data Log Tidak Tersedia</th>
-                                </tr>
-                            <?php endif ?>
+
+                            <?php endif; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>
