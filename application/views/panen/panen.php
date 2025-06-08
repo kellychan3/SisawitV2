@@ -62,7 +62,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php if (empty($asset)): ?>
+                                            <?php if (empty($panenPerTanggal['data'])): ?>
                                 <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
                             <?php else: ?>
                                             <?php foreach ($panenPerTanggal['data'] as $data): ?>
@@ -98,24 +98,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php if (empty($asset)): ?>
-                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                                            <?php foreach ($panenPerBulan['data'] as $data): ?>
-                                                <tr>
-                                                    <?php foreach ($panenPerBulan['title'] as $title): ?>
-                                                        <?php if ($data[$title]): ?>
-                                                            <?php if ($title == 'Bulan Panen'): ?>
-                                                                <td><?= date('M Y', strtotime($data[$title])); ?></td>
+                                            <?php if (empty($panenPerBulan['data'])): ?>
+                                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
+                                            <?php else: ?>
+                                                <?php foreach ($panenPerBulan['data'] as $data): ?>
+                                                    <tr>
+                                                        <?php foreach ($panenPerBulan['title'] as $title): ?>
+                                                            <?php if ($data[$title]): ?>
+                                                                <?php if ($title == 'Bulan Panen'): ?>
+                                                                    <td><?= date('M Y', strtotime($data[$title])); ?></td>
+                                                                <?php else: ?>
+                                                                    <td><?= $data[$title]; ?></td>
+                                                                <?php endif; ?>
                                                             <?php else: ?>
-                                                                <td><?= $data[$title]; ?></td>
+                                                                <td>-</td>
                                                             <?php endif; ?>
-                                                        <?php else: ?>
-                                                            <td>-</td>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             <?php endif; ?>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -133,16 +135,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php if (empty($asset)): ?>
-                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                                            <?php foreach ($panenPerTahun['data'] as $data): ?>
-                                                <tr>
-                                                    <?php foreach ($panenPerTahun['title'] as $title): ?>
-                                                        <td><?= $data[$title] ?? '-'; ?></td>
-                                                    <?php endforeach; ?>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <?php if (empty($panenPerTahun['data'])): ?>
+                                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
+                                            <?php else: ?>
+                                                <?php foreach ($panenPerTahun['data'] as $data): ?>
+                                                    <tr>
+                                                        <?php foreach ($panenPerTahun['title'] as $title): ?>
+                                                            <td><?= $data[$title] ?? '-'; ?></td>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             <?php endif; ?>
+
                                         </tbody>
                                     </table>
                                 </div>

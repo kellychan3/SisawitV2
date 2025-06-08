@@ -20,7 +20,7 @@ class User extends CI_Controller
         // Ambil data aset
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/organisasi/$organisasi_id/users",
+            CURLOPT_URL => "http://103.150.101.10/api/organisasi/users",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",
@@ -32,7 +32,12 @@ class User extends CI_Controller
         $allOrganisasi = json_decode($response, true) ?: [];
 
         $data['users'] = $allOrganisasi['users'] ?? [];
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        
+        $data['user'] = [
+            'email' => $this->session->userdata('email'),
+            'nama' => $this->session->userdata('nama'),
+            'role' => $this->session->userdata('role'),
+        ];
 
         $this->load->view('layout/header', $data);
         $this->load->view('user/user', $data);

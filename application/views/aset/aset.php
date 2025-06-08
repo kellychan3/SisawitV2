@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="jenisaset" class="form-label">Jenis Aset</label>
-                                <select class="form-control" id="kategori_id" name="kategori_id" disabled>
+                                <select class="form-control" id="kategori_id" name="kategori_id">
                                     <option value="">--</option>
                                     <?php foreach ($kategori as $k): ?>
                                         <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kategori']); ?></option>
@@ -90,6 +90,71 @@
             </div>
         </div>
 
+        <!-- Modal Ubah Aset -->
+<div class="modal fade" id="editAssetModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title text-primary">Ubah Aset</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editAssetForm">
+          <input type="hidden" id="edit_id" name="id">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nama Aset</label>
+              <input type="text" id="edit_namaaset" class="form-control" disabled>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Jenis Aset</label>
+              <input type="text" id="edit_jenisaset" class="form-control" disabled>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Kebun</label>
+              <input type="text" id="edit_namakebun" class="form-control" disabled>
+              <input type="hidden" id="edit_kebun_id" name="kebun_id">
+            </div>
+
+            <div class="col-md-6">
+              <label for="edit_jumlahaset" class="form-label">Jumlah Aset</label>
+              <input type="number" class="form-control" id="edit_jumlahaset" name="jumlah_aset" required>
+            </div>
+          </div>
+
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmDeleteLabel">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus aset ini?
+        <input type="hidden" id="delete_id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
         <!-- TABEL DATA -->
         <div class="card mt-4">
             <div class="card-body">
@@ -101,7 +166,9 @@
                                 <th>Jumlah Aset</th>
                                 <th>Jenis Aset</th>
                                 <th>Kebun</th>
-                                <th>Aksi</th>
+                                <?php if ($this->session->userdata('role') !== 'mandor'): ?>
+                                    <th>Aksi</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,12 +179,23 @@
                                     <tr>
                                         <td><?= htmlspecialchars($a['nama_aset']); ?></td>
                                         <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
-                                        <td><?= htmlspecialchars($a['kategori']['nama_kategori'] ?? '-'); ?></td>
+                                        <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
                                         <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
+                                        <?php if ($this->session->userdata('role') == 'pemilik'): ?>
                                         <td>
-                                            <button class="btn btn-secondary" disabled>Ubah</button>
-                                            <button class="btn btn-secondary" disabled>Hapus</button>
+                                            <button class="btn btn-warning edit-btn"
+                                                    data-id="<?= $a['id']; ?>"
+                                                    data-nama="<?= htmlspecialchars($a['nama_aset']); ?>"
+                                                    data-jenis="<?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?>"
+                                                    data-kebun-id="<?= $a['kebun']['id'] ?? ''; ?>"
+                                                    data-kebun-nama="<?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?>"
+                                                    data-jumlah="<?= $a['jumlah_aset']; ?>">
+                                                Ubah
+                                            </button>
+                                            <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
+
                                         </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -153,8 +231,6 @@ $(document).ready(function() {
         }
     });
 });
-
-
 </script>
 
 <script>
@@ -185,6 +261,88 @@ $(document).ready(function() {
             $('#kategori_id').val('');
         }
     });
+});
+</script>
+
+<script>
+$(document).on('click', '.edit-btn', function() {
+  $('.edit-btn').on('click', function() {
+  $('#edit_id').val($(this).data('id'));
+  $('#edit_namaaset').val($(this).data('nama'));
+  $('#edit_jenisaset').val($(this).data('jenis'));
+  $('#edit_namakebun').val($(this).data('kebun-nama'));
+  $('#edit_kebun_id').val($(this).data('kebun-id'));
+  $('#edit_jumlahaset').val($(this).data('jumlah'));
+
+  var modal = new bootstrap.Modal(document.getElementById('editAssetModal'));
+  modal.show();
+});
+
+
+  $('#editAssetForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const id = $('#edit_id').val();
+    const jumlah_aset = $('#edit_jumlahaset').val();
+    const kebun_id = $('#edit_kebun_id').val();
+
+    $.ajax({
+      url: `http://103.150.101.10/api/aset/${id}`,
+      method: 'PUT',
+      contentType: 'application/json',
+      headers: {
+        'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
+        'Accept': 'application/json'
+      },
+      data: JSON.stringify({
+        jumlah_aset: parseInt(jumlah_aset),
+        kebun_id: parseInt(kebun_id)
+      }),
+      success: function(res) {
+        alert('Aset berhasil diperbarui.');
+        location.reload();
+      },
+      error: function(xhr) {
+        alert('Gagal mengubah aset.');
+      }
+    });
+  });
+});
+
+</script>
+
+<script>
+$(document).ready(function() {
+  let deleteId = null;
+
+  // Saat tombol hapus ditekan
+  $(document).on('click', '.delete-btn', function() {
+    deleteId = $(this).data('id');
+    $('#delete_id').val(deleteId);
+    const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+    modal.show();
+  });
+
+  // Saat tombol konfirmasi hapus ditekan
+  $('#confirmDeleteBtn').on('click', function() {
+    const id = $('#delete_id').val();
+
+    $.ajax({
+      url: `http://103.150.101.10/api/aset/${id}`,
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
+        'Accept': 'application/json'
+      },
+      success: function(response) {
+        alert('Aset berhasil dihapus.');
+        location.reload();
+      },
+      error: function(xhr) {
+        alert('Gagal menghapus aset.');
+      }
+    });
+  });
 });
 </script>
 

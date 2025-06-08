@@ -14,38 +14,71 @@
             </div>
         </div>
         <!--end breadcrumb-->
-        <hr />
-        <div class="card">
+         <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+        <?php endif; ?>
+
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+        <?php endif; ?>
+
+        <!-- TABEL DATA -->
+        <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered" style="width:100%">
-                        <?php if ($SystemLog) : ?>
-                            <thead>
+         <table id="aset" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
                                 <th>Tanggal Log</th>
                                 <th>Nama Log</th>
-                            </thead>
-                            <?php foreach ($SystemLog as $sl) : ?>
-                                <tr>
-                                    <td><?= $sl['date']; ?></td>
-                                    <td><?= $sl['value']; ?></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($log_pengguna)): ?>
+                                <tr><td colspan="5" class="text-center">Data login belum ada.</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($log_pengguna as $a): ?>
+                                    <tr>
+                                        <td><?= date('Y-m-d', strtotime($a['created_at'])); ?></td>
+                                        <td><?= htmlspecialchars($a['user']['nama']) . ' Login'; ?></td>
+                                    </tr>
                                 <?php endforeach; ?>
-                                </tr>
-                            <?php else : ?>
-                                <tr style="text-align:center">
-                                    <th>Data Log Tidak Tersedia</th>
-                                </tr>
-                            <?php endif ?>
+
+                            <?php endif; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--end page wrapper -->
-<!--start overlay-->
-<div class="overlay toggle-icon"></div>
-<!--end overlay-->
-<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
-<!--End Back To Top Button-->
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#aset').DataTable({
+        order: [[0, 'desc']],
+        search: {
+            smart: false,
+            regex: false,
+            caseInsensitive: true
+        },
+        language: {
+            lengthMenu: "Menampilkan _MENU_ entri",
+            zeroRecords: "Data tidak ditemukan",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+            infoFiltered: "(disaring dari _MAX_ total entri)",
+            search: "Cari:",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Berikutnya >",
+                previous: "< Sebelumnya"
+            }
+        }
+    });
+});
+</script>
