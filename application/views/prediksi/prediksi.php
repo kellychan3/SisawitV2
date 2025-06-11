@@ -17,37 +17,43 @@
 <div class="page-wrapper">
         <div class="page-content">
             <form method="get" action="">
-                <div class="filter-box">
-                    <div class="field">
-                        <label for="tahun">Tahun</label>
-                        <select id="tahun" name="tahun" onchange="this.form.submit()">
-                            <?php foreach($tahun_list as $t): ?>
-                                <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
-                                    <?= $t['tahun']; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-            </form>
+    <div class="filter-box">
+        <div class="field">
+            <label for="tahun">Tahun</label>
+            <select id="tahun" name="tahun" onchange="this.form.submit()">
+                <?php foreach($tahun_list as $t): ?>
+                    <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
+                        <?= $t['tahun']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+</form>
+
 
             <div class="dashboard-container-row">
                 <div class="resume-box">
-                    <div class = "title-box">
-                        <div class="resume-title">Resume Laporan</div>
-                    </div>
-                
-                    <div class="info-box-wrap">
-                            <div class="info-box">
-                            <div class="label">Prediksi Total Hasil Panen</div>
-                            <!-- <div class="value"><?= $indikator_panen['nilai']; ?> Kg</div> -->
-                        </div>
-                        <div class="info-box">
-                            <div class="label">Realita Total Hasil Panen</div>
-                                <!-- <div class="value"><?= $indikator_panen_mingguan['nilai']; ?> Kg</div> -->
-                        </div>
-                    </div>
-                </div>
+    <div class="title-box">
+        <div class="resume-title">Resume Laporan</div>
+    </div>
+
+    <div class="info-box-wrap">
+        <div class="info-box">
+            <div class="label">Prediksi Total Hasil Panen</div>
+            <div class="value"><?= number_format($total_prediksi, 0, ',', '.') ?> Kg</div>
+        </div>
+        <div class="info-box">
+    <div class="label">Realita Total Hasil Panen</div>
+    <?php $color = ($total_aktual >= $total_prediksi) ? 'green' : 'red'; ?>
+    <div class="value" style="color: <?= $color ?>;">
+        <?= number_format($total_aktual, 0, ',', '.') ?> Kg
+    </div>
+</div>
+
+    </div>
+</div>
+
 
                 <!-- Grafik Prediksi vs Aktual-->
                 <div class="dashboard-box chart-box">
@@ -66,6 +72,7 @@
     const prediksiData = <?= json_encode(array_map(fn($i) => $prediksi[$i] ?? 0, range(1,12))) ?>;
     const aktualData = <?= json_encode(array_map(fn($i) => $aktual[$i] ?? 0, range(1,12))) ?>;
 
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -78,33 +85,50 @@
                 },
                 {
                     label: 'Aktual',
-                    backgroundColor: '#1cc88a',
+                    backgroundColor: aktualData.map((val, i) => val >= prediksiData[i] ? '#1cc88a' : '#e74a3b'),
                     data: aktualData
                 }
             ]
         },
         options: {
             plugins: {
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    formatter: Math.round,
-                    font: {
-                        weight: 'bold'
-                    }
-                }
+            legend: {
+                position: 'bottom',
+                align: 'start' // membuat legenda berada di sudut kiri bawah
             },
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                clamp: true,
+                formatter: Math.round,
+                font: {
+                    weight: 'bold'
+                },
+                color: '#000'
+            }
+        },
             responsive: true,
             scales: {
+                x: {
+                    grid: {
+                        display: false // sembunyikan garis vertikal
+                    }
+                },
                 y: {
                     beginAtZero: true,
+                    grid: {
+                        display: true // tampilkan garis horizontal
+                    },
                     title: {
-                        display: true,
+                        display: false,
                         text: 'Hasil Panen (Kg)'
                     }
                 }
             }
-        }
+
+            }
+
+
     });
 </script>
 
