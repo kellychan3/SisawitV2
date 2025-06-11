@@ -6,8 +6,6 @@ class Authentication extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('User_model', 'userrole');
-        $this->load->model('Log_pengguna_model');
     }
 
     public function index()
@@ -60,13 +58,6 @@ class Authentication extends CI_Controller
                 'token' => $result['token'],
                 'organisasi_id' => $user['organisasi_id'],
             ]);
-
-            $currentDate = date('Y-m-d H:i:s');
-            $this->Log_pengguna_model->insert([
-                'value' => $user['nama'] . ' login',
-                'date' => $currentDate,
-            ]);
-
             redirect('Dashboard');
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email atau Password salah!</div>');
