@@ -21,13 +21,28 @@ Salin file .env.example menjadi .env dan sesuaikan variabelnya:
 ```bash
 cp .env.example .env
 ```
-hubungi Kelly untuk mendapatkan file .env
+Hubungi Kelly untuk mendapatkan file .env
 
-### 3. Install Docker Desktop & Jalankan Docker
+### 3. Siapkan SQL Inisialisasi Database
+Buat folder inisialisasi dan masukkan file SQL:
+```bash
+mkdir -p docker/mysql-init
+```
+Hubungi Kelly untuk mendapatkan file *.sql.
+
+### 4. Install Dependensi PHP
+```bash
+composer update
+composer install
+composer require dompdf/dompdf
+```
+Hubungi Kelly untuk mendapatkan file .sql
+
+### 5. Install Docker Desktop & Jalankan Docker
 ```bash
 docker compose down -v
 docker compose up --build
 ```
 
-### 4. Akses aplikasi:
-Akses URL http://localhost:8081
+### 6. Akses aplikasi:
+Buka browser ke: http://localhost:8081
