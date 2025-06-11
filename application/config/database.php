@@ -75,10 +75,10 @@ $query_builder = true;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'sisawitv2',
+    'hostname' => getenv('DB1_HOSTNAME'),
+    'username' => getenv('DB1_USERNAME'),
+    'password' => getenv('DB1_PASSWORD'),
+    'database' => getenv('DB1_NAME'),
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,
@@ -95,13 +95,12 @@ $db['default'] = array(
     'save_queries' => true,
 );
 
-// Tambahan (data warehouse)
 $db['dw'] = array(
     'dsn' => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'dw_sawit',
+    'hostname' => getenv('DB2_HOSTNAME'),
+    'username' => getenv('DB2_USERNAME'),
+    'password' => getenv('DB2_PASSWORD'),
+    'database' => getenv('DB2_NAME'),
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => false,
