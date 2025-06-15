@@ -32,9 +32,7 @@ Hubungi Kelly untuk mendapatkan file *.sql.
 
 ### 4. Install Dependensi PHP
 ```bash
-composer update
 composer install
-composer require dompdf/dompdf
 ```
 Hubungi Kelly untuk mendapatkan file .sql
 

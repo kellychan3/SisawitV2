@@ -50,16 +50,28 @@ class Authentication extends CI_Controller
         $result = json_decode($response, true);
 
         if (isset($result['message']) && $result['message'] == "Success") {
-            $user = $result['user'];
-            $this->session->set_userdata([
-                'email' => $user['email'],
-                'nama' => $user['nama'],
-                'role' => $user['role'],
-                'token' => $result['token'],
-                'organisasi_id' => $user['organisasi_id'],
-            ]);
-            redirect('Dashboard');
-        } else {
+    $user = $result['user'];
+    $token = $result['token'];
+
+    $this->session->set_userdata([
+        'id_user' => $user['id'],
+        'email' => $user['email'],
+        'nama' => $user['nama'],
+        'role' => $user['role'],
+        'token' => $token,
+        'organisasi_id' => $user['organisasi_id'],
+    ]);
+
+    $this->db->insert('api_tokens', [
+        'id_user' => $user['id'],
+        'id_organisasi' => $user['organisasi_id'],
+        'token' => $token,
+        'created_at' => date('Y-m-d H:i:s') // jika DB tidak auto timestamp
+    ]);
+
+    redirect('Dashboard');
+}
+else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email atau Password salah!</div>');
             redirect('Authentication');
         }

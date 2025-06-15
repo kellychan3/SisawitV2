@@ -6,11 +6,20 @@ services:
       - "8081:80"
     volumes:
       - .:/var/www/html
+      - ./pentaho/.kettle:/var/www/.kettle
+      - ./pentaho/.pentaho:/var/www/.pentaho
     depends_on:
       - db
+    networks:
+      - sisawitnet
+    environment:
+      DB1_HOSTNAME: db
+      DB1_USERNAME: root
+      DB1_PASSWORD: rootpass
+      DB1_NAME: dw_sawit
 
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     command: --sql-mode=""
     restart: always
     environment:
@@ -21,6 +30,11 @@ services:
     volumes:
       - data:/var/lib/mysql
       - ./docker/mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - sisawitnet
 
 volumes:
   data:
+
+networks:
+  sisawitnet:
