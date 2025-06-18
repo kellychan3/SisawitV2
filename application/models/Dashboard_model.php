@@ -75,7 +75,7 @@ class Dashboard_model extends CI_Model
     public function get_summary_kebun($organisasi_id = null, $kebun = null)
     {
         $sql = "SELECT COUNT(DISTINCT f.sk_kebun) as jumlah_kebun, 
-                    SUM(f.luas_kebun_ha) as total_luas
+                    SUM(f.luas_kebun) as total_luas
                 FROM fact_luas_kebun f
                 LEFT JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
                 LEFT JOIN dim_user u ON f.sk_user = u.sk_user
@@ -290,7 +290,7 @@ public function get_rata2_panen_mingguan_bulan_ini($tahun, $bulan, $organisasi_i
 
     public function get_luas_kebun_persentase($organisasi_id = null, $kebun = null)
     {
-        $sql = "SELECT k.nama_kebun, SUM(f.luas_kebun_ha) as total_luas
+        $sql = "SELECT k.nama_kebun, SUM(f.luas_kebun) as total_luas
                 FROM fact_luas_kebun f
                 JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
                 JOIN dim_user u ON f.sk_user = u.sk_user

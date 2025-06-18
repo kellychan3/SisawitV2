@@ -22,73 +22,80 @@
 
     <div class="page-wrapper">
         <div class="page-content">
-            <form method="post" action="<?= base_url('dashboard/refresh') ?>">
-                <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user') ?>">
-                <button type="submit">Refresh</button>
-            </form>
-
-            <div>           
-                <div class="filter-box">
+            <div class="filter-box">
+                <div class="refresh-form">
+                    <form method="post" action="<?= base_url('dashboard/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
     
-                    <div class="field">
-                        <label for="tahun">Tahun</label>
-                        <select id="tahun" name="tahun" onchange="this.form.submit()">
-                            <?php if (empty($tahun_list)): ?>
-                                <option value="">Tidak ada data panen</option>
-                            <?php else: ?>
-                                <?php foreach($tahun_list as $t): ?>
-                                    <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
-                                        <?= $t['tahun']; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="bulan">Bulan</label>
-                        <div class="custom-dropdown">
-                            <div class="dropdown-label" onclick="toggleDropdown('bulan')">Semua ▾</div>
-                            <div class="dropdown-checkboxes" id="dropdown-bulan">
-                                <?php if (empty($bulan_list)): ?>
-                                    <label><i>Tidak ada data bulan</i></label>
-                                <?php else: ?>
-                                    <?php foreach($bulan_list as $b): ?>
-                                        <label>
-                                            <input type="checkbox" onchange="this.form.submit()" name="bulan[]" value="<?= $b['bulan']; ?>"
-                                            <?= (is_array($filter['bulan']) && in_array($b['bulan'], $filter['bulan'])) ? 'checked' : ''; ?>>
-                                            <?= $b['nama']; ?>
-                                        </label>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
+                        <?php if ($last_updated): ?>
+<div style="display: flex; flex-direction: column; justify-content: center; font-family: inherit; font-size: 13px; color: white; line-height: 1.4;">
+    <label>Terakhir Diperbarui</label>
+    <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
+</div>
+<?php endif; ?>
 
 
-                    <div class="field">
-                        <label for="kebun">Kebun</label>
-                        <div class="custom-dropdown">
-                            <div class="dropdown-label" onclick="toggleDropdown('kebun')">Semua ▾</div>
-                            <div class="dropdown-checkboxes" id="dropdown-kebun">
-                                <?php if (empty($kebun_list)): ?>
-                                    <label><i>Tidak ada data kebun</i></label>
-                                <?php else: ?>
-                                    <?php foreach($kebun_list as $k): ?>
-                                        <label>
-                                            <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['nama_kebun']; ?>"
-                                                <?= (is_array($filter['kebun']) && in_array($k['nama_kebun'], $filter['kebun'])) ? 'checked' : ''; ?>>
-                                            <?= $k['nama_kebun']; ?>
-                                        </label>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
+                        <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user'); ?>">
+
+                        <button type="submit" style="padding: 6px 12px; background-color: white; color: black; font-weight: 600; border: none; cursor: pointer;">
+                            🔄 Perbarui Dashboard
+                        </button>
+                    </form>
 
                 </div>
-            </div>
+     
+                <div class="filter-form">
+                <!-- Form filter -->
+                    <form method="get" action="">
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            
+                            <div class="field">
+                                <label for="tahun">Tahun</label>
+                                <select id="tahun" name="tahun" onchange="this.form.submit()">
+                                    <?php foreach($tahun_list as $t): ?>
+                                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
+                                            <?= $t['tahun']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
+                            <div class="field">
+                                <label for="bulan">Bulan</label>
+                                <div class="custom-dropdown">
+                                    <div class="dropdown-label" onclick="toggleDropdown('bulan')">Semua ▾</div>
+                                    <div class="dropdown-checkboxes" id="dropdown-bulan">
+                                        <?php foreach($bulan_list as $b): ?>
+                                            <label>
+                                                <input type="checkbox" onchange="this.form.submit()" name="bulan[]" value="<?= $b['bulan']; ?>"
+                                                <?= (is_array($filter['bulan']) && in_array($b['bulan'], $filter['bulan'])) ? 'checked' : ''; ?>>
+                                                <?= $b['nama']; ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label for="kebun">Kebun</label>
+                                <div class="custom-dropdown">
+                                    <div class="dropdown-label" onclick="toggleDropdown('kebun')">Semua ▾</div>
+                                    <div class="dropdown-checkboxes" id="dropdown-kebun">
+                                        <?php foreach($kebun_list as $k): ?>
+                                            <label>
+                                                <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['nama_kebun']; ?>"
+                                                    <?= (is_array($filter['kebun']) && in_array($k['nama_kebun'], $filter['kebun'])) ? 'checked' : ''; ?>>
+                                                <?= $k['nama_kebun']; ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
             <div class="dashboard-container-row">
                 <!-- Resume -->
                 <div class="resume-box">

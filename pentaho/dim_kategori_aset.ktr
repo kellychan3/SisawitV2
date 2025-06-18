@@ -437,8 +437,8 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
-    <server>localhost</server>
+    <name>dw_sawit_new</name>
+    <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
     <database>dw_sawit</database>
@@ -505,23 +505,13 @@
   </connection>
   <order>
     <hop>
+      <from>Output Kategori Aset</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>REST Kategori Aset</from>
       <to>Output Kategori Aset</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Get variables</from>
-      <to>REST Kategori Aset</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Output Kategori Aset</from>
-      <to>Menambah sequence</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Menambah sequence</from>
-      <to>Seleksi Kolom Kategori Aset</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -529,7 +519,104 @@
       <to>dim_kategori_aset</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Data Ada?</from>
+      <to>Filter - Data belum di db</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>dim_kategori_aset_db</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Data belum di db</from>
+      <to>Seleksi Kolom Kategori Aset</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Get variables</from>
+      <to>REST Kategori Aset</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <step>
+    <name>Data Ada?</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_kategori_aset_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_kategori_api</name>
+        <field>id_kategori</field>
+      </key>
+      <value>
+        <name>id_kategori</name>
+        <rename>id_kategori_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Data belum di db</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kategori Aset</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>id_kategori_db</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>800</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Get variables</name>
     <type>GetVariable</type>
@@ -555,9 +642,9 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>max_kategori_aset</name>
-        <variable>${max_kategori_aset}</variable>
-        <type>Integer</type>
+        <name>sk_organisasi_api</name>
+        <variable>${sk_organisasi_api}</variable>
+        <type>String</type>
         <format/>
         <currency/>
         <decimal/>
@@ -576,43 +663,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
-      <yloc>96</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Menambah sequence</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <valuename>sk_kategori_aset</valuename>
-    <use_database>N</use_database>
-    <connection/>
-    <schema/>
-    <seqname>SEQ_</seqname>
-    <use_counter>Y</use_counter>
-    <counter_name/>
-    <start_at>1</start_at>
-    <increment_by>1</increment_by>
-    <max_value>999999999</max_value>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>96</yloc>
+      <xloc>64</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -648,7 +700,7 @@
     </file>
     <fields>
       <field>
-        <name>id_kategori</name>
+        <name>id_kategori_api</name>
         <path>$.[*].id</path>
         <type>Integer</type>
         <format/>
@@ -661,7 +713,7 @@
         <repeat>N</repeat>
       </field>
       <field>
-        <name>nama_kategori</name>
+        <name>nama_kategori_api</name>
         <path>$.[*].nama_kategori</path>
         <type>String</type>
         <format/>
@@ -695,8 +747,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>96</yloc>
+      <xloc>456</xloc>
+      <yloc>269</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -751,8 +803,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>272</xloc>
-      <yloc>96</yloc>
+      <xloc>248</xloc>
+      <yloc>269</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -769,16 +821,12 @@
     </partitioning>
     <fields>
       <field>
-        <name>sk_kategori_aset</name>
+        <name>id_kategori_api</name>
+        <rename>id_kategori</rename>
       </field>
       <field>
-        <name>id_kategori</name>
-      </field>
-      <field>
-        <name>nama_kategori</name>
-      </field>
-      <field>
-        <name>max_kategori_aset</name>
+        <name>nama_kategori_api</name>
+        <rename>nama_kategori</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -791,8 +839,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>928</xloc>
-      <yloc>96</yloc>
+      <xloc>1048</xloc>
+      <yloc>269</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -807,14 +855,14 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <schema>dw_sawit</schema>
     <table>dim_kategori_aset</table>
     <commit>1000</commit>
-    <truncate>Y</truncate>
+    <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
+    <specify_fields>N</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
@@ -847,8 +895,117 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1184</xloc>
-      <yloc>96</yloc>
+      <xloc>1288</xloc>
+      <yloc>269</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>dim_kategori_aset_db</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_kategori_aset
+, id_kategori
+, nama_kategori
+FROM dw_sawit.dim_kategori_aset
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_kategori_aset</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>kategori_aset_db</origin>
+        <comments>sk_kategori_aset</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>id_kategori</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>kategori_aset_db</origin>
+        <comments>id_kategori</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>nama_kategori</name>
+        <length>63</length>
+        <precision>-1</precision>
+        <origin>kategori_aset_db</origin>
+        <comments>nama_kategori</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
