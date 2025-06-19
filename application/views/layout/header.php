@@ -74,9 +74,9 @@
 						</li>
 						<li> <a href="<?= base_url('Prediksi'); ?>"><i class="fa-solid fa-chart-line"></i></i>Prediksi Hasil Panen</a>
 						</li>
-						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
+						<li> <a href="<?= base_url('Kesehatan'); ?>"><i class="bx bx-aperture"></i>Cek Kesehatan Pohon</a>
 						</li>
-						<li> <a href="<?= base_url('Log_panen'); ?>"><i class="fa-solid fa-list-ul"></i>Log Kesehatan Pohon</a>
+						<li> <a href="<?= base_url('Log_kesehatan'); ?>"><i class="fa-solid fa-list-ul"></i>Log Kesehatan Pohon</a>
 						</li>
 					</ul>
 				</li>
