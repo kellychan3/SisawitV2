@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 5px;
+    background: #f0f2f5;
+    font-size: 12px;
+    overflow-x: hidden;
+}
+
+/* Resume Title & Chart Title */
+.resume-title,
+.dashboard-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1A0066;
+}
+.resume-title {
+    color: white;
+    padding: 6px;
+    margin-bottom: 15px;
+}
+
+/* Dashboard Container */
+.dashboard-container-row {
+    display: flex;
+    flex-wrap: nowrap; /* penting agar tidak pindah baris */
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* Resume Box */
+.resume-box {
+    flex: 0 0 300px; /* tetap kiri, ukuran tetap */
+    max-width: 300px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    min-width: 300px;
+}
+.resume-box .title-box {
+    background: #1F049A;
+}
+.resume-box .info-box {
+    background: white;
+    color: #1A0066;
+    padding: 6px;
+    margin: 10px;
+    text-align: left;
+    border: 1px solid #CCCCCC;
+}
+.resume-box .info-box .label {
+    font-size: 11px;
+    color: #555;
+}
+.resume-box .info-box .value {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Chart Box */
+.chart-box {
+    flex: 1;
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+.chart-box canvas {
+    flex-grow: 1;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 260px;
+}
+
+/* Filter Bar (atas) */
+.filter-box {
+    display: flex;
+    background-color: #1F049A;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 15px;
+}
+.refresh-form {
+    flex: 0 0 auto;
+}
+.filter-form {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+.filter-box .field {
+    display: flex;
+    flex-direction: column;
+}
+.filter-box label {
+    color: white;
+    font-weight: bold;
+    text-align: left;
+}
+.filter-box select {
+    width: 160px;
+    height: 30px;
+}
+
+/* Filter Kebun Box */
+.filter-kebun-box {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    max-width: 200px;
+    min-width: 180px;
+    flex: 0 0 200px;
+    font-size: 12px;
+}
+.filter-kebun-box label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: normal;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .dashboard-container-row {
+        flex-direction: column;
+    }
+
+    .resume-box,
+    .chart-box {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .filter-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -4,44 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Panen</title>
-    <!-- Pindahkan ke paling atas -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Baru setelah itu: -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/prediksi.css">
 </head>
 <body>
-<div class="page-wrapper">
+    <div class="page-wrapper">
         <div class="page-content">
+
+            <!-- Filter Atas -->
             <div class="filter-box">
+                <!-- Refresh Button -->
                 <div class="refresh-form">
-                    <?php if ($this->session->flashdata('message')): ?>
-    <div style="color: yellow; margin-bottom: 10px;">
-        <?= $this->session->flashdata('message') ?>
-    </div>
-<?php endif; ?>
-                <form method="post" action="<?= base_url('prediksi/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
-    
+                    <form method="post" action="<?= base_url('prediksi/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
                         <?php if ($last_updated): ?>
-                            <div style="display: flex; flex-direction: column; justify-content: center; font-family: inherit; font-size: 13px; color: white; line-height: 1.4;">
+                            <div style="display: flex; flex-direction: column; font-size: 13px; color: white;">
                                 <label>Terakhir Diperbarui</label>
                                 <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
                             </div>
                         <?php endif; ?>
-
                         <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user'); ?>">
-
                         <button type="submit" style="padding: 6px 12px; background-color: white; color: black; font-weight: 600; border: none; cursor: pointer;">
                             🔄 Perbarui Dashboard
                         </button>
                     </form>
                 </div>
+
+                <!-- Filter Tahun -->
+                <div class="filter-form">
+                    <form method="get" action="">
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <div class="field">
+                                <label for="tahun">Tahun</label>
+                                <select id="tahun" name="tahun" onchange="this.form.submit()">
+                                    <?php foreach($tahun_list as $t): ?>
+                                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
+                                            <?= $t['tahun']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+
+            <div class="dashboard-container-row">
+                <div class="resume-box">
+                    <div class="title-box">
+                        <div class="resume-title">Resume Laporan</div>
+                    </div>
+                    <div class="info-box-wrap">
+                        <div class="info-box">
+                            <div class="label">Prediksi Total Hasil Panen</div>
+                            <div class="value"><?= number_format($total_prediksi, 0, ',', '.') ?> Kg</div>
+                        </div>
+                        <div class="info-box">
+                            <div class="label">Realita Total Hasil Panen</div>
+                            <?php $color = ($total_aktual >= $total_prediksi) ? 'green' : 'red'; ?>
+                            <div class="value" style="color: <?= $color ?>;">
+                                <?= number_format($total_aktual, 0, ',', '.') ?> Kg
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                        <!-- Filter Kebun -->
+                            <form method="get" action="">
+                                <input type="hidden" name="tahun" value="<?= $filter['tahun'] ?>">
+
+                                <strong style="display: block; margin-bottom: 8px;">FILTER KEBUN</strong>
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <?php foreach ($kebun_list as $k): ?>
+                                        <?php $id = $k['kebun']; ?>
+                                        <label style="display: flex; justify-content: space-between; align-items: center; font-weight: normal;">
+                                            <span><?= $k['nama_kebun'] ?></span>
+                                            <input type="checkbox" name="kebun[]" value="<?= $id ?>" <?= in_array($id, $filter['kebun']) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+                <div class="dashboard-box chart-box">
+                    <h3>Prediksi vs Aktual Hasil Panen (kg)</h3>
+                    <canvas id="panenChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+<script>
+const ctx = document.getElementById('panenChart').getContext('2d');
+const bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+const prediksiData = <?= json_encode(array_map(fn($i) => $prediksi[$i] ?? 0, range(1,12))) ?>;
+const aktualData = <?= json_encode(array_map(fn($i) => $aktual[$i] ?? 0, range(1,12))) ?>;
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: bulanLabels,
+        datasets: [
+            {
+                label: 'Prediksi',
+                data: prediksiData,
+                backgroundColor: '#4e73df',
+                barThickness: 20,
+                categoryPercentage: 0.6,
+                barPercentage: 0.9
+            },
+            {
+                label: 'Aktual',
+                data: aktualData,
+                backgroundColor: aktualData.map((val, i) =>
+                    val >= prediksiData[i] ? '#1cc88a' : '#e74a3b'
+                ),
+                barThickness: 20,
+                categoryPercentage: 0.6,
+                barPercentage: 0.9
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                align: 'start'
+            }
+        },
+        scales: {
+            x: {
+                stacked: false,
+                grid: { display: false }
+            },
+            y: {
+                beginAtZero: true,
+                grid: { display: true },
+                title: {
+                    display: false,
+                    text: 'Hasil Panen (Kg)'
+                }
+            }
+        }
+    }
+});
+</script>
+
 
 </body>
 </html>

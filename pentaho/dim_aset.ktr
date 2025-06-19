@@ -470,10 +470,6 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -794,9 +790,21 @@
     <compare>
       <condition>
         <negated>N</negated>
-        <leftvalue>jumlah_aset_api</leftvalue>
-        <function>&lt;></function>
-        <rightvalue>jumlah_aset_db</rightvalue>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>jumlah_aset_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>jumlah_aset_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>id_aset_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
       </condition>
     </compare>
     <attributes/>
@@ -829,9 +837,21 @@
     <compare>
       <condition>
         <negated>N</negated>
-        <leftvalue>nama_aset_api</leftvalue>
-        <function>&lt;></function>
-        <rightvalue>nama_aset_db</rightvalue>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>nama_aset_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>nama_aset_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>id_aset_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
       </condition>
     </compare>
     <attributes/>
@@ -1265,13 +1285,16 @@
     </partitioning>
     <connection>dw_sawit_new</connection>
     <sql>SELECT
-  sk_aset
-, id_aset
-, nama_aset
-, jumlah_aset
-, sk_kategori_aset
-, sk_kebun
-FROM dw_sawit.dim_aset
+  a.sk_aset,
+  a.id_aset,
+  a.nama_aset,
+  a.jumlah_aset,
+  a.sk_kategori_aset,
+  a.sk_kebun
+FROM dw_sawit.dim_aset a
+JOIN dw_sawit.dim_kebun k
+  ON a.sk_kebun = k.sk_kebun
+WHERE k.sk_organisasi = ${sk_organisasi_api};
 </sql>
     <limit>0</limit>
     <lookup/>
