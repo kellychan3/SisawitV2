@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Cek Data</name>
+    <name>fact_prediksi_panen</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -428,9 +428,9 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2025/04/20 13:37:00.912</created_date>
+    <created_date>2025/04/13 17:04:32.406</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2025/04/20 13:37:00.912</modified_date>
+    <modified_date>2025/04/13 17:04:32.406</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
@@ -605,8 +605,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>551</xloc>
-      <yloc>537</yloc>
+      <xloc>506</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -702,8 +702,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>711</xloc>
-      <yloc>313</yloc>
+      <xloc>666</xloc>
+      <yloc>37</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -767,8 +767,8 @@ if (waktu_api != null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>871</xloc>
-      <yloc>313</yloc>
+      <xloc>826</xloc>
+      <yloc>37</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -833,8 +833,8 @@ if (response_body != null &amp;&amp; (response_body.startsWith("{") || response_
       </output>
     </remotesteps>
     <GUI>
-      <xloc>535</xloc>
-      <yloc>313</yloc>
+      <xloc>490</xloc>
+      <yloc>37</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -889,8 +889,8 @@ if (response_body != null &amp;&amp; (response_body.startsWith("{") || response_
       </output>
     </remotesteps>
     <GUI>
-      <xloc>295</xloc>
-      <yloc>313</yloc>
+      <xloc>250</xloc>
+      <yloc>37</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -916,15 +916,12 @@ if (response_body != null &amp;&amp; (response_body.startsWith("{") || response_
       </field>
       <field>
         <name>waktu_lengkap</name>
-        <rename/>
       </field>
       <field>
         <name>jumlah_prediksi_panen_api</name>
-        <rename/>
       </field>
       <field>
         <name>jumlah</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -954,8 +951,8 @@ if (response_body != null &amp;&amp; (response_body.startsWith("{") || response_
       </output>
     </remotesteps>
     <GUI>
-      <xloc>87</xloc>
-      <yloc>537</yloc>
+      <xloc>42</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -995,8 +992,8 @@ if (response_body != null &amp;&amp; (response_body.startsWith("{") || response_
       </output>
     </remotesteps>
     <GUI>
-      <xloc>807</xloc>
-      <yloc>537</yloc>
+      <xloc>762</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1128,8 +1125,8 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>199</xloc>
-      <yloc>425</yloc>
+      <xloc>154</xloc>
+      <yloc>149</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1357,8 +1354,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>343</xloc>
-      <yloc>425</yloc>
+      <xloc>298</xloc>
+      <yloc>149</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1421,8 +1418,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1015</xloc>
-      <yloc>537</yloc>
+      <xloc>970</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1463,8 +1460,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>199</xloc>
-      <yloc>537</yloc>
+      <xloc>154</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1505,8 +1502,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>343</xloc>
-      <yloc>537</yloc>
+      <xloc>298</xloc>
+      <yloc>261</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1568,8 +1565,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>96</xloc>
-      <yloc>304</yloc>
+      <xloc>51</xloc>
+      <yloc>28</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

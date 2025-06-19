@@ -27,12 +27,11 @@
                     <form method="post" action="<?= base_url('dashboard/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
     
                         <?php if ($last_updated): ?>
-<div style="display: flex; flex-direction: column; justify-content: center; font-family: inherit; font-size: 13px; color: white; line-height: 1.4;">
-    <label>Terakhir Diperbarui</label>
-    <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
-</div>
-<?php endif; ?>
-
+                            <div style="display: flex; flex-direction: column; justify-content: center; font-family: inherit; font-size: 13px; color: white; line-height: 1.4;">
+                                <label>Terakhir Diperbarui</label>
+                                <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
+                            </div>
+                        <?php endif; ?>
 
                         <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user'); ?>">
 
