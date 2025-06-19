@@ -442,7 +442,7 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
+    <name>dw_sawit_new</name>
     <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
@@ -461,10 +461,6 @@
       <attribute>
         <code>EXTRA_OPTION_MYSQL.useCursorFetch</code>
         <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useSSL</code>
-        <attribute>false</attribute>
       </attribute>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -670,7 +666,7 @@ token_bearer = "Bearer " + token;
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT token, id_organisasi
 FROM dw_sawit.api_tokens
 WHERE id_user = ${id_user}
@@ -756,11 +752,10 @@ LIMIT 1;
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT
   sk_organisasi
 , id_organisasi
-, nama_organisasi
 FROM dw_sawit.dim_organisasi
 </sql>
     <limit>0</limit>
@@ -776,7 +771,7 @@ FROM dw_sawit.dim_organisasi
         <name>sk_organisasi</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
+        <origin>dim_organisasi_db</origin>
         <comments>sk_organisasi</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
@@ -799,32 +794,9 @@ FROM dw_sawit.dim_organisasi
         <name>id_organisasi</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
+        <origin>dim_organisasi_db</origin>
         <comments>id_organisasi</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>String</type>
-        <storagetype>normal</storagetype>
-        <name>nama_organisasi</name>
-        <length>63</length>
-        <precision>-1</precision>
-        <origin>dim_kebun_db 2</origin>
-        <comments>nama_organisasi</comments>
-        <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>

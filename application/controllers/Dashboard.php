@@ -171,6 +171,16 @@ class Dashboard extends CI_Controller
 
     $data['warna_kebun'] = $warna_kebun;
 
+    $this->db->select('refreshed_at');
+$this->db->from('dashboard_refresh_log');
+$this->db->where('id_organisasi', $organisasi_id);
+$this->db->order_by('refreshed_at', 'DESC');
+$this->db->limit(1);
+$query = $this->db->get();
+
+$data['last_updated'] = $query->row() ? $query->row()->refreshed_at : null;
+
+
     $this->load->view('layout/header', $data);
     $this->load->view('dashboard/dashboard', $data);
     $this->load->view('layout/footer');
@@ -196,8 +206,16 @@ class Dashboard extends CI_Controller
         exec($command, $output, $status);
 
         if ($status === 0) {
-            $this->session->set_flashdata('message', 'Refresh berhasil!');
-        } else {
+    // Catat waktu refresh
+    $this->db->insert('dashboard_refresh_log', [
+        'id_organisasi' => $this->session->userdata('organisasi_id'),
+        'id_user' => $id_user,
+        'refreshed_at' => date('Y-m-d H:i:s'),
+    ]);
+
+    $this->session->set_flashdata('message', 'Refresh berhasil!');
+}
+ else {
             $this->session->set_flashdata('message', 'Refresh gagal. Cek log.');
         }
 

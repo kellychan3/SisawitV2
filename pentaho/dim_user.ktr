@@ -437,8 +437,8 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
-    <server>localhost</server>
+    <name>dw_sawit_new</name>
+    <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
     <database>dw_sawit</database>
@@ -505,38 +505,18 @@
   </connection>
   <order>
     <hop>
-      <from>Get variables</from>
-      <to>REST Organisasi &amp; User</to>
+      <from>Data Ada?</from>
+      <to>Filter - Data belum di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter Data Terbaru</from>
-      <to>dim_user</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Menambah sequence</from>
-      <to>Seleksi Kolom User</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Seleksi Kolom User</from>
-      <to>Filter Data Terbaru</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>dim_organisasi</from>
-      <to>sk_organisasi</to>
+      <from>Filter - Data belum di db</from>
+      <to>Select values</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Output User</from>
-      <to>sk_organisasi</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>sk_organisasi</from>
-      <to>Menambah sequence</to>
+      <to>Data Ada?</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -544,9 +524,123 @@
       <to>Output User</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Select values</from>
+      <to>dim_user</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>dim_user_db</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Get variables</from>
+      <to>REST Organisasi &amp; User</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter - Data berubah di API 2</from>
+      <to>Delete</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Table input</from>
+      <to>Stream lookup 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Stream lookup 3</from>
+      <to>Filter - Data berubah di API 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Output User</from>
+      <to>Stream lookup 3</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <step>
-    <name>Filter Data Terbaru</name>
+    <name>Data Ada?</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_user_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_user_api</name>
+        <field>id_user</field>
+      </key>
+      <value>
+        <name>id_user</name>
+        <rename>id_user_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Delete</name>
+    <type>Delete</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <commit>100</commit>
+    <lookup>
+      <schema>dw_sawit</schema>
+      <table>dim_user</table>
+      <key>
+        <name>id_user</name>
+        <field>id_user</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1088</xloc>
+      <yloc>464</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Data belum di db</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -556,22 +650,22 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>dim_user</send_true_to>
-    <send_false_to/>
+    <send_true_to>Select values</send_true_to>
+    <send_false_to>Filter - Data sudah di db</send_false_to>
     <compare>
       <condition>
         <negated>N</negated>
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>sk_user</leftvalue>
-            <function>&gt;</function>
-            <rightvalue>max_user</rightvalue>
+            <leftvalue>id_user_db</leftvalue>
+            <function>IS NULL</function>
+            <rightvalue/>
           </condition>
           <condition>
             <negated>N</negated>
             <operator>AND</operator>
-            <leftvalue>id_user</leftvalue>
+            <leftvalue>id_user_api</leftvalue>
             <function>IS NOT NULL</function>
             <rightvalue/>
           </condition>
@@ -587,8 +681,48 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1408</xloc>
+      <xloc>944</xloc>
       <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Data berubah di API 2</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Delete</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>id_user_api</leftvalue>
+            <function>IS NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -617,20 +751,8 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>max_organisasi</name>
-        <variable>${max_organisasi}</variable>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>max_user</name>
-        <variable>${max_user}</variable>
+        <name>sk_organisasi_api</name>
+        <variable>${sk_organisasi_api}</variable>
         <type>String</type>
         <format/>
         <currency/>
@@ -650,42 +772,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Menambah sequence</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <valuename>sk_user</valuename>
-    <use_database>N</use_database>
-    <connection>con-dw-sawit</connection>
-    <schema/>
-    <seqname>SEQ_</seqname>
-    <use_counter>Y</use_counter>
-    <counter_name/>
-    <start_at>1</start_at>
-    <increment_by>1</increment_by>
-    <max_value>999999999</max_value>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>992</xloc>
+      <xloc>240</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -694,7 +781,7 @@
     <name>Output User</name>
     <type>JsonInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -722,7 +809,7 @@
     </file>
     <fields>
       <field>
-        <name>id_user</name>
+        <name>id_user_api</name>
         <path>$.users[*].id</path>
         <type>Integer</type>
         <format/>
@@ -735,61 +822,9 @@
         <repeat>N</repeat>
       </field>
       <field>
-        <name>nama_user</name>
+        <name>nama_user_api</name>
         <path>$.users[*].nama</path>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>no_hp</name>
-        <path>$.users[*].no_hp</path>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>email</name>
-        <path>$.users[*].email</path>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>role</name>
-        <path>$.users[*].role</path>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>id_organisasi</name>
-        <path>$.users[*].organisasi_id</path>
-        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -877,13 +912,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>464</xloc>
+      <xloc>448</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Seleksi Kolom User</name>
+    <name>Select values</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -895,19 +930,12 @@
     </partitioning>
     <fields>
       <field>
-        <name>max_user</name>
+        <name>id_user_api</name>
+        <rename>id_user</rename>
       </field>
       <field>
-        <name>sk_user</name>
-      </field>
-      <field>
-        <name>id_user</name>
-      </field>
-      <field>
-        <name>nama_user</name>
-      </field>
-      <field>
-        <name>sk_organisasi</name>
+        <name>sk_organisasi_api</name>
+        <rename>sk_organisasi</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -920,13 +948,55 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1200</xloc>
+      <xloc>1152</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>dim_organisasi</name>
+    <name>Stream lookup 3</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>Output User</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_user</name>
+        <field>id_user_api</field>
+      </key>
+      <value>
+        <name>id_user_api</name>
+        <rename>id_user_api</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>464</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table input</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -936,28 +1006,28 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT
-  sk_organisasi
-, id_organisasi
-, nama_organisasi
-FROM dw_sawit.dim_organisasi
-</sql>
+  sk_user
+, id_user
+, sk_organisasi
+FROM dw_sawit.dim_user
+where sk_organisasi = ${sk_organisasi_api}</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
+    <variables_active>Y</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>sk_organisasi</name>
+        <name>sk_user</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_waktu</origin>
-        <comments>sk_organisasi</comments>
+        <origin>Table input</origin>
+        <comments>sk_user</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -976,11 +1046,11 @@ FROM dw_sawit.dim_organisasi
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>id_organisasi</name>
+        <name>id_user</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_waktu</origin>
-        <comments>id_organisasi</comments>
+        <origin>Table input</origin>
+        <comments>id_user</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -999,12 +1069,35 @@ FROM dw_sawit.dim_organisasi
       <value-meta>
         <type>String</type>
         <storagetype>normal</storagetype>
-        <name>nama_organisasi</name>
+        <name>nama_user</name>
         <length>63</length>
         <precision>-1</precision>
-        <origin>dim_waktu</origin>
-        <comments>nama_organisasi</comments>
+        <origin>Table input</origin>
+        <comments>nama_user</comments>
         <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>Table input</origin>
+        <comments>sk_organisasi</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
@@ -1029,8 +1122,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>800</xloc>
-      <yloc>128</yloc>
+      <xloc>432</xloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1045,14 +1138,14 @@ FROM dw_sawit.dim_organisasi
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <schema>dw_sawit</schema>
     <table>dim_user</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
+    <specify_fields>N</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
@@ -1089,14 +1182,14 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1408</xloc>
-      <yloc>400</yloc>
+      <xloc>1312</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>sk_organisasi</name>
-    <type>StreamLookup</type>
+    <name>dim_user_db</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1105,23 +1198,90 @@ FROM dw_sawit.dim_organisasi
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <from>dim_organisasi</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_organisasi</name>
-        <field>id_organisasi</field>
-      </key>
-      <value>
-        <name>sk_organisasi</name>
-        <rename>sk_organisasi</rename>
-        <default/>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_user
+, id_user
+, sk_organisasi
+FROM dw_sawit.dim_user
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
         <type>Integer</type>
-      </value>
-    </lookup>
+        <storagetype>normal</storagetype>
+        <name>sk_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>sk_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>id_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>id_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>sk_organisasi</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1131,8 +1291,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>800</xloc>
-      <yloc>272</yloc>
+      <xloc>752</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

@@ -12,11 +12,6 @@ services:
       - db
     networks:
       - sisawitnet
-    environment:
-      DB1_HOSTNAME: db
-      DB1_USERNAME: root
-      DB1_PASSWORD: rootpass
-      DB1_NAME: dw_sawit
 
   db:
     image: mysql:8.0

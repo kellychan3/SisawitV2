@@ -442,8 +442,8 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
-    <server>localhost</server>
+    <name>dw_sawit_new</name>
+    <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
     <database>dw_sawit</database>
@@ -461,10 +461,6 @@
       <attribute>
         <code>EXTRA_OPTION_MYSQL.useCursorFetch</code>
         <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useSSL</code>
-        <attribute>false</attribute>
       </attribute>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -515,8 +511,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Token Login</from>
-      <to>Set variables</to>
+      <from>Stream lookup</from>
+      <to>Token Login</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -525,18 +521,18 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_organisasi_db</from>
-      <to>Stream lookup</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Output Login</from>
       <to>Stream lookup</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup</from>
-      <to>Token Login</to>
+      <from>dim_organisasi_db</from>
+      <to>Stream lookup</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Token Login</from>
+      <to>Set variables</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -579,8 +575,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>208</xloc>
-      <yloc>208</yloc>
+      <xloc>194</xloc>
+      <yloc>266</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -663,8 +659,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>208</yloc>
+      <xloc>546</xloc>
+      <yloc>266</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -719,8 +715,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>208</yloc>
+      <xloc>354</xloc>
+      <yloc>266</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -759,8 +755,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1040</xloc>
-      <yloc>208</yloc>
+      <xloc>992</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -801,8 +797,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>208</yloc>
+      <xloc>706</xloc>
+      <yloc>266</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -848,8 +844,8 @@ token_bearer = "Bearer " + token;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>864</xloc>
-      <yloc>208</yloc>
+      <xloc>850</xloc>
+      <yloc>266</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -864,11 +860,10 @@ token_bearer = "Bearer " + token;
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT
   sk_organisasi
 , id_organisasi
-, nama_organisasi
 FROM dw_sawit.dim_organisasi
 </sql>
     <limit>0</limit>
@@ -884,7 +879,7 @@ FROM dw_sawit.dim_organisasi
         <name>sk_organisasi</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
+        <origin>dim_organisasi_db</origin>
         <comments>sk_organisasi</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
@@ -907,32 +902,9 @@ FROM dw_sawit.dim_organisasi
         <name>id_organisasi</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
+        <origin>dim_organisasi_db</origin>
         <comments>id_organisasi</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>String</type>
-        <storagetype>normal</storagetype>
-        <name>nama_organisasi</name>
-        <length>63</length>
-        <precision>-1</precision>
-        <origin>dim_kebun_db 2</origin>
-        <comments>nama_organisasi</comments>
-        <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
@@ -957,8 +929,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>64</yloc>
+      <xloc>706</xloc>
+      <yloc>122</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

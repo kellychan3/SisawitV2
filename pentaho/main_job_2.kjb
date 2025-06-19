@@ -11,9 +11,14 @@
   <modified_user>-</modified_user>
   <modified_date>2025/05/16 20:43:59.434</modified_date>
   <parameters>
-    </parameters>
+    <parameter>
+      <name>id_user</name>
+      <default_value>0</default_value>
+      <description/>
+    </parameter>
+  </parameters>
   <connection>
-    <name>con-dw-sawit</name>
+    <name>dw_sawit_new</name>
     <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
@@ -32,10 +37,6 @@
       <attribute>
         <code>EXTRA_OPTION_MYSQL.useCursorFetch</code>
         <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useSSL</code>
-        <attribute>false</attribute>
       </attribute>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -372,8 +373,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>64</yloc>
+      <xloc>160</xloc>
+      <yloc>96</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -383,7 +384,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/step_login.ktr</filename>
+      <filename>/var/www/html/pentaho/step_login.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -411,18 +412,18 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>192</xloc>
-      <yloc>64</yloc>
+      <xloc>288</xloc>
+      <yloc>96</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>dimensi ktr</name>
+      <name>fact_prediksi_panen</name>
       <description/>
       <type>TRANS</type>
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/dim_kebun.ktr</filename>
+      <filename>/var/www/html/pentaho/fact_prediksi_panen.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -450,39 +451,15 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
-      <yloc>64</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Write to log</name>
-      <description/>
-      <type>WRITE_TO_LOG</type>
-      <attributes/>
-      <logmessage>Job main_job.kjb STARTED</logmessage>
-      <loglevel>Basic</loglevel>
-      <logsubject/>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>351</xloc>
-      <yloc>217</yloc>
+      <xloc>448</xloc>
+      <yloc>96</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
   <hops>
     <hop>
-      <from>Token Login</from>
-      <to>dimensi ktr</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Start</from>
-      <to>Write to log</to>
+      <to>Token Login</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -490,8 +467,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Write to log</from>
-      <to>Token Login</to>
+      <from>Token Login</from>
+      <to>fact_prediksi_panen</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

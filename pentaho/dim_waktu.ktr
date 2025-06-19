@@ -437,14 +437,14 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
-    <server>localhost</server>
+    <name>dw_sawit_new</name>
+    <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
     <database>dw_sawit</database>
     <port>3306</port>
     <username>root</username>
-    <password>Encrypted </password>
+    <password>Encrypted 2be98afc86aa7f2e4b916a164ce93bcc9</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -771,7 +771,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <schema>dw_sawit</schema>
     <table>dim_waktu</table>
     <commit>1000</commit>

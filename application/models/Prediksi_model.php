@@ -3,51 +3,101 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Prediksi_model extends CI_Model
 {
-    private $dw;
+    private $db;
 
     public function __construct()
-    {
-        parent::__construct();
-        $this->dw = $this->load->database('dw', TRUE); 
-    }
-
-    public function get_prediksi_by_year($tahun)
-    {
-        $this->dw->select('bulan, SUM(hasil_kg) as total_prediksi');
-        $this->dw->from('fact_prediksi_panen');
-        $this->dw->where('tahun', $tahun);
-        $this->dw->group_by('bulan');
-        $query = $this->dw->get();
-
-        $result = [];
-        foreach ($query->result() as $row) {
-            $result[(int)$row->bulan] = (int)$row->total_prediksi;
-        }
-
-        return $result;
-    }
-
-    public function get_aktual_by_year($tahun)
 {
-    $this->dw->select('w.bulan, SUM(f.jumlah_panen) as total_panen');
-    $this->dw->from('fact_panen f');
-    $this->dw->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
-    $this->dw->where('w.tahun', $tahun);
-    $this->dw->group_by('w.bulan');
-
-    $query = $this->dw->get();
-    $result = [];
-    foreach ($query->result() as $row) {
-        $result[(int)$row->bulan] = (int)$row->total_panen;
-    }
-
-    return $result;
+    parent::__construct();
+    $this->db = $this->load->database('default', TRUE);
 }
 
-    public function get_tahun_list()
+public function get_available_years()
 {
-    $query = $this->dw->query("SELECT DISTINCT tahun FROM fact_prediksi_panen ORDER BY tahun");
+    $this->db->select('DISTINCT(LEFT(sk_waktu, 4)) AS tahun');
+    $this->db->from('fact_prediksi_panen');
+    $this->db->order_by('tahun', 'ASC');
+    $query = $this->db->get();
+
     return $query->result_array();
+}
+
+public function get_total_prediksi_by_year($tahun, $kebun = [])
+{
+    $this->db->select_sum('jumlah_prediksi_panen', 'total');
+    $this->db->from('fact_prediksi_panen');
+    $this->db->where('LEFT(sk_waktu, 4) =', $tahun, false);
+    if (!empty($kebun)) {
+        $this->db->where_in('sk_kebun', $kebun);
+    }
+    return $this->db->get()->row()->total ?? 0;
+}
+
+public function get_total_aktual_by_year($tahun, $kebun = [])
+{
+    $this->db->select_sum('jumlah_panen', 'total');
+    $this->db->from('fact_panen');
+    $this->db->where('LEFT(sk_waktu, 4) =', $tahun, false);
+    if (!empty($kebun)) {
+        $this->db->where_in('sk_kebun', $kebun);
+    }
+    $query = $this->db->get();
+    return $query->row()->total ?? 0;
+}
+
+
+public function get_prediksi_bulanan($tahun, $kebun = [])
+{
+    $this->db->select("MONTH(sk_waktu) as bulan, SUM(jumlah_prediksi_panen) as total");
+    $this->db->from('fact_prediksi_panen');
+    $this->db->where('LEFT(sk_waktu, 4) =', $tahun, false);
+    if (!empty($kebun)) {
+        $this->db->where_in('sk_kebun', $kebun);
+    }
+    $this->db->group_by('bulan');
+    $result = $this->db->get()->result();
+
+    $data = [];
+    foreach ($result as $row) {
+        $data[(int)$row->bulan] = (int)$row->total;
+    }
+
+    return $data;
+}
+
+public function get_aktual_bulanan($tahun, $kebun = [])
+{
+    $this->db->select("MONTH(sk_waktu) as bulan, SUM(jumlah_panen) as total");
+    $this->db->from('fact_panen');
+    $this->db->where('LEFT(sk_waktu, 4) =', $tahun, false);
+    if (!empty($kebun)) {
+        $this->db->where_in('sk_kebun', $kebun);
+    }
+    $this->db->group_by('bulan');
+    $result = $this->db->get()->result();
+
+    $data = [];
+    foreach ($result as $row) {
+        $data[(int)$row->bulan] = (int)$row->total;
+    }
+
+    return $data;
+}
+
+public function get_all_kebun($organisasi_id = null)
+{
+    $this->db->select('fp.sk_kebun as kebun, dk.nama_kebun');
+    $this->db->from('fact_prediksi_panen fp');
+    $this->db->join('dim_kebun dk', 'fp.sk_kebun = dk.sk_kebun');
+    $this->db->join('dim_organisasi do', 'fp.sk_organisasi = do.sk_organisasi');
+
+    if ($organisasi_id !== null) {
+        $this->db->where('do.id_organisasi', $organisasi_id);
+    }
+
+    $this->db->group_by(['fp.sk_kebun', 'dk.nama_kebun']);
+    $this->db->order_by('dk.nama_kebun', 'ASC');
+
+    return $this->db->get()->result_array();
 }
 
 }

@@ -1,40 +1,64 @@
 * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 5px;
-            background: #f0f2f5;
-            font-size: 12px;
-            overflow-x: hidden;
-        }
+    box-sizing: border-box;
+}
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 5px;
+    background: #f0f2f5;
+    font-size: 12px;
+    overflow-x: hidden;
+}
 
-        .resume-title,
-        .dashboard-box h3 {
-            font-size: 14px; 
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1A0066;
-        }
-        .dashboard-container-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .dashboard-box {
-            flex: 1;
-            background-color: white;
-            padding: 15px;
-            max-height: 270px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-        }
+/* Typography */
+.resume-title,
+.dashboard-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1A0066;
+}
+.resume-title {
+    color: white;
+    padding: 6px;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
 
-        .dashboard-box.chart-box.pupuk {
+/* Layout */
+.dashboard-container-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.dashboard-box {
+    flex: 1;
+    background-color: white;
+    padding: 15px;
+    max-height: 270px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+.chart-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.chart-box canvas {
+    flex-grow: 1;
+    width: 100%;
+    height: 230px;
+    max-height: 230px;
+    display: block;
+}
+
+/* Chart Box Variants */
+.dashboard-box.chart-box.pupuk {
     flex: 0 0 268px;
     max-width: 280px;
     max-height: 268px;
@@ -44,179 +68,99 @@
     max-width: 260px;
     max-height: 270px;
 }
-
 .dashboard-box.chart-box.piechart {
     flex: 0 0 280px;
     max-width: 280px;
 }
 
-        .resume-box {
+/* Resume */
+.resume-box {
     background-color: white;
-    color: white;
-    flex: 0 0 260px; /* lebar tetap 200px */
+    flex: 0 0 260px;
     max-height: 268px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
-
-        .resume-box .title-box {
-            background: #1F049A;
-        }
-        .resume-title {
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding: 6px;
-            color: white;
-
-        }
-        .resume-box .info-box {
-            background: white;
-            color: #1A0066;
-            padding: 6px;
-            margin-bottom: 10px;
-            text-align: left;
-            border: 1px solid #CCCCCC;
-        }
-        .resume-box .info-box .label {
-            font-size: 11px;
-            color: #555;
-        }
-        .resume-box .info-box .value {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .chart-box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .chart-box canvas {
-    flex-grow: 1;
-    width: 100%;
-    height: 230px; /* Batas aman agar tidak tumpah dari box */
-    max-height: 230px;
-    display: block;
+.resume-box .title-box {
+    background: #1F049A;
+}
+.resume-box .info-box {
+    background: white;
+    color: #1A0066;
+    padding: 6px;
+    margin-bottom: 10px;
+    text-align: left;
+    border: 1px solid #CCCCCC;
+}
+.resume-box .info-box .label {
+    font-size: 11px;
+    color: #555;
+}
+.resume-box .info-box .value {
+    font-size: 14px;
+    font-weight: bold;
+}
+.info-box-wrap {
+    padding: 0 10px;
+}
+.info-box-row {
+    display: flex;
+    gap: 10px;
+}
+.info-box-row .info-box {
+    flex: 1;
 }
 
-        .scrollable-table {
-            flex: 1;
-            max-height: 300px;
-            overflow-y: auto;
-            overflow-x: auto; /* Tambahkan jika kolom terlalu lebar */
-        }
-
-        table {
-            width: 100%;
-            table-layout: fixed; /* Cegah kolom memanjang melebihi kontainer */
-            word-wrap: break-word;
-        }
-
-        table th, table td {
-            padding: 8px;
-            border: 1px solid #ccc;
-        }
-        @media (max-width: 1024px) {
-            .dashboard-container-row {
-                flex-direction: column;
-            }
-        }
-
-        .info-box-row {
-            display: flex;
-            gap: 10px;
-        }
-        .info-box-row .info-box {
-            flex: 1;
-        }
-        .info-box-wrap{
-            padding: 0 10px;
-        }
-
-        .filter-box {
-            background-color: #1F049A;
-            padding: 10px;
-            display: flex;
-            justify-content: flex-end; /* rata kanan */
-            gap: 30px; /* jarak antar elemen */
-            margin-bottom: 15px;
-        }
-
-        .filter-box .field {
-            display: flex;
-            flex-direction: column;
-            align-items: left;
-        }
-
-        .filter-box label {
-            color: white;
-            font-weight: bold;
-            text-align: left;
-        }
-
-        .filter-box select {
-            width: 160px;
-            height: 30px;
-        }
-
-        .multi-select-dropdown {
-  position: relative;
-  width: 180px;
-  user-select: none;
-  font-family: sans-serif;
+/* Filter */
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+.filter-left form,
+.filter-right form {
+    margin: 0;
+}
+.filter-box {
+    display: flex;
+    background-color: #1F049A;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap; /* jika tampilan kecil */
+    gap: 16px;
+    margin-bottom: 15px;
+}
+.refresh-form {
+    flex: 0 0 auto; /* hanya sebesar kontennya */
 }
 
-.dropdown-btn {
-  border: 1px solid #ccc;
-  padding: 6px 10px;
-  cursor: pointer;
-  background-color: white;
+.filter-form {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+.filter-box .field {
+    display: flex;
+    flex-direction: column;
+}
+.filter-box label {
+    color: white;
+    font-weight: bold;
+    text-align: left;
+}
+.filter-box select {
+    width: 160px;
+    height: 30px;
 }
 
-.dropdown-list {
-  position: absolute;
-  background-color: black;
-  border: 1px solid #ccc;
-  width: 100%;
-  max-height: 150px;
-  overflow-y: auto;
-  z-index: 10;
-  margin-top: 2px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.hide {
-  display: none;
-}
-
-.dropdown-item {
-  display: block;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background-color: #f1f1f1;
-}
-
-.dropdown-item input {
-  margin-right: 8px;
-}
-
-#selected-count {
-  float: right;
-  font-weight: bold;
-  color: #555;
-}
-
+/* Custom Dropdown */
 .custom-dropdown {
     position: relative;
     display: inline-block;
     width: 160px;
 }
-
 .dropdown-label {
     border: 1px solid #ccc;
     padding: 6px;
@@ -224,7 +168,6 @@
     cursor: pointer;
     color: black;
 }
-
 .dropdown-checkboxes {
     display: none;
     position: absolute;
@@ -237,7 +180,6 @@
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
 .dropdown-checkboxes label {
     display: block;
     margin-bottom: 5px;
@@ -245,3 +187,69 @@
     text-align: left;
 }
 
+/* Multi-select Dropdown (legacy?) */
+.multi-select-dropdown {
+    position: relative;
+    width: 180px;
+    user-select: none;
+}
+.dropdown-btn {
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    cursor: pointer;
+    background-color: white;
+}
+.dropdown-list {
+    position: absolute;
+    background-color: black;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+    margin-top: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.dropdown-item {
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+.dropdown-item input {
+    margin-right: 8px;
+}
+#selected-count {
+    float: right;
+    font-weight: bold;
+    color: #555;
+}
+.hide {
+    display: none;
+}
+
+/* Table */
+.scrollable-table {
+    flex: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+table th, table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .dashboard-container-row {
+        flex-direction: column;
+    }
+}

@@ -437,7 +437,7 @@
   <notepads>
   </notepads>
   <connection>
-    <name>con-dw-sawit</name>
+    <name>dw_sawit_new</name>
     <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
@@ -456,10 +456,6 @@
       <attribute>
         <code>EXTRA_OPTION_MYSQL.useCursorFetch</code>
         <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useSSL</code>
-        <attribute>false</attribute>
       </attribute>
       <attribute>
         <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
@@ -521,7 +517,7 @@
     </hop>
     <hop>
       <from>Output Kebun</from>
-      <to>Stream lookup</to>
+      <to>Data Ada?</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -540,13 +536,13 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup</from>
+      <from>Data Ada?</from>
       <to>Filter - Data belum ada di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>dim_kebun_db</from>
-      <to>Stream lookup</to>
+      <to>Data Ada?</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -571,6 +567,54 @@
     </hop>
   </order>
   <step>
+    <name>Data Ada?</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_kebun_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_kebun_api</name>
+        <field>id_kebun</field>
+      </key>
+      <value>
+        <name>id_kebun</name>
+        <rename>id_kebun_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>nama_kebun</name>
+        <rename>nama_kebun_db</rename>
+        <default/>
+        <type>String</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Delete</name>
     <type>Delete</type>
     <description/>
@@ -581,7 +625,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <commit>100</commit>
     <lookup>
       <schema>dw_sawit</schema>
@@ -791,7 +835,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <commit>100</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
@@ -1004,54 +1048,6 @@
     </GUI>
   </step>
   <step>
-    <name>Stream lookup</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_kebun_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_kebun_api</name>
-        <field>id_kebun</field>
-      </key>
-      <value>
-        <name>id_kebun</name>
-        <rename>id_kebun_db</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-      <value>
-        <name>nama_kebun</name>
-        <rename>nama_kebun_db</rename>
-        <default/>
-        <type>String</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>672</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Stream lookup 3</name>
     <type>StreamLookup</type>
     <description/>
@@ -1104,7 +1100,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT
   sk_kebun,
   id_kebun,
@@ -1238,7 +1234,7 @@ where sk_organisasi = ${sk_organisasi_api}
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <schema>dw_sawit</schema>
     <table>dim_kebun</table>
     <commit>1000</commit>
@@ -1298,7 +1294,7 @@ where sk_organisasi = ${sk_organisasi_api}
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>con-dw-sawit</connection>
+    <connection>dw_sawit_new</connection>
     <sql>SELECT
   sk_kebun
 , id_kebun

@@ -34,13 +34,15 @@ Hubungi Kelly untuk mendapatkan file *.sql.
 ```bash
 composer install
 ```
-Hubungi Kelly untuk mendapatkan file .sql
 
-### 5. Install Docker Desktop & Jalankan Docker
+### 5. Download PDI
+Unduh file pdi.zip dari link drive berikut:https://drive.google.com/file/d/1L6jSetbVLe0GjPMxcAAZSqimWy_K5nVh/view?usp=sharing, lalu ekstrak ke dalam folder pentaho/:
+
+### 6. Install Docker Desktop & Jalankan Docker
 ```bash
 docker compose down -v
 docker compose up --build
 ```
 
-### 6. Akses aplikasi:
+### 7. Akses aplikasi:
 Buka browser ke: http://localhost:8081
