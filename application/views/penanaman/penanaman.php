@@ -34,7 +34,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-         <table id="aset" class="table table-striped table-bordered">
+         <table id="penanaman" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Kebun</th>
@@ -70,7 +70,7 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#aset').DataTable({
+    $('#penanaman').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
             { targets: 2, searchable: false } // kolom Jumlah Bibit gak bisa dicari
@@ -97,4 +97,5 @@ $(document).ready(function() {
     });
 });
 
+$.fn.dataTable.ext.errMode = 'none';
 </script>

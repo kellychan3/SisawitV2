@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
@@ -110,7 +111,7 @@
                             </div>
                             <div class="info-box">
                                 <div class="label">Total Luas Kebun</div>
-                                <div class="value"><?= number_format($summary_kebun->total_luas, 3) ?> HA</div>
+                                <div class="value"><?= number_format($summary_kebun->total_luas) ?> HA</div>
                             </div>
                         </div>
 
@@ -137,36 +138,55 @@
                 <!-- Grafik Panen Bulanan-->
                 <div class="dashboard-box chart-box">
                     <h3>Total Panen per Bulan (Kg)</h3>
-                    <canvas id="panenChart"></canvas>
+                    <?php if (empty($panen_per_bulan )): ?>
+                        <div class="empty-chart">
+                            <p>📉 Belum ada data panen. Silahkan inputkan melalui aplikasi mobile</p>
+                        </div>
+                    <?php else: ?>
+                        <canvas id="panenChart"></canvas>
+                    <?php endif; ?>
                 </div>
+
 
                 <!-- Grafik Luas Kebun -->
                 <div class="dashboard-box chart-box piechart">
                     <h3 style="text-align: center;">Luas Kebun</h3>
-                    <canvas id="kebunPieChart"></canvas>
+                    <?php if (empty($luas_kebun )): ?>
+                        <div class="empty-chart">
+                            <p>📉 Belum ada data kebun. Silahkan inputkan melalui aplikasi mobile</p>
+                        </div>
+                    <?php else: ?>
+                        <canvas id="kebunPieChart"></canvas>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Tabel Persediaan Pupuk -->
                 <div class="dashboard-box chart-box pupuk">
                     <h3>Data Persediaan Pupuk</h3>
-                    <div class="scrollable-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nama Pupuk</th>
-                                    <th>Stok</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($persediaan_pupuk as $row): ?>
+                    <?php if (empty($persediaan_pupuk)): ?>
+                        <div class="empty-chart">
+                            <p>📦 Belum ada data pupuk. Silakan inputkan melalui menu Data Aset Barang</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="scrollable-table">
+                            <table style="height: 210px">
+                                <thead>
                                     <tr>
-                                        <td><?= htmlspecialchars($row->nama_aset); ?></td>
-                                        <td><?= number_format($row->jumlah_aset); ?></td>
+                                        <th>Nama Pupuk</th>
+                                        <th>Stok</th>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($persediaan_pupuk as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row->nama_aset); ?></td>
+                                            <td><?= number_format($row->jumlah_aset); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -175,14 +195,25 @@
                 <!-- Grafik Persentase Panen per Kebun -->
                 <div class="dashboard-box chart-box donut">
                     <h3>Persentase Panen per Kebun</h3>
-                 <canvas id="persentasePanenKebunChart"></canvas>
+                    <?php if (empty($persentase_panen_kebun )): ?>
+                        <div class="empty-chart">
+                            <p>📉 Belum ada data kebun. Silahkan inputkan melalui aplikasi mobile</p>
+                        </div>
+                    <?php else: ?>
+                        <canvas id="persentasePanenKebunChart"></canvas>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Grafik Panen Mingguan-->
                 <div class="dashboard-box chart-box">
                     <h3>Total Panen per Minggu per Kebun (Kg)</h3>
-                 <canvas id="panenMingguanKebunChart"></canvas>
-                   
+                    <?php if (empty($panen_mingguan_kebun )): ?>
+                        <div class="empty-chart">
+                            <p>📉 Belum ada data panen. Silahkan inputkan melalui aplikasi mobile</p>
+                        </div>
+                    <?php else: ?>
+                        <canvas id="panenMingguanKebunChart"></canvas>
+                    <?php endif; ?>
                 </div>
             </div>
     </div>
@@ -192,17 +223,28 @@
 function toggleDropdown(type) {
     const dropdown = document.getElementById('dropdown-' + type);
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    event.stopPropagation(); // tambahkan ini
 }
+
+
+document.querySelectorAll('.dropdown-label').forEach(label => {
+    label.addEventListener('click', function(event) {
+        event.stopPropagation();
+        const type = this.getAttribute('data-type');
+        const dropdown = document.getElementById('dropdown-' + type);
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+});
 
 document.addEventListener('click', function(event) {
     ['kebun', 'bulan'].forEach(type => {
         const dropdown = document.getElementById('dropdown-' + type);
-        const label = document.querySelector(`.dropdown-label[onclick="toggleDropdown('${type}')"]`);
-        if (dropdown && label && !label.contains(event.target) && !dropdown.contains(event.target)) {
+        if (dropdown && !dropdown.contains(event.target)) {
             dropdown.style.display = 'none';
         }
     });
 });
+
 </script>
 
 <script>

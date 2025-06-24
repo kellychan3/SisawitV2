@@ -26,15 +26,4 @@ class Profile extends CI_Controller
     $this->load->view('profile/profile', ['user' => $user]);
     $this->load->view('layout/footer');
 }
-
-    public function changePassword($id)
-    {
-        $data = [
-            'password' => md5($this->input->post('password')),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ];
-        $id = $this->input->post('id_user');
-        $this->User_model->update(['id_user' => $id], $data);
-        redirect('Profile');
-    }
 }

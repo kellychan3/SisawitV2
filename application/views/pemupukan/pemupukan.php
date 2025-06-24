@@ -1,14 +1,15 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <style>
-  .dataTables_wrapper .dataTables_length select {
+.dataTables_wrapper .dataTables_length select {
     min-width: 50px;
-    padding-right: 1.8em; 
+    padding-right: 1.8em;
 }
-
 </style>
+
 <div class="page-wrapper">
     <div class="page-content">
-        <!-- breadcrumb -->
+
+        <!-- Breadcrumb -->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Data Perkebunan</div>
             <div class="ps-3">
@@ -20,26 +21,32 @@
                 </nav>
             </div>
         </div>
-        <!-- end breadcrumb -->
 
+        <!-- Flash Messages -->
         <?php if ($this->session->flashdata('success')): ?>
-            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= $this->session->flashdata('success'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php endif; ?>
 
         <?php if ($this->session->flashdata('error')): ?>
-            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?= $this->session->flashdata('error'); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php endif; ?>
 
-        <!-- TABEL DATA -->
+        <!-- Tabel Data -->
         <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-         <table id="aset" class="table table-striped table-bordered">
+                    <table id="pemupukan" class="table table-striped table-bordered" width="100%">
                         <thead>
                             <tr>
                                 <th>Kebun</th>
                                 <th>Jenis Pupuk</th>
-                                <th>Jumlat Pupuk</th>
+                                <th>Jumlah Pupuk</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
                                 <th>Status</th>
@@ -47,37 +54,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (empty($pemupukan)): ?>
-                                <tr><td colspan="7" class="text-center">Data pemupukan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                            <?php else: ?>
-                                <?php foreach ($pemupukan as $a): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($a['kebun']['nama_kebun']); ?></td>
-                                        <td><?= htmlspecialchars($a['aset']['nama_aset']); ?></td>
-                                        <td><?= htmlspecialchars($a['jumlah_pupuk']); ?></td>
-                                        <td><?= htmlspecialchars($a['tanggal_mulai']); ?></td>
-                                        <td><?= htmlspecialchars($a['tanggal_selesai']); ?></td>
-                                        <td><?= htmlspecialchars($a['status']); ?></td>
-                                        <td><?= htmlspecialchars($a['added_by']['nama']); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
+    <?php if (empty($pemupukan)): ?>
+        <tr>
+            <td colspan="7" class="text-center text-muted">
+                Data pemupukan belum tersedia. Silakan tambahkan melalui aplikasi mobile.
+            </td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($pemupukan as $a): ?>
+            <tr>
+                <td><?= isset($a['kebun']['nama_kebun']) ? htmlspecialchars($a['kebun']['nama_kebun']) : '-'; ?></td>
+                <td><?= isset($a['aset']['nama_aset']) ? htmlspecialchars($a['aset']['nama_aset']) : '-'; ?></td>
+                <td><?= isset($a['jumlah_pupuk']) ? htmlspecialchars($a['jumlah_pupuk']) : '-'; ?></td>
+                <td><?= isset($a['tanggal_mulai']) ? htmlspecialchars($a['tanggal_mulai']) : '-'; ?></td>
+                <td><?= isset($a['tanggal_selesai']) ? htmlspecialchars($a['tanggal_selesai']) : '-'; ?></td>
+                <td><?= isset($a['status']) ? htmlspecialchars($a['status']) : '-'; ?></td>
+                <td><?= isset($a['added_by']['nama']) ? htmlspecialchars($a['added_by']['nama']) : '-'; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</tbody>
+
                     </table>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
+<!-- JS DataTables -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#aset').DataTable({
+    $('#pemupukan').DataTable({
         order: [[3, 'desc']],
         columnDefs: [
-            { targets: 2, searchable: false } // kolom Jumlah Bibit gak bisa dicari
+            { targets: 2, searchable: false } 
         ],
         search: {
             smart: false,
@@ -101,6 +115,6 @@ $(document).ready(function() {
     });
 });
 
+$.fn.dataTable.ext.errMode = 'none';
 
 </script>
-

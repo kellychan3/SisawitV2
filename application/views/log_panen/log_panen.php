@@ -35,7 +35,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="table-responsive">
-         <table id="aset" class="table table-striped table-bordered">
+         <table id="log_panen" class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Tanggal Panen</th>
@@ -71,7 +71,7 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#aset').DataTable({
+    $('#log_panen').DataTable({
         order: [[0, 'desc']],
         search: {
             smart: false,
@@ -94,4 +94,6 @@ $(document).ready(function() {
         }
     });
 });
+
+$.fn.dataTable.ext.errMode = 'none';
 </script>

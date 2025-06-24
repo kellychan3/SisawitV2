@@ -154,6 +154,20 @@ body {
     width: 160px;
     height: 30px;
 }
+.empty-chart {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 2px dashed #ddd;
+    color: #777;
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    padding: 0 16px;
+}
+
 
 /* Custom Dropdown */
 .custom-dropdown {

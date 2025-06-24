@@ -541,6 +541,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -980,8 +984,8 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>sk_organisasi_api</name>
-        <variable>${sk_organisasi_api}</variable>
+        <name>sk_organisasi</name>
+        <variable>${sk_organisasi}</variable>
         <type>String</type>
         <format/>
         <currency/>
@@ -1381,7 +1385,7 @@
 , f.jumlah_panen
 FROM dw_sawit.fact_panen f
 JOIN dw_sawit.dim_user u ON f.sk_user = u.sk_user
-WHERE u.sk_organisasi = ${sk_organisasi_api}</sql>
+WHERE u.sk_organisasi = ${sk_organisasi}</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>

@@ -50,9 +50,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |        my-controller/my-method    -> my_controller/my_method
  */
 $route['default_controller'] = 'Authentication';
-$route['lupa_sandi'] = 'authentication/lupa_sandi';
+
+$route['lupa_sandi'] = 'lupa_sandi/index';
+$route['lupa_sandi/request_otp'] = 'lupa_sandi/request_otp';
+$route['lupa_sandi/submit_otp'] = 'lupa_sandi/submit_otp';
+$route['lupa_sandi/verifikasi_otp'] = 'lupa_sandi/verifikasi_otp';
+
 $route['dashboard/refresh'] = 'dashboard/refresh_data';
 $route['prediksi/refresh'] = 'prediksi/refresh_data';
+
+
 
 // CRUD Kebun
 $route['api/kebun']['get'] = 'api/kebun/index';

@@ -470,6 +470,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -893,8 +897,8 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>sk_organisasi_api</name>
-        <variable>${sk_organisasi_api}</variable>
+        <name>sk_organisasi</name>
+        <variable>${sk_organisasi}</variable>
         <type>String</type>
         <format/>
         <currency/>
@@ -1294,7 +1298,7 @@
 FROM dw_sawit.dim_aset a
 JOIN dw_sawit.dim_kebun k
   ON a.sk_kebun = k.sk_kebun
-WHERE k.sk_organisasi = ${sk_organisasi_api};
+WHERE k.sk_organisasi = ${sk_organisasi};
 </sql>
     <limit>0</limit>
     <lookup/>

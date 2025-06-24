@@ -74,6 +74,17 @@ class Kesehatan extends CI_Controller
             redirect('kesehatan');
         }
 
+        // Tambahkan validasi ini sebelum CURLFile
+    if (
+        !isset($_FILES['gambar_kebun']) ||
+        $_FILES['gambar_kebun']['error'] !== UPLOAD_ERR_OK ||
+        empty($_FILES['gambar_kebun']['tmp_name'])
+    ) {
+        $this->session->set_flashdata('error', 'File upload gagal atau tidak valid');
+        $this->session->set_flashdata('old_input', $this->input->post());
+        redirect('kesehatan');
+    }
+    
         // Prepare API data
         $postData = [
             'kebun_id' => $this->input->post('nama_kebun'),

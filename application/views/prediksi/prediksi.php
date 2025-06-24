@@ -14,9 +14,25 @@
     <link rel="stylesheet" href="assets/css/prediksi.css">
 </head>
 <body>
+    
     <div class="page-wrapper">
         <div class="page-content">
 
+        <!--breadcrumb-->
+        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+            <div class="breadcrumb-title pe-3">Monitoring</div>
+            <div class="ps-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a href="<?= base_url('Dashboard'); ?>"><i class="bx bx-home-alt"></i></a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Prediksi Hasil Panen</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--end breadcrumb-->
+<?php if ($data_prediksi_tersedia): ?>
             <!-- Filter Atas -->
             <div class="filter-box">
                 <!-- Refresh Button -->
@@ -83,9 +99,10 @@
                                         <?php $id = $k['kebun']; ?>
                                         <label style="display: flex; justify-content: space-between; align-items: center; font-weight: normal;">
                                             <span><?= $k['nama_kebun'] ?></span>
-                                            <input type="checkbox" name="kebun[]" value="<?= $id ?>" <?= in_array($id, $filter['kebun']) ? 'checked' : '' ?> onchange="this.form.submit()">
+                                            <input type="checkbox" name="kebun[]" value="<?= $id ?>" <?= in_array($id, $filter['kebun']) ? 'checked' : '' ?> onchange="this.form.submit()" <?= $id === '' ? 'disabled' : '' ?>>
                                         </label>
                                     <?php endforeach; ?>
+
                                 </div>
                             </form>
                         </div>
@@ -99,8 +116,19 @@
                     <canvas id="panenChart"></canvas>
                 </div>
             </div>
+
+            <?php else: ?>
+            <div style="display: flex; justify-content: center; align-items: center; height: 60vh;">
+                <div style="max-width: 700px; padding: 40px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🌾</div>
+                    <h2 style="margin-bottom: 12px; color: #333;">Data Prediksi Belum Tersedia</h2>
+                    <p style="color: #666; font-size: 15px;">Silakan hubungi admin untuk melakukan pelatihan model terlebih dahulu.</p>
+                </div>
+            </div>
+        <?php endif; ?>
         </div>
     </div>
+    
 
 <script>
 const ctx = document.getElementById('panenChart').getContext('2d');

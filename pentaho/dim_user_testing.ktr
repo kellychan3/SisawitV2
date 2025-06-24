@@ -507,7 +507,7 @@
     </hop>
     <hop>
       <from>Output Login</from>
-      <to>Stream lookup</to>
+      <to>Token Login</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -516,18 +516,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup</from>
-      <to>Token Login</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>dim_organisasi_db</from>
-      <to>Stream lookup</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Data Ada?</from>
-      <to>sk_kategori_aset</to>
+      <to>sk_user</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -536,68 +526,68 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Jumlah berubah di API 2</from>
-      <to>Insert / update 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Nama berubah di API</from>
+      <from>Filter - Luas berubah di API</from>
       <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Output Aset</from>
-      <to>Data Ada?</to>
+      <from>Filter - Waktu berubah di API</from>
+      <to>Insert / update 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Aset</from>
-      <to>Output Aset</to>
+      <from>Output Kebun</from>
+      <to>sk_kebun 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Seleksi Kolom Kebun</from>
-      <to>dim_aset</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>dim_aset_db</from>
-      <to>Data Ada?</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>dim_kategori_aset_db</from>
-      <to>sk_kategori_aset</to>
+      <to>fact_luas_kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>dim_kebun_db</from>
-      <to>sk_kebun</to>
+      <to>sk_kebun 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kategori_aset</from>
-      <to>sk_kebun</to>
+      <from>dim_user_db</from>
+      <to>sk_user</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun</from>
+      <from>dim_waktu_db</from>
+      <to>sk_waktu</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>fact_luas_kebun_db</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>sk_kebun 2</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>sk_user</from>
+      <to>sk_waktu</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>sk_waktu</from>
       <to>Filter - Data belum ada di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun</from>
-      <to>Filter - Jumlah berubah di API 2</to>
+      <from>sk_waktu</from>
+      <to>Filter - Luas berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun</from>
-      <to>Filter - Nama berubah di API</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Token Login</from>
-      <to>REST Aset</to>
+      <from>sk_waktu</from>
+      <to>Filter - Waktu berubah di API</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -628,7 +618,7 @@
     </fields>
     <data>
       <line>
-        <item>{"no_hp":"pemilik1@example.com","password":"password"}</item>
+        <item>{"no_hp":"keli@gmail.com","password":"password"}</item>
       </line>
     </data>
     <attributes/>
@@ -640,8 +630,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>64</xloc>
-      <yloc>160</yloc>
+      <xloc>68</xloc>
+      <yloc>110</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -724,8 +714,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>416</xloc>
-      <yloc>160</yloc>
+      <xloc>420</xloc>
+      <yloc>110</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -780,50 +770,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Stream lookup</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_organisasi_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_organisasi</name>
-        <field>id_organisasi</field>
-      </key>
-      <value>
-        <name>sk_organisasi</name>
-        <rename>sk_organisasi_api</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>576</xloc>
-      <yloc>160</yloc>
+      <xloc>228</xloc>
+      <yloc>110</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -869,14 +817,14 @@ token_bearer = "Bearer " + token;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
-      <yloc>160</yloc>
+      <xloc>576</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>dim_organisasi_db</name>
-    <type>TableInput</type>
+    <name>Data Ada?</name>
+    <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -885,118 +833,33 @@ token_bearer = "Bearer " + token;
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>dw_sawit_new</connection>
-    <sql>SELECT
-  sk_organisasi
-, id_organisasi
-FROM dw_sawit.dim_organisasi
-</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_organisasi</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_organisasi_db</origin>
-        <comments>sk_organisasi</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>id_organisasi</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_organisasi_db</origin>
-        <comments>id_organisasi</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>576</xloc>
-      <yloc>16</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Data Ada?</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_aset_db</from>
+    <from>fact_luas_kebun_db</from>
     <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
+    <preserve_memory>N</preserve_memory>
     <sorted_list>N</sorted_list>
     <integer_pair>N</integer_pair>
     <lookup>
       <key>
-        <name>id_aset_api</name>
-        <field>id_aset</field>
+        <name>sk_kebun_api</name>
+        <field>sk_kebun</field>
       </key>
       <value>
-        <name>id_aset</name>
-        <rename>id_aset_db</rename>
+        <name>sk_fact_luas_kebun</name>
+        <rename>sk_fact_luas_kebun_db</rename>
         <default/>
         <type>Integer</type>
       </value>
       <value>
-        <name>nama_aset</name>
-        <rename>nama_aset_db</rename>
+        <name>sk_waktu</name>
+        <rename>sk_waktu_db</rename>
         <default/>
         <type>Integer</type>
       </value>
       <value>
-        <name>jumlah_aset</name>
-        <rename>jumlah_aset_db</rename>
+        <name>luas_kebun</name>
+        <rename>luas_kebun_db</rename>
         <default/>
-        <type>Integer</type>
+        <type>Number</type>
       </value>
     </lookup>
     <attributes/>
@@ -1008,8 +871,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>416</yloc>
+      <xloc>564</xloc>
+      <yloc>444</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1032,14 +895,14 @@ FROM dw_sawit.dim_organisasi
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>id_aset_api</leftvalue>
+            <leftvalue>id_kebun_api</leftvalue>
             <function>IS NOT NULL</function>
             <rightvalue/>
           </condition>
           <condition>
             <negated>N</negated>
             <operator>AND</operator>
-            <leftvalue>id_aset_db</leftvalue>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
             <function>IS NULL</function>
             <rightvalue/>
           </condition>
@@ -1055,60 +918,13 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>960</xloc>
-      <yloc>416</yloc>
+      <xloc>1044</xloc>
+      <yloc>444</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Jumlah berubah di API 2</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Insert / update 2</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>jumlah_aset_api</leftvalue>
-            <function>&lt;></function>
-            <rightvalue>jumlah_aset_db</rightvalue>
-          </condition>
-          <condition>
-            <negated>N</negated>
-            <operator>AND</operator>
-            <leftvalue>id_aset_db</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>960</xloc>
-      <yloc>624</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter - Nama berubah di API</name>
+    <name>Filter - Luas berubah di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -1126,14 +942,14 @@ FROM dw_sawit.dim_organisasi
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>nama_aset_api</leftvalue>
+            <leftvalue>luas_kebun_api</leftvalue>
             <function>&lt;></function>
-            <rightvalue>nama_aset_db</rightvalue>
+            <rightvalue>luas_kebun_db</rightvalue>
           </condition>
           <condition>
             <negated>N</negated>
             <operator>AND</operator>
-            <leftvalue>id_aset_db</leftvalue>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
             <function>IS NOT NULL</function>
             <rightvalue/>
           </condition>
@@ -1149,8 +965,55 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>960</xloc>
-      <yloc>512</yloc>
+      <xloc>1044</xloc>
+      <yloc>540</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Waktu berubah di API</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update 2</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>sk_waktu_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>sk_waktu_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1044</xloc>
+      <yloc>636</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1170,16 +1033,16 @@ FROM dw_sawit.dim_organisasi
     <update_bypassed>N</update_bypassed>
     <lookup>
       <schema>dw_sawit</schema>
-      <table>dim_aset</table>
+      <table>fact_luas_kebun</table>
       <key>
-        <name>id_aset_api</name>
-        <field>id_aset</field>
+        <name>sk_kebun_api</name>
+        <field>sk_kebun</field>
         <condition>=</condition>
         <name2/>
       </key>
       <value>
-        <name>nama_aset</name>
-        <rename>nama_aset_api</rename>
+        <name>luas_kebun</name>
+        <rename>luas_kebun_api</rename>
         <update>Y</update>
       </value>
     </lookup>
@@ -1192,8 +1055,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1168</xloc>
-      <yloc>512</yloc>
+      <xloc>1252</xloc>
+      <yloc>540</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1213,16 +1076,16 @@ FROM dw_sawit.dim_organisasi
     <update_bypassed>N</update_bypassed>
     <lookup>
       <schema>dw_sawit</schema>
-      <table>dim_aset</table>
+      <table>fact_luas_kebun</table>
       <key>
-        <name>id_aset_api</name>
-        <field>id_aset</field>
+        <name>sk_kebun_api</name>
+        <field>sk_kebun</field>
         <condition>=</condition>
         <name2/>
       </key>
       <value>
-        <name>jumlah_aset</name>
-        <rename>jumlah_aset_api</rename>
+        <name>sk_waktu</name>
+        <rename>sk_waktu_api</rename>
         <update>Y</update>
       </value>
     </lookup>
@@ -1235,16 +1098,16 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1168</xloc>
-      <yloc>624</yloc>
+      <xloc>1252</xloc>
+      <yloc>636</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Output Aset</name>
+    <name>Output Kebun</name>
     <type>JsonInput</type>
     <description/>
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -1272,47 +1135,8 @@ FROM dw_sawit.dim_organisasi
     </file>
     <fields>
       <field>
-        <name>id_aset_api</name>
-        <path>$.[*].id</path>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>nama_aset_api</name>
-        <path>$.[*].nama_aset</path>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>jumlah_aset_api</name>
-        <path>$.[*].jumlah_aset</path>
-        <type>Number</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
         <name>id_kebun_api</name>
-        <path>$.[*].kebun.id</path>
+        <path>$.[*]id</path>
         <type>Integer</type>
         <format/>
         <currency/>
@@ -1324,9 +1148,35 @@ FROM dw_sawit.dim_organisasi
         <repeat>N</repeat>
       </field>
       <field>
-        <name>id_kategori_api</name>
-        <path>$.[*].kategori_aset.id</path>
+        <name>tanggal_api</name>
+        <path>$.[*]tanggal_akuisisi</path>
+        <type>Date</type>
+        <format>yyyy-MM-dd</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>id_user_api</name>
+        <path>$.[*].added_by.user_id</path>
         <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>luas_kebun_api</name>
+        <path>$.[*]luas_kebun_ha</path>
+        <type>Number</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1340,7 +1190,7 @@ FROM dw_sawit.dim_organisasi
     <limit>0</limit>
     <IsInFields>Y</IsInFields>
     <IsAFile>N</IsAFile>
-    <valueField>result_aset</valueField>
+    <valueField>result_kebun</valueField>
     <shortFileFieldName/>
     <pathFieldName/>
     <hiddenFieldName/>
@@ -1358,64 +1208,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>416</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>REST Aset</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <applicationType>TEXT PLAIN</applicationType>
-    <method>GET</method>
-    <url>http://103.150.101.10/api/aset</url>
-    <urlInField>N</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField/>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      <header>
-        <field>token_bearer</field>
-        <name>Authorization</name>
-      </header>
-    </headers>
-    <parameters>
-      </parameters>
-    <matrixParameters>
-      </matrixParameters>
-    <result>
-      <name>result_aset</name>
-      <code/>
-      <response_time/>
-      <response_header/>
-    </result>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>128</xloc>
-      <yloc>416</yloc>
+      <xloc>260</xloc>
+      <yloc>444</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1432,22 +1226,19 @@ FROM dw_sawit.dim_organisasi
     </partitioning>
     <fields>
       <field>
-        <name>id_aset_api</name>
-        <rename>id_aset</rename>
+        <name>sk_kebun_api</name>
+        <rename>sk_kebun</rename>
       </field>
       <field>
-        <name>nama_aset_api</name>
-        <rename>nama_aset</rename>
+        <name>sk_user</name>
       </field>
       <field>
-        <name>jumlah_aset_api</name>
-        <rename>jumlah_aset</rename>
+        <name>sk_waktu_api</name>
+        <rename>sk_waktu</rename>
       </field>
       <field>
-        <name>sk_kategori_aset</name>
-      </field>
-      <field>
-        <name>sk_kebun</name>
+        <name>luas_kebun_api</name>
+        <rename>luas_kebun</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -1460,366 +1251,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1216</xloc>
-      <yloc>416</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>dim_aset</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <schema>dw_sawit</schema>
-    <table>dim_aset</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>sk_aset</column_name>
-        <stream_name>sk_aset</stream_name>
-      </field>
-      <field>
-        <column_name>id_aset</column_name>
-        <stream_name>id_aset</stream_name>
-      </field>
-      <field>
-        <column_name>nama_aset</column_name>
-        <stream_name>nama_aset</stream_name>
-      </field>
-      <field>
-        <column_name>jumlah_aset</column_name>
-        <stream_name>jumlah_aset</stream_name>
-      </field>
-      <field>
-        <column_name>sk_kategori_aset</column_name>
-        <stream_name>sk_kategori_aset</stream_name>
-      </field>
-      <field>
-        <column_name>sk_kebun</column_name>
-        <stream_name>sk_kebun</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1392</xloc>
-      <yloc>416</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>dim_aset_db</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <sql>SELECT
-  sk_aset
-, id_aset
-, nama_aset
-, jumlah_aset
-, sk_kategori_aset
-, sk_kebun
-FROM dw_sawit.dim_aset
-</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_aset</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>sk_aset</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>id_aset</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>id_aset</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>String</type>
-        <storagetype>normal</storagetype>
-        <name>nama_aset</name>
-        <length>63</length>
-        <precision>-1</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>nama_aset</comments>
-        <conversion_Mask/>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>BigNumber</type>
-        <storagetype>normal</storagetype>
-        <name>jumlah_aset</name>
-        <length>22</length>
-        <precision>-1</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>jumlah_aset</comments>
-        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_kategori_aset</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>sk_kategori_aset</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_kebun</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kebun_db</origin>
-        <comments>sk_kebun</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>400</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>dim_kategori_aset_db</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <sql>SELECT
-  sk_kategori_aset
-, id_kategori
-, nama_kategori
-FROM dw_sawit.dim_kategori_aset
-</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_kategori_aset</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kategori_aset</origin>
-        <comments>sk_kategori_aset</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>id_kategori</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_kategori_aset</origin>
-        <comments>id_kategori</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>String</type>
-        <storagetype>normal</storagetype>
-        <name>nama_kategori</name>
-        <length>63</length>
-        <precision>-1</precision>
-        <origin>dim_kategori_aset</origin>
-        <comments>nama_kategori</comments>
-        <conversion_Mask/>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>592</xloc>
-      <yloc>272</yloc>
+      <xloc>1300</xloc>
+      <yloc>444</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1951,14 +1384,14 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>768</xloc>
-      <yloc>272</yloc>
+      <xloc>388</xloc>
+      <yloc>332</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>sk_kategori_aset</name>
-    <type>StreamLookup</type>
+    <name>dim_user_db</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1967,23 +1400,90 @@ FROM dw_sawit.dim_kebun
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <from>dim_kategori_aset_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_kategori_api</name>
-        <field>id_kategori</field>
-      </key>
-      <value>
-        <name>sk_kategori_aset</name>
-        <rename>sk_kategori_aset</rename>
-        <default/>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_user
+, id_user
+, sk_organisasi
+FROM dw_sawit.dim_user
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
         <type>Integer</type>
-      </value>
-    </lookup>
+        <storagetype>normal</storagetype>
+        <name>sk_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>sk_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>id_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>id_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>sk_organisasi</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1993,13 +1493,463 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>592</xloc>
-      <yloc>416</yloc>
+      <xloc>724</xloc>
+      <yloc>332</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>sk_kebun</name>
+    <name>dim_waktu_db</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_waktu
+, tanggal
+, tahun
+, kuartal
+, bulan
+, minggu
+, hari
+, minggu_ke_dalam_bulan
+FROM dw_sawit.dim_waktu
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_waktu</name>
+        <length>15</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>sk_waktu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>tanggal</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>tanggal</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>tahun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>tahun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>kuartal</name>
+        <length>63</length>
+        <precision>-1</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>kuartal</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>bulan</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>bulan</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>minggu</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>minggu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>hari</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>hari</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>minggu_ke_dalam_bulan</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db</origin>
+        <comments>minggu_ke_dalam_bulan</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>852</xloc>
+      <yloc>332</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <schema>dw_sawit</schema>
+    <table>fact_luas_kebun</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>sk_fact_kebun</column_name>
+        <stream_name>sk_fact_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_kebun</column_name>
+        <stream_name>sk_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_user</column_name>
+        <stream_name>sk_user</stream_name>
+      </field>
+      <field>
+        <column_name>sk_waktu</column_name>
+        <stream_name>sk_waktu</stream_name>
+      </field>
+      <field>
+        <column_name>luas_kebun_ha</column_name>
+        <stream_name>luas_kebun_ha</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1492</xloc>
+      <yloc>444</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun_db</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_fact_luas_kebun
+, sk_kebun
+, sk_user
+, sk_waktu
+, luas_kebun
+FROM dw_sawit.fact_luas_kebun
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_fact_luas_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_fact_luas_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_waktu</name>
+        <length>15</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_waktu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>luas_kebun</name>
+        <length>22</length>
+        <precision>-1</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>luas_kebun</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>564</xloc>
+      <yloc>332</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_kebun 2</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>N</distribute>
@@ -2021,7 +1971,7 @@ FROM dw_sawit.dim_kebun
       </key>
       <value>
         <name>sk_kebun</name>
-        <rename>sk_kebun</rename>
+        <rename>sk_kebun_api</rename>
         <default/>
         <type>Integer</type>
       </value>
@@ -2035,8 +1985,92 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>768</xloc>
-      <yloc>416</yloc>
+      <xloc>388</xloc>
+      <yloc>444</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_user</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_user_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_user_api</name>
+        <field>id_user</field>
+      </key>
+      <value>
+        <name>sk_user</name>
+        <rename>sk_user</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>724</xloc>
+      <yloc>444</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_waktu</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_waktu_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>tanggal_api</name>
+        <field>tanggal</field>
+      </key>
+      <value>
+        <name>sk_waktu</name>
+        <rename>sk_waktu_api</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>852</xloc>
+      <yloc>444</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

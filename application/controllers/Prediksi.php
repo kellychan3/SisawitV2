@@ -22,6 +22,8 @@ class Prediksi extends CI_Controller
 
     $organisasi_id = $this->session->userdata('organisasi_id'); 
 
+    $data['data_prediksi_tersedia'] = $this->Prediksi_model->has_prediksi_data($organisasi_id);
+
     $this->db->select('refreshed_at');
     $this->db->from('dashboard_prediksi_refresh_log');
     $this->db->where('id_organisasi', $organisasi_id);
@@ -37,17 +39,22 @@ class Prediksi extends CI_Controller
     $tahun = $this->input->get('tahun') ?? date('Y');
     $data['filter']['tahun'] = $tahun;
 
-    $data['kebun_list'] = $this->Prediksi_model->get_all_kebun();
+    $kebun_list = $this->Prediksi_model->get_all_kebun($organisasi_id);
+if (empty($kebun_list)) {
+    $data['kebun_list'] = [['kebun' => '', 'nama_kebun' => 'Belum ada kebun']];
+} else {
+    $data['kebun_list'] = $kebun_list;
+}
+
 
     // Tangkap kebun terpilih dari GET
     $selected_kebun = $this->input->get('kebun') ?? [];
     $data['filter']['kebun'] = $selected_kebun;
 
-    // Ubah query total dan bulanan agar ikut filter kebun
-    $data['total_prediksi'] = $this->Prediksi_model->get_total_prediksi_by_year($tahun, $selected_kebun);
-    $data['total_aktual']   = $this->Prediksi_model->get_total_aktual_by_year($tahun, $selected_kebun);
-    $data['prediksi']       = $this->Prediksi_model->get_prediksi_bulanan($tahun, $selected_kebun);
-    $data['aktual']         = $this->Prediksi_model->get_aktual_bulanan($tahun, $selected_kebun);
+    $data['total_prediksi'] = $this->Prediksi_model->get_total_prediksi_by_year($tahun, $selected_kebun, $organisasi_id);
+    $data['total_aktual']   = $this->Prediksi_model->get_total_aktual_by_year($tahun, $selected_kebun, $organisasi_id);
+    $data['prediksi']       = $this->Prediksi_model->get_prediksi_bulanan($tahun, $selected_kebun, $organisasi_id);
+    $data['aktual']         = $this->Prediksi_model->get_aktual_bulanan($tahun, $selected_kebun, $organisasi_id);
 
     $this->load->view('layout/header', $data);
     $this->load->view('prediksi/prediksi', $data);

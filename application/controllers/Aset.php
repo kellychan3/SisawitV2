@@ -104,26 +104,26 @@ class Aset extends CI_Controller
     curl_close($curl);
     $existingAssets = json_decode($response, true) ?: [];
 
-if (!is_array($existingAssets)) {
-    log_message('error', 'Format response tidak sesuai: ' . $response);
-    $this->session->set_flashdata('error', 'Gagal mengambil data aset dari server.');
-    redirect('Aset');
-    return;
-}
-
-foreach ($existingAssets as $aset) {
-    if (
-        is_array($aset) &&
-        isset($aset['nama_aset'], $aset['kategori_aset']['id'], $aset['kebun']['id']) &&
-        strtolower($aset['nama_aset']) === strtolower($nama_aset) &&
-        $aset['kategori_aset']['id'] == $kategori_aset_id &&
-        $aset['kebun']['id'] == $kebun_id
-    ) {
-        $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
+    if (!is_array($existingAssets)) {
+        log_message('error', 'Format response tidak sesuai: ' . $response);
+        $this->session->set_flashdata('error', 'Gagal mengambil data aset dari server.');
         redirect('Aset');
         return;
     }
-}
+
+    foreach ($existingAssets as $aset) {
+        if (
+            is_array($aset) &&
+            isset($aset['nama_aset'], $aset['kategori_aset']['id'], $aset['kebun']['id']) &&
+            strtolower($aset['nama_aset']) === strtolower($nama_aset) &&
+            $aset['kategori_aset']['id'] == $kategori_aset_id &&
+            $aset['kebun']['id'] == $kebun_id
+        ) {
+            $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
+            redirect('Aset');
+            return;
+        }
+    }
 
     // Lanjut tambah aset jika tidak duplikat
     $postData = json_encode([
@@ -157,5 +157,71 @@ foreach ($existingAssets as $aset) {
 
     redirect('Aset');
 }
+
+public function editAset()
+{
+    $token = $this->session->userdata('token');
+    $id = $this->input->post('id');
+    $jumlah_aset = (int) $this->input->post('jumlah_aset');
+    $kebun_id = (int) $this->input->post('kebun_id');
+
+    $data = json_encode([
+        'jumlah_aset' => $jumlah_aset,
+        'kebun_id' => $kebun_id
+    ]);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/aset/$id",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "PUT",
+        CURLOPT_POSTFIELDS => $data,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $token",
+            "Accept: application/json",
+            "Content-Type: application/json"
+        ],
+    ]);
+    $response = curl_exec($curl);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($status == 200) {
+        $this->session->set_flashdata('success', 'Aset berhasil diubah.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal mengubah aset.');
+    }
+
+    redirect('Aset');
+}
+
+public function deleteAset()
+{
+    $token = $this->session->userdata('token');
+    $id = $this->input->post('id');
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/aset/$id",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "DELETE",
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $token",
+            "Accept: application/json"
+        ],
+    ]);
+    $response = curl_exec($curl);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($status == 200 || $status == 204) {
+        $this->session->set_flashdata('success', 'Aset berhasil dihapus.');
+    } else {
+        $this->session->set_flashdata('error', 'Gagal menghapus aset.');
+    }
+
+    redirect('Aset');
+}
+
 
 }
