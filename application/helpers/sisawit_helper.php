@@ -2,10 +2,9 @@
 function is_logged_in()
 {
     $ci = get_instance();
-
-    // Cek apakah user sudah login
-    if (!$ci->session->userdata('email')) {
+    if (!$ci->session->userdata('id_user')) {
         redirect('Authentication');
     }
 }
-?>
+
+

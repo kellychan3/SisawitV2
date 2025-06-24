@@ -23,7 +23,7 @@ class Dashboard extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id'); 
 
         $tahun = $this->input->get('tahun') ?? date('Y');
-        $bulan = $this->input->get('bulan');
+        $bulan = range(1, date('n'));
 
         if (empty($bulan)) {
             $bulanIni = (int)date('n');
@@ -60,7 +60,8 @@ class Dashboard extends CI_Controller
         
         $data['panen_per_bulan'] = $this->Dashboard_model->get_total_panen_per_bulan($organisasi_id, $tahun, $bulan, $kebun);
         $data['luas_kebun'] = $this->Dashboard_model->get_luas_kebun_persentase($organisasi_id, $kebun);
-        $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($organisasi_id);
+        $data['summary_kebun'] = $this->Dashboard_model->get_summary_kebun($organisasi_id, $kebun, $tahun, $bulan);
+
         $data['persediaan_pupuk'] = $this->Dashboard_model->get_persediaan_pupuk($organisasi_id, $kebun);
         $data['persentase_panen_kebun'] = $this->Dashboard_model->get_persen_panen_per_kebun($organisasi_id, $tahun, $bulan, $kebun);
         $data['panen_mingguan_kebun'] = $this->Dashboard_model->get_panen_per_minggu_per_kebun($tahun, $bulan, $organisasi_id, $kebun);
@@ -152,13 +153,22 @@ class Dashboard extends CI_Controller
         'naik' => $selisih_persen_bulan >= 0
     ];
 
-    // Tentukan minggu terakhir dari bulan terakhir yang difilter
-    $minggu_terakhir = $this->Dashboard_model->get_minggu_terakhir_bulan($tahun, $bulan_terakhir);
+    // Ambil tanggal hari ini
+$tanggal_hari_ini = new DateTime(); // default ke hari ini
+$tahun_sekarang = (int)$tanggal_hari_ini->format('Y');
+$bulan_sekarang = (int)$tanggal_hari_ini->format('n');
+$tanggal_ke = (int)$tanggal_hari_ini->format('j');
 
-    $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $bulan_terakhir, $minggu_terakhir, $organisasi_id, $kebun);
+// Hitung minggu ke dalam bulan
+$minggu_ke = (int)ceil($tanggal_ke / 7);
+
+// Pakai bulan sekarang (bukan bulan_terakhir)
+$total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun_sekarang, $bulan_sekarang, $minggu_ke, $organisasi_id, $kebun);
+
     $total_minggu_ini = $total_minggu_ini ?? 0;
     
-    $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan_ini($tahun, $bulan_terakhir, $organisasi_id, $kebun);
+    $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan($tahun, $bulan, $organisasi_id, $kebun);
+
     $rata_mingguan = $rata_mingguan ?? 0;
     
     $selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;

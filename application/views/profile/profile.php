@@ -30,30 +30,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <form action="<?= base_url('Profile/changePassword/') . $user['id_user']; ?>" method="POST">
-                                <input type="hidden" name="id_user" id="id_user" value="<?= $user['id_user']; ?>">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="mt-0 mb-2 ">
-                                            <h4 style="text-align: center;">Ubah Password</h4>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <h6 class="mt-2">Password</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="password" name="password" id="password" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-3"></div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4" value="Ubah Password" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>

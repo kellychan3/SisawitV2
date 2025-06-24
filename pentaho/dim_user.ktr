@@ -470,10 +470,6 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -504,11 +500,6 @@
     </attributes>
   </connection>
   <order>
-    <hop>
-      <from>Data Ada?</from>
-      <to>Filter - Data belum di db</to>
-      <enabled>Y</enabled>
-    </hop>
     <hop>
       <from>Filter - Data belum di db</from>
       <to>Select values</to>
@@ -552,6 +543,11 @@
     <hop>
       <from>Stream lookup 3</from>
       <to>Filter - Data berubah di API 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Data Ada?</from>
+      <to>Filter - Data belum di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -681,7 +677,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>944</xloc>
+      <xloc>928</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -751,8 +747,8 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>sk_organisasi_api</name>
-        <variable>${sk_organisasi_api}</variable>
+        <name>sk_organisasi</name>
+        <variable>${sk_organisasi}</variable>
         <type>String</type>
         <format/>
         <currency/>
@@ -934,8 +930,7 @@
         <rename>id_user</rename>
       </field>
       <field>
-        <name>sk_organisasi_api</name>
-        <rename>sk_organisasi</rename>
+        <name>sk_organisasi</name>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -948,7 +943,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1152</xloc>
+      <xloc>1136</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1012,7 +1007,7 @@
 , id_user
 , sk_organisasi
 FROM dw_sawit.dim_user
-where sk_organisasi = ${sk_organisasi_api}</sql>
+where sk_organisasi = ${sk_organisasi}</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -1182,7 +1177,7 @@ where sk_organisasi = ${sk_organisasi_api}</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1296</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>

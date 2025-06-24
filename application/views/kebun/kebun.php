@@ -19,6 +19,7 @@
 
         <a class="btn btn-warning mb-3" href="<?= base_url('KebunPdf'); ?>" target="_blank">Cetak File PDF</a>
 
+        <?php if ($kebun): ?>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5">
             <?php foreach ($kebun as $k) : ?>
                 <div class="col mb-4">
@@ -79,5 +80,17 @@
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
+   
+
+<?php else: ?>
+            <div style="display: flex; justify-content: center; align-items: center; height: 60vh;">
+                <div style="max-width: 700px; padding: 40px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🌾</div>
+                    <h2 style="margin-bottom: 12px; color: #333;">Data Kebun Belum Ada</h2>
+                    <p style="color: #666; font-size: 15px;">Silakan inputkan melalui aplikasi mobile.</p>
+                </div>
+            </div>
+        <?php endif; ?>
+
+ </div>
 </div>

@@ -1,41 +1,52 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<style>
-  .dataTables_wrapper .dataTables_length select {
-    min-width: 50px;
-    padding-right: 1.8em; 
-}
-
-</style>
-<div class="page-wrapper">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Manajemen Aset Perkebunan</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <style>
+    .dataTables_wrapper .dataTables_length select {
+      min-width: 50px;
+      padding-right: 1.8em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Konten dimulai -->
+  <div class="page-wrapper">
     <div class="page-content">
-        <!-- breadcrumb -->
-        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Data Perkebunan</div>
-            <div class="ps-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="<?= base_url('Dashboard'); ?>"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Data Aset</li>
-                    </ol>
-                </nav>
-            </div>
+      <!-- Breadcrumb -->
+      <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Data Perkebunan</div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item">
+                <a href="<?= base_url('Dashboard'); ?>">
+                  <i class="bx bx-home-alt"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Data Aset</li>
+            </ol>
+          </nav>
         </div>
-        <!-- end breadcrumb -->
+      </div>
 
-        <?php if ($this->session->flashdata('success')): ?>
-            <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
-        <?php endif; ?>
+      <!-- Flash message -->
+      <?php if ($this->session->flashdata('success')): ?>
+        <div class="alert alert-success"> <?= $this->session->flashdata('success'); ?> </div>
+      <?php endif; ?>
 
-        <?php if ($this->session->flashdata('error')): ?>
-            <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
-        <?php endif; ?>
+      <?php if ($this->session->flashdata('error')): ?>
+        <div class="alert alert-danger"> <?= $this->session->flashdata('error'); ?> </div>
+      <?php endif; ?>
 
+      <!-- Tombol Tambah -->
+      <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addAssetModal">
+        <i class='bx bx-plus me-2'></i>Tambah Data
+      </button>
 
-        <button type="button" class="btn btn-primary px-5 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addAssetModal">
-            <i class='bx bx-plus me-2 align-middle'></i>Tambah Data
-        </button>
-
-        <!-- Modal Tambah Aset -->
+       <!-- Modal Tambah Aset -->
         <div class="modal fade" id="addAssetModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -99,7 +110,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <form id="editAssetForm">
+        <form class="row g-3" method="post" action="<?= base_url('Aset/editAset'); ?>">
           <input type="hidden" id="edit_id" name="id">
 
           <div class="row g-3">
@@ -139,210 +150,154 @@
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="confirmDeleteLabel">Konfirmasi Hapus</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        Apakah Anda yakin ingin menghapus aset ini?
-        <input type="hidden" id="delete_id">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
-      </div>
+      <form method="post" action="<?= base_url('Aset/deleteAset'); ?>">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="confirmDeleteLabel">Konfirmasi Hapus</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Apakah Anda yakin ingin menghapus aset ini?
+          <input type="hidden" id="delete_id" name="id">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Hapus</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
-        <!-- TABEL DATA -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <div class="table-responsive">
-         <table id="aset" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Nama Aset</th>
-                                <th>Jumlah Aset</th>
-                                <th>Jenis Aset</th>
-                                <th>Kebun</th>
-                                <?php if ($this->session->userdata('role') !== 'mandor'): ?>
-                                    <th>Aksi</th>
-                                <?php endif; ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($asset)): ?>
-                                <tr><td colspan="5" class="text-center">Aset belum pernah ditambahkan, silahkan tambahkan aset.</td></tr>
-                            <?php else: ?>
-                                <?php foreach ($asset as $a): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($a['nama_aset']); ?></td>
-                                        <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
-                                        <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
-                                        <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
-                                        <?php if ($this->session->userdata('role') == 'pemilik'): ?>
-                                        <td>
-                                            <button class="btn btn-warning edit-btn"
-                                                    data-id="<?= $a['id']; ?>"
-                                                    data-nama="<?= htmlspecialchars($a['nama_aset']); ?>"
-                                                    data-jenis="<?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?>"
-                                                    data-kebun-id="<?= $a['kebun']['id'] ?? ''; ?>"
-                                                    data-kebun-nama="<?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?>"
-                                                    data-jumlah="<?= $a['jumlah_aset']; ?>">
-                                                Ubah
-                                            </button>
-                                            <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
 
-                                        </td>
-                                        <?php endif; ?>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+      <!-- Tabel -->
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="aset" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Nama Aset</th>
+                  <th>Jumlah Aset</th>
+                  <th>Jenis Aset</th>
+                  <th>Kebun</th>
+                  <?php if ($this->session->userdata('role') !== 'mandor'): ?>
+                    <th>Aksi</th>
+                  <?php endif; ?>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (empty($asset)): ?>
+                  <tr><td colspan="5" class="text-center">Belum ada aset ditambahkan.</td></tr>
+                <?php else: ?>
+                  <?php foreach ($asset as $a): ?>
+                    <tr>
+                      <td><?= htmlspecialchars($a['nama_aset']); ?></td>
+                      <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
+                      <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
+                      <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
+                      <?php if ($this->session->userdata('role') == 'pemilik'): ?>
+                        <td>
+                          <button class="btn btn-warning edit-btn"
+                            data-id="<?= $a['id']; ?>"
+                            data-nama="<?= htmlspecialchars($a['nama_aset']); ?>"
+                            data-jenis="<?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?>"
+                            data-kebun-id="<?= $a['kebun']['id'] ?? ''; ?>"
+                            data-kebun-nama="<?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?>"
+                            data-jumlah="<?= $a['jumlah_aset']; ?>">
+                            Ubah
+                          </button>
+                          <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
+                        </td>
+                      <?php endif; ?>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
+
     </div>
-</div>
+  </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#aset').DataTable({
-        columnDefs: [
-            { targets: 1, searchable: false }
-        ],
+  <!-- Script dependencies -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#aset').DataTable({
+        columnDefs: [{ targets: 1, searchable: false }],
         language: {
-            lengthMenu: "Menampilkan _MENU_ entri",
-            zeroRecords: "Data tidak ditemukan",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-            infoFiltered: "(disaring dari _MAX_ total entri)",
-            search: "Cari:",
-            paginate: {
-                first: "Pertama",
-                last: "Terakhir",
-                next: "Berikutnya >",
-                previous: "< Sebelumnya"
-            }
+          lengthMenu: "Menampilkan _MENU_ entri",
+          zeroRecords: "Data tidak ditemukan",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+          infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+          infoFiltered: "(disaring dari _MAX_ total entri)",
+          search: "Cari:",
+          paginate: {
+            first: "Pertama", last: "Terakhir", next: "Berikutnya >", previous: "< Sebelumnya"
+          }
         }
-    });
-});
-</script>
+      });
 
-<script>
-$(document).ready(function() {
-    const kategoriMap = {
-        'Dolomite': 'Pupuk',
-        'MOP': 'Pupuk',
-        'NPK': 'Pupuk',
-        'RP': 'Pupuk',
-        'Traktor': 'Alat Berat',
-        'TSP': 'Pupuk',
-        'Urea': 'Pupuk'
-    };
+      const kategoriMap = {
+        'Dolomite': 'Pupuk', 'MOP': 'Pupuk', 'NPK': 'Pupuk', 'RP': 'Pupuk',
+        'Traktor': 'Alat Berat', 'TSP': 'Pupuk', 'Urea': 'Pupuk'
+      };
 
-    // Buat mapping nama_kategori ke id dari data kategori yang ada di PHP
-    const kategoriIdMap = {};
-    <?php foreach ($kategori as $k): ?>
+      const kategoriIdMap = {};
+      <?php foreach ($kategori as $k): ?>
         kategoriIdMap["<?= addslashes($k['nama_kategori']) ?>"] = "<?= $k['id'] ?>";
-    <?php endforeach; ?>
+      <?php endforeach; ?>
 
-    $('#namaaset').on('change', function() {
-        const selectedAset = $(this).val();
-        const namaKategori = kategoriMap[selectedAset];
+      $('#namaaset').on('change', function () {
+        const kategori = kategoriMap[$(this).val()];
+        $('#kategori_id').val(kategoriIdMap[kategori] || '');
+      });
 
-        if (namaKategori && kategoriIdMap[namaKategori]) {
-            $('#kategori_id').val(kategoriIdMap[namaKategori]).trigger('change');
-        } else {
-            $('#kategori_id').val('');
-        }
-    });
-});
-</script>
+      const editModal = new bootstrap.Modal(document.getElementById('editAssetModal'));
+      const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
 
-<script>
-$(document).on('click', '.edit-btn', function() {
-  $('.edit-btn').on('click', function() {
+      $(document).on('click', '.edit-btn', function () {
   $('#edit_id').val($(this).data('id'));
   $('#edit_namaaset').val($(this).data('nama'));
   $('#edit_jenisaset').val($(this).data('jenis'));
   $('#edit_namakebun').val($(this).data('kebun-nama'));
   $('#edit_kebun_id').val($(this).data('kebun-id'));
   $('#edit_jumlahaset').val($(this).data('jumlah'));
+  editModal.show();
+});
 
-  var modal = new bootstrap.Modal(document.getElementById('editAssetModal'));
-  modal.show();
+$(document).on('click', '.delete-btn', function () {
+  $('#delete_id').val($(this).data('id'));
+  deleteModal.show();
 });
 
 
-  $('#editAssetForm').on('submit', function(e) {
-    e.preventDefault();
-
-    const id = $('#edit_id').val();
-    const jumlah_aset = $('#edit_jumlahaset').val();
-    const kebun_id = $('#edit_kebun_id').val();
-
-    $.ajax({
-      url: `http://103.150.101.10/api/aset/${id}`,
-      method: 'PUT',
-      contentType: 'application/json',
-      headers: {
-        'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
-        'Accept': 'application/json'
-      },
-      data: JSON.stringify({
-        jumlah_aset: parseInt(jumlah_aset),
-        kebun_id: parseInt(kebun_id)
-      }),
-      success: function(res) {
-        alert('Aset berhasil diperbarui.');
-        location.reload();
-      },
-      error: function(xhr) {
-        alert('Gagal mengubah aset.');
-      }
+      $('#confirmDeleteBtn').on('click', function () {
+        const id = $('#delete_id').val();
+        $.ajax({
+          url: `http://103.150.101.10/api/aset/${id}`,
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
+            'Accept': 'application/json'
+          },
+          success: function () {
+  // Tampilkan notifikasi sukses di atas
+  $('body').prepend('<div class="alert alert-success">Aset berhasil diubah.</div>');
+  setTimeout(() => location.reload(), 1500);
+},
+          error: function () {
+            alert('Gagal menghapus aset.');
+          }
+        });
+      });
     });
-  });
-});
 
-</script>
-
-<script>
-$(document).ready(function() {
-  let deleteId = null;
-
-  // Saat tombol hapus ditekan
-  $(document).on('click', '.delete-btn', function() {
-    deleteId = $(this).data('id');
-    $('#delete_id').val(deleteId);
-    const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-    modal.show();
-  });
-
-  // Saat tombol konfirmasi hapus ditekan
-  $('#confirmDeleteBtn').on('click', function() {
-    const id = $('#delete_id').val();
-
-    $.ajax({
-      url: `http://103.150.101.10/api/aset/${id}`,
-      method: 'DELETE',
-      headers: {
-        'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
-        'Accept': 'application/json'
-      },
-      success: function(response) {
-        alert('Aset berhasil dihapus.');
-        location.reload();
-      },
-      error: function(xhr) {
-        alert('Gagal menghapus aset.');
-      }
-    });
-  });
-});
-</script>
-
+    $.fn.dataTable.ext.errMode = 'none';
+  </script>
+</body>
+</html>

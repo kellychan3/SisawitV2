@@ -130,4 +130,6 @@ $(document).ready(function () {
     $('#previewGambar').attr('src', url);
   });
 });
+
+$.fn.dataTable.ext.errMode = 'none';
 </script>

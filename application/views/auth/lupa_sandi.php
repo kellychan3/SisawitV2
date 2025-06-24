@@ -1,3 +1,14 @@
+<style>
+    .invalid-feedback {
+        display: none;
+        color: #dc3545;
+        font-size: 0.875em;
+    }
+    .was-validated input:invalid ~ .invalid-feedback {
+        display: block;
+    }
+</style>
+
 <body class="bg-login">
     <div class="wrapper">
         <div class="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">
@@ -14,15 +25,24 @@
                                         <h3 class="">Lupa Kata Sandi</h3>
                                     </div>
                                     <div class="form-body">
-                                        <form class="row g-3">
-                                            <label class="text-center d-block">Silahkan Masukkan Email/No.Hp Anda</label>
+                                       <form class="row g-3 needs-validation" method="post" action="<?= site_url('lupa_sandi/request_otp'); ?>" novalidate>
+                                            <label class="text-center d-block">Silakan Masukkan Email Anda</label>
                                             <div class="col-12">
-                                                <input type="email" class="form-control" name="email" id="email" placeholder="Masukkan Email/No. HP">
+                                                <?php if ($this->session->flashdata('error')): ?>
+                                                    <div class="alert alert-danger py-1 px-2" style="font-size: 0.9rem;">
+                                                        <?= $this->session->flashdata('error'); ?>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <input type="text" class="form-control" name="email" id="email" placeholder="Masukkan Email">
+<div id="emailEmptyFeedback" class="invalid-feedback">Kolom ini wajib diisi.</div>
+<div id="emailFormatFeedback" class="invalid-feedback">Masukkan email yang valid.</div>
+
                                             </div>
-                                            
+
                                             <div class="col-12">
                                                 <div class="d-grid">
-                                                    <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i>Ubah Kata Sandi</button>
+                                                    <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i> Ubah Kata Sandi</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -35,3 +55,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+document.querySelector('form').addEventListener('submit', function (e) {
+    const emailInput = document.getElementById('email');
+    const value = emailInput.value.trim();
+    const emptyFeedback = document.getElementById('emailEmptyFeedback');
+    const formatFeedback = document.getElementById('emailFormatFeedback');
+
+    // Reset
+    emailInput.classList.remove('is-invalid');
+    emptyFeedback.style.display = 'none';
+    formatFeedback.style.display = 'none';
+
+    let valid = true;
+
+    if (!value) {
+        emailInput.classList.add('is-invalid');
+        emptyFeedback.style.display = 'block';
+        valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        emailInput.classList.add('is-invalid');
+        formatFeedback.style.display = 'block';
+        valid = false;
+    }
+
+    if (!valid) {
+        e.preventDefault();
+    }
+});
+</script>
+
+</body>

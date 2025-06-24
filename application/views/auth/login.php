@@ -1,3 +1,14 @@
+<style>
+.invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 0.875em;
+}
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+</style>
+
 <body class="bg-login">
     <!--wrapper-->
     <div class="wrapper">
@@ -18,37 +29,42 @@
                                     <!-- Flash message dari server -->
                                     <?= $this->session->flashdata('message'); ?>
 
+                                    <?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+<?php endif; ?>
+
+
                                     <div class="form-body">
                                         <form id="loginForm" class="row g-3" method="POST" action="<?= base_url('authentication/ceklogin'); ?>">
 
-                                            <div class="col-12">
-                                                <label for="email" class="form-label">Email/No.Hp</label>
-                                                <div id="emailAlert" class="alert alert-danger py-1 px-2 mb-2" style="display: none;">Email/No.HP tidak boleh kosong!</div>
-                                                <input type="text" class="form-control" name="email" id="email" placeholder="Masukkan Email/No. HP">
-                                            </div>
+    <div class="col-12">
+        <label for="email" class="form-label">Email/No.Hp</label>
+        <input type="text" class="form-control" name="email" id="email" placeholder="Masukkan Email/No. HP">
+        <div id="emailAlert" class="invalid-feedback">Email/No.HP tidak boleh kosong!</div>
+    </div>
 
-                                            <div class="col-12">
-                                                <label for="password" class="form-label">Kata Sandi</label>
-                                                <div id="passwordAlert" class="alert alert-danger py-1 px-2 mb-2" style="display: none;">Kata sandi tidak boleh kosong!</div>
-                                                <div class="input-group" id="password-group">
-                                                    <input type="password" class="form-control border-end-0" name="password" id="password" placeholder="Masukkan Kata Sandi">
-                                                    <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
-                                                </div>
-                                            </div>
+    <div class="col-12">
+        <label for="password" class="form-label">Kata Sandi</label>
+        <div class="input-group">
+            <input type="password" class="form-control border-end-0" name="password" id="password" placeholder="Masukkan Kata Sandi">
+            <span class="input-group-text bg-transparent" id="togglePassword" style="cursor:pointer;">
+                <i class='bx bx-hide'></i>
+            </span>
+        </div>
+        <div id="passwordAlert" class="invalid-feedback">Kata sandi tidak boleh kosong!</div>
+    </div>
 
-                                            <!-- Lupa Password -->
-                                            <a href="<?= site_url('lupa_sandi'); ?>">
-                                                <label class="text-end d-block" style="cursor:pointer; color:black;">Lupa Kata Sandi?</label>
-                                            </a>
+    <a href="<?= site_url('lupa_sandi'); ?>">
+        <label class="text-end d-block" style="cursor:pointer; color:black;">Lupa Kata Sandi?</label>
+    </a>
 
-                                            <!-- Submit Button -->
-                                            <div class="col-12">
-                                                <div class="d-grid">
-                                                    <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i> Masuk</button>
-                                                </div>
-                                            </div>
+    <div class="col-12">
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i> Masuk</button>
+        </div>
+    </div>
+</form>
 
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -58,24 +74,48 @@
             </div>
         </div>
     </div>
-
-    <!-- Validasi form sebelum submit -->
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            let email = document.getElementById('email').value.trim();
-            let password = document.getElementById('password').value.trim();
-            let emailAlert = document.getElementById('emailAlert');
-            let passwordAlert = document.getElementById('passwordAlert');
-
-            emailAlert.style.display = 'none';
-            passwordAlert.style.display = 'none';
-
-            if (!email || !password) {
-                e.preventDefault(); // Hentikan submit ke server
-
-                if (!email) emailAlert.style.display = 'block';
-                if (!password) passwordAlert.style.display = 'block';
-            }
-        });
-    </script>
 </body>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const emailAlert = document.getElementById('emailAlert');
+    const passwordAlert = document.getElementById('passwordAlert');
+
+    let valid = true;
+
+    emailAlert.style.display = 'none';
+    passwordAlert.style.display = 'none';
+    email.classList.remove('is-invalid');
+    password.classList.remove('is-invalid');
+
+    if (!email.value.trim()) {
+        email.classList.add('is-invalid');
+        emailAlert.style.display = 'block';
+        valid = false;
+    }
+
+    if (!password.value.trim()) {
+        password.classList.add('is-invalid');
+        passwordAlert.style.display = 'block';
+        valid = false;
+    }
+
+    if (!valid) {
+        e.preventDefault();
+    }
+});
+
+// Toggle mata password
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    const icon = this.querySelector('i');
+    const isVisible = passwordInput.type === 'text';
+
+    passwordInput.type = isVisible ? 'password' : 'text';
+    icon.classList.toggle('bx-show', !isVisible);
+    icon.classList.toggle('bx-hide', isVisible);
+});
+</script>
+

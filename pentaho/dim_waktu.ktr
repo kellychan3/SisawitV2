@@ -725,24 +725,35 @@
     <fields>
       <field>
         <name>sk_waktu</name>
+        <rename/>
       </field>
       <field>
         <name>tanggal</name>
+        <rename/>
       </field>
       <field>
         <name>tahun</name>
+        <rename/>
       </field>
       <field>
         <name>kuartal</name>
+        <rename/>
       </field>
       <field>
         <name>bulan</name>
+        <rename/>
       </field>
       <field>
         <name>minggu</name>
+        <rename/>
       </field>
       <field>
         <name>hari</name>
+        <rename/>
+      </field>
+      <field>
+        <name>minggu_ke_dalam_bulan</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -778,7 +789,7 @@
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
+    <specify_fields>N</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
@@ -849,9 +860,16 @@
       <jsScript>
         <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>//Script here
+        <jsScript_script>// Konversi ke JS Date
+var jsDate = new Date(tanggal.getTime());
+
+// Hitung sk_waktu
 var sk_waktu = (tahun * 10000) + (bulan * 100) + hari;
 
+// Hitung minggu ke dalam bulan
+var firstDay = new Date(jsDate.getFullYear(), jsDate.getMonth(), 1);
+var offset = firstDay.getDay(); // Minggu = 0
+var minggu_ke_dalam_bulan = Math.ceil((jsDate.getDate() + offset) / 7);
 </jsScript_script>
       </jsScript>
     </jsScripts>
@@ -862,6 +880,14 @@ var sk_waktu = (tahun * 10000) + (bulan * 100) + hari;
         <type>Integer</type>
         <length>16</length>
         <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>minggu_ke_dalam_bulan</name>
+        <rename>minggu_ke_dalam_bulan</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
         <replace>N</replace>
       </field>
     </fields>
@@ -898,13 +924,13 @@ var sk_waktu = (tahun * 10000) + (bulan * 100) + hari;
         <currency/>
         <decimal/>
         <group/>
-        <nullif>2014-01-01</nullif>
+        <nullif>2000-01-01</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
       </field>
     </fields>
-    <limit>6209</limit>
+    <limit>11323</limit>
     <never_ending>N</never_ending>
     <interval_in_ms>5000</interval_in_ms>
     <row_time_field>now</row_time_field>
