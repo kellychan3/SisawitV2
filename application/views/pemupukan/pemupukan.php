@@ -65,7 +65,7 @@
             <tr>
                 <td><?= isset($a['kebun']['nama_kebun']) ? htmlspecialchars($a['kebun']['nama_kebun']) : '-'; ?></td>
                 <td><?= isset($a['aset']['nama_aset']) ? htmlspecialchars($a['aset']['nama_aset']) : '-'; ?></td>
-                <td><?= isset($a['jumlah_pupuk']) ? htmlspecialchars($a['jumlah_pupuk']) : '-'; ?></td>
+                <td><?= isset($a['jumlah_pupuk']) ? htmlspecialchars($a['jumlah_pupuk']). ' gram' : '-'; ?></td>
                 <td><?= isset($a['tanggal_mulai']) ? htmlspecialchars($a['tanggal_mulai']) : '-'; ?></td>
                 <td><?= isset($a['tanggal_selesai']) ? htmlspecialchars($a['tanggal_selesai']) : '-'; ?></td>
                 <td><?= isset($a['status']) ? htmlspecialchars($a['status']) : '-'; ?></td>
