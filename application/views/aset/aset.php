@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="jenisaset" class="form-label">Jenis Aset</label>
-                                <select class="form-control" id="kategori_id" name="kategori_id">
+                                <select class="form-control" id="kategori_id" name="kategori_id" required oninvalid="this.setCustomValidity('Jenis aset wajib dipilih')" oninput="this.setCustomValidity('')">
                                     <option value="">--</option>
                                     <?php foreach ($kategori as $k): ?>
                                         <option value="<?= $k['id']; ?>"><?= htmlspecialchars($k['nama_kategori']); ?></option>
@@ -192,7 +192,11 @@
                   <?php foreach ($asset as $a): ?>
                     <tr>
                       <td><?= htmlspecialchars($a['nama_aset']); ?></td>
-                      <td><?= htmlspecialchars($a['jumlah_aset']) . ' Kg'; ?></td>
+                      <td>
+  <?= htmlspecialchars($a['jumlah_aset']); ?>
+  <?= (isset($a['kategori_aset']['nama_kategori']) && $a['kategori_aset']['nama_kategori'] === 'Pupuk') ? ' kg' : ''; ?>
+</td>
+
                       <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
                       <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
                       <?php if ($this->session->userdata('role') == 'pemilik'): ?>
@@ -243,19 +247,20 @@
       });
 
       const kategoriMap = {
-        'Dolomite': 'Pupuk', 'MOP': 'Pupuk', 'NPK': 'Pupuk', 'RP': 'Pupuk',
-        'Traktor': 'Alat Berat', 'TSP': 'Pupuk', 'Urea': 'Pupuk'
-      };
+  'Dolomite': 'Pupuk', 'MOP': 'Pupuk', 'NPK': 'Pupuk', 'RP': 'Pupuk',
+  'Traktor': 'Alat Berat', 'TSP': 'Pupuk', 'Urea': 'Pupuk'
+};
 
-      const kategoriIdMap = {};
-      <?php foreach ($kategori as $k): ?>
-        kategoriIdMap["<?= addslashes($k['nama_kategori']) ?>"] = "<?= $k['id'] ?>";
-      <?php endforeach; ?>
+const kategoriIdMap = {};
+<?php foreach ($kategori as $k): ?>
+  kategoriIdMap["<?= addslashes($k['nama_kategori']) ?>"] = "<?= $k['id'] ?>";
+<?php endforeach; ?>
 
-      $('#namaaset').on('change', function () {
-        const kategori = kategoriMap[$(this).val()];
-        $('#kategori_id').val(kategoriIdMap[kategori] || '');
-      });
+$('#namaaset').on('change', function () {
+  const kategori = kategoriMap[$(this).val()];
+  $('#kategori_id').val(kategoriIdMap[kategori] || '');
+});
+
 
       const editModal = new bootstrap.Modal(document.getElementById('editAssetModal'));
       const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));

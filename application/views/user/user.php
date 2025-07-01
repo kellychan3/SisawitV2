@@ -48,13 +48,16 @@
                                 <tr><td colspan="5" class="text-center">Tidak ada data aset.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($users as $u): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($u['nama']); ?></td>
-                                        <td><?= htmlspecialchars($u['no_hp']); ?></td>
-                                        <td><?= htmlspecialchars($u['email']); ?></td>
-                                        <td><?= htmlspecialchars($u['role']); ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
+    <?php if ($u['is_active'] == 1): ?>
+        <tr>
+            <td><?= htmlspecialchars($u['nama']); ?></td>
+            <td><?= htmlspecialchars($u['no_hp']); ?></td>
+            <td><?= htmlspecialchars($u['email']); ?></td>
+            <td><?= htmlspecialchars($u['role']); ?></td>
+        </tr>
+    <?php endif; ?>
+<?php endforeach; ?>
+
                             <?php endif; ?>
                         </tbody>
                     </table>

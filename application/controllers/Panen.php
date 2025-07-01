@@ -62,7 +62,7 @@ class Panen extends CI_Controller
     foreach ($dailyData as $tanggal => $kebunPanen) {
         $row = ['Tanggal Panen' => $tanggal];
         foreach ($kebunNames as $kebun) {
-            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : null;
         }
         $tableData[] = $row;
     }
@@ -105,7 +105,7 @@ class Panen extends CI_Controller
     foreach ($monthlyData as $bulan => $kebunPanen) {
         $row = ['Bulan Panen' => $bulan];
         foreach ($kebunNames as $kebun) {
-            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : null;
         }
         $tableDataBulan[] = $row;
     }
@@ -118,7 +118,7 @@ class Panen extends CI_Controller
     foreach ($yearlyData as $tahun => $kebunPanen) {
         $row = ['Tahun Panen' => $tahun];
         foreach ($kebunNames as $kebun) {
-            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : '-';
+            $row[$kebun] = isset($kebunPanen[$kebun]) ? $kebunPanen[$kebun] : null;
         }
         $tableDataTahun[] = $row;
     }

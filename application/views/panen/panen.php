@@ -1,3 +1,48 @@
+<?php
+function renderPanenTable($dataset, $labelTanggal) {
+    ?>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <?php foreach ($dataset['title'] as $title): ?>
+                        <th><?= $title; ?></th>
+                    <?php endforeach; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($dataset['data'])): ?>
+                    <tr>
+                        <td colspan="<?= count($dataset['title']); ?>" class="text-center">
+                            Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($dataset['data'] as $data): ?>
+                        <tr>
+                            <?php foreach ($dataset['title'] as $title): ?>
+                                <?php if (!empty($data[$title])): ?>
+                                    <?php if ($title == $labelTanggal): ?>
+                                        <td>
+                                            <?= $labelTanggal == 'Tanggal Panen' ? date('d M Y', strtotime($data[$title])) :
+                                                ($labelTanggal == 'Bulan Panen' ? date('M Y', strtotime($data[$title] . '-01')) :
+                                                $data[$title]); ?>
+                                        </td>
+                                    <?php else: ?>
+                                        <td><?= $data[$title]; ?> Kg</td>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <td>-</td>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+
 <div class="page-wrapper">
     <div class="page-content">
         <!-- Breadcrumb -->
@@ -22,140 +67,42 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
+                        <!-- Tabs -->
                         <ul class="nav nav-tabs nav-primary" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#panenTanggal" role="tab" aria-selected="true">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-calendar-event font-18 me-1'></i></div>
-                                        <div class="tab-title">Harian</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#panenBulan" role="tab" aria-selected="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-calendar font-18 me-1'></i></div>
-                                        <div class="tab-title">Bulanan</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#panenTahun" role="tab" aria-selected="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="tab-icon"><i class='bx bx-calendar-check font-18 me-1'></i></div>
-                                        <div class="tab-title">Tahunan</div>
-                                    </div>
-                                </a>
-                            </li>
+                            <?php
+                            $tabs = [
+                                'panenTanggal' => ['label' => 'Harian', 'icon' => 'bx-calendar-event', 'active' => true],
+                                'panenBulan' => ['label' => 'Bulanan', 'icon' => 'bx-calendar', 'active' => false],
+                                'panenTahun' => ['label' => 'Tahunan', 'icon' => 'bx-calendar-check', 'active' => false],
+                            ];
+                            foreach ($tabs as $id => $tab): ?>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link <?= $tab['active'] ? 'active' : '' ?>" data-bs-toggle="tab" href="#<?= $id ?>" role="tab">
+                                        <div class="d-flex align-items-center">
+                                            <div class="tab-icon"><i class="bx <?= $tab['icon'] ?> font-18 me-1"></i></div>
+                                            <div class="tab-title"><?= $tab['label'] ?></div>
+                                        </div>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
 
+                        <!-- Tab Content -->
                         <div class="tab-content py-3">
-                            <!-- Tab Harian -->
                             <div class="tab-pane fade show active" id="panenTanggal" role="tabpanel">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <?php foreach ($panenPerTanggal['title'] as $title): ?>
-                                                    <th><?= $title; ?></th>
-                                                <?php endforeach; ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if (empty($panenPerTanggal['data'])): ?>
-                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                            <?php else: ?>
-                                            <?php foreach ($panenPerTanggal['data'] as $data): ?>
-                                                <tr>
-                                                    <?php foreach ($panenPerTanggal['title'] as $title): ?>
-                                                        <?php if ($data[$title]): ?>
-                                                            <?php if ($title == 'Tanggal Panen'): ?>
-                                                                <td><?= date('d M Y', strtotime($data[$title])); ?></td>
-                                                            <?php else: ?>
-                                                                <td><?= $data[$title]; ?></td>
-                                                            <?php endif; ?>
-                                                        <?php else: ?>
-                                                            <td>-</td>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                        </tbody>
-                                    </table>
-                                </div>
+                                <?php renderPanenTable($panenPerTanggal, 'Tanggal Panen'); ?>
                             </div>
-
-                            <!-- Tab Bulanan -->
                             <div class="tab-pane fade" id="panenBulan" role="tabpanel">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <?php foreach ($panenPerBulan['title'] as $title): ?>
-                                                    <th><?= $title; ?></th>
-                                                <?php endforeach; ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if (empty($panenPerBulan['data'])): ?>
-                                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                                            <?php else: ?>
-                                                <?php foreach ($panenPerBulan['data'] as $data): ?>
-                                                    <tr>
-                                                        <?php foreach ($panenPerBulan['title'] as $title): ?>
-                                                            <?php if ($data[$title]): ?>
-                                                                <?php if ($title == 'Bulan Panen'): ?>
-                                                                    <td><?= date('M Y', strtotime($data[$title])); ?></td>
-                                                                <?php else: ?>
-                                                                    <td><?= $data[$title]; ?></td>
-                                                                <?php endif; ?>
-                                                            <?php else: ?>
-                                                                <td>-</td>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <?php renderPanenTable($panenPerBulan, 'Bulan Panen'); ?>
                             </div>
-
-                            <!-- Tab Tahunan -->
                             <div class="tab-pane fade" id="panenTahun" role="tabpanel">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <?php foreach ($panenPerTahun['title'] as $title): ?>
-                                                    <th><?= $title; ?></th>
-                                                <?php endforeach; ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if (empty($panenPerTahun['data'])): ?>
-                                                <tr><td colspan="5" class="text-center">Data pemanenan belum pernah ditambahkan, silahkan tambahkan melalui aplikasi mobile.</td></tr>
-                                            <?php else: ?>
-                                                <?php foreach ($panenPerTahun['data'] as $data): ?>
-                                                    <tr>
-                                                        <?php foreach ($panenPerTahun['title'] as $title): ?>
-                                                            <td><?= $data[$title] ?? '-'; ?></td>
-                                                        <?php endforeach; ?>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <?php renderPanenTable($panenPerTahun, 'Tahun Panen'); ?>
                             </div>
-                        </div> <!-- end tab-content -->
+                        </div>
+
                     </div> <!-- end card-body -->
                 </div> <!-- end card -->
             </div>
         </div>
     </div>
 </div>
-
