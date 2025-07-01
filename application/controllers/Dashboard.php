@@ -23,21 +23,15 @@ class Dashboard extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id'); 
 
         $tahun = $this->input->get('tahun') ?? date('Y');
-        $bulan = range(1, date('n'));
+        $bulan = $this->input->get('bulan');
+if (empty($bulan)) {
+    $bulan = range(1, date('n')); // default: sampai bulan sekarang
+} elseif (!is_array($bulan)) {
+    $bulan = [$bulan];
+}
+$bulan = array_map('intval', $bulan);
 
-        if (empty($bulan)) {
-            $bulanIni = (int)date('n');
-            $bulan = [
-                $bulanIni,
-                $bulanIni - 1 > 0 ? $bulanIni - 1 : 12,
-                $bulanIni - 2 > 0 ? $bulanIni - 2 : 11,
-            ];
-        } else {
-            if (!is_array($bulan)) {
-                $bulan = [$bulan];
-            }
-            $bulan = array_map('intval', $bulan);
-        }
+
 
         $kebun = $this->input->get('kebun');
 

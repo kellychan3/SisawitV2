@@ -60,35 +60,58 @@
                             </div>
 
                             <div class="field">
-                                <label for="bulan">Bulan</label>
-                                <div class="custom-dropdown">
-                                    <div class="dropdown-label" onclick="toggleDropdown('bulan')">Semua ▾</div>
-                                    <div class="dropdown-checkboxes" id="dropdown-bulan">
-                                        <?php foreach($bulan_list as $b): ?>
-                                            <label>
-                                                <input type="checkbox" onchange="this.form.submit()" name="bulan[]" value="<?= $b['bulan']; ?>"
-                                                <?= (is_array($filter['bulan']) && in_array($b['bulan'], $filter['bulan'])) ? 'checked' : ''; ?>>
-                                                <?= $b['nama']; ?>
-                                            </label>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            </div>
+    <label for="bulan">Bulan</label>
+    <div class="custom-dropdown">
+        <?php
+    $bulan_valid = array_column($bulan_list, 'bulan'); // Ambil bulan valid dari DB
+    $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid); // Bandingkan dengan yang dipilih
+    $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
+?>
+        <div class="dropdown-label" onclick="toggleDropdown('bulan')">
+    <?= $label_bulan ?> ▾
+</div>
+        <div class="dropdown-checkboxes" id="dropdown-bulan">
+            <?php foreach($bulan_list as $b): 
+                $bulan_num = (int)$b['bulan'];
+                $nama_bulan = date("F", mktime(0, 0, 0, $bulan_num, 1));
+            ?>
+                <label>
+                    <input type="checkbox" onchange="this.form.submit()" name="bulan[]" value="<?= $bulan_num ?>"
+                        <?= (is_array($filter['bulan']) && in_array($bulan_num, $filter['bulan'])) ? 'checked' : '' ?>>
+                    <?= $nama_bulan ?>
+                </label>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
 
                             <div class="field">
                                 <label for="kebun">Kebun</label>
-                                <div class="custom-dropdown">
-                                    <div class="dropdown-label" onclick="toggleDropdown('kebun')">Semua ▾</div>
-                                    <div class="dropdown-checkboxes" id="dropdown-kebun">
-                                        <?php foreach($kebun_list as $k): ?>
-                                            <label>
-                                                <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['nama_kebun']; ?>"
-                                                    <?= (is_array($filter['kebun']) && in_array($k['nama_kebun'], $filter['kebun'])) ? 'checked' : ''; ?>>
-                                                <?= $k['nama_kebun']; ?>
-                                            </label>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
+    <div class="custom-dropdown">
+
+        <?php
+        // Gunakan sk_kebun sebagai value dan pembanding
+        $kebun_valid = array_column($kebun_list, 'sk_kebun');
+        $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
+        $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
+        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
+        ?>
+
+        <div class="dropdown-label" onclick="toggleDropdown('kebun')">
+            <?= $label_kebun ?> ▾
+        </div>
+        
+        <div class="dropdown-checkboxes" id="dropdown-kebun">
+            <?php foreach($kebun_list as $k): ?>
+                <label>
+                    <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
+                        <?= in_array($k['sk_kebun'], $filter_kebun) ? 'checked' : ''; ?>>
+                    <?= $k['nama_kebun']; ?>
+                </label>
+            <?php endforeach; ?>
+        </div>
+        
+    </div>
                             </div>
 
                         </div>

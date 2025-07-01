@@ -88,7 +88,7 @@
                                 </select>
                             </div>
                              <div class="col-md-6">
-                                <label for="jumlahaset" class="form-label">Jumlah Aset</label>
+                                <label for="jumlahaset" class="form-label">Jumlah Aset (Pupuk: Kg)</label>
                                 <input type="number" class="form-control" id="jumlahaset" name="jumlahaset" required oninvalid="this.setCustomValidity('Jumlah aset wajib diisi')" oninput="this.setCustomValidity('')">
                             </div>
                             <div class="modal-footer">
@@ -192,7 +192,7 @@
                   <?php foreach ($asset as $a): ?>
                     <tr>
                       <td><?= htmlspecialchars($a['nama_aset']); ?></td>
-                      <td><?= htmlspecialchars($a['jumlah_aset']); ?></td>
+                      <td><?= htmlspecialchars($a['jumlah_aset']) . ' Kg'; ?></td>
                       <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
                       <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
                       <?php if ($this->session->userdata('role') == 'pemilik'): ?>
