@@ -74,7 +74,7 @@ $bulan = array_map('intval', $bulan);
         foreach ($panen_data as $row) {
 
         if ((float)$row->total_panen > 0) {
-            $label = $bulan_nama[(int)$row->bulan] . ' Minggu ' . $row->minggu_ke;
+            $label = $bulan_nama[(int)$row->bulan] . "\nMinggu " . $row->minggu_ke;
             if (!in_array($label, $minggu_labels)) {
                 $minggu_labels[] = $label;
             }
@@ -112,7 +112,7 @@ $bulan = array_map('intval', $bulan);
         foreach ($minggu_labels as $label) {
             $panen = null;
             foreach ($panen_data as $row) {
-                $row_label = $bulan_nama[(int)$row->bulan] . ' Minggu ' . $row->minggu_ke;
+                $row_label = $bulan_nama[(int)$row->bulan] . "\nMinggu " . $row->minggu_ke;
                 if ($row_label == $label && $row->nama_kebun == $kebun && (float)$row->total_panen > 0) {
                     $panen = (float)$row->total_panen;
                     break;
@@ -136,27 +136,26 @@ $bulan = array_map('intval', $bulan);
     $total_bulan_ini = $this->Dashboard_model->get_total_panen_bulan_ini($tahun, $bulan_terakhir,$organisasi_id, $kebun);
     $total_bulan_ini = $total_bulan_ini ?? 0;
 
-    $rata_bulanan = $this->Dashboard_model->get_rata2_panen_bulanan_tahun_ini( $tahun, $organisasi_id, $kebun);
+    $rata_bulanan = $this->Dashboard_model->get_rata2_panen_bulanan_tahun_ini($tahun, $organisasi_id, $kebun);
     $rata_bulanan = $rata_bulanan ?? 0;
+    $data['rata_panen_bulanan'] = $rata_bulanan;
+
 
     $selisih_persen_bulan = $rata_bulanan ? (($total_bulan_ini - $rata_bulanan) / $rata_bulanan * 100) : 0;
 
     $data['indikator_panen'] = [
-        'nilai' => number_format($total_bulan_ini, 2, ',', '.'),
+        'nilai' => number_format($total_bulan_ini, 1, ',', '.'),
         'persen' => round(abs($selisih_persen_bulan), 1),
         'naik' => $selisih_persen_bulan >= 0
     ];
 
-    // Ambil tanggal hari ini
-$tanggal_hari_ini = new DateTime(); // default ke hari ini
+$tanggal_hari_ini = new DateTime(); 
 $tahun_sekarang = (int)$tanggal_hari_ini->format('Y');
 $bulan_sekarang = (int)$tanggal_hari_ini->format('n');
 $tanggal_ke = (int)$tanggal_hari_ini->format('j');
 
-// Hitung minggu ke dalam bulan
 $minggu_ke = (int)ceil($tanggal_ke / 7);
 
-// Pakai bulan sekarang (bukan bulan_terakhir)
 $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun_sekarang, $bulan_sekarang, $minggu_ke, $organisasi_id, $kebun);
 
     $total_minggu_ini = $total_minggu_ini ?? 0;
@@ -164,11 +163,12 @@ $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini($tahun_se
     $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan($tahun, $bulan, $organisasi_id, $kebun);
 
     $rata_mingguan = $rata_mingguan ?? 0;
+    $data['rata_panen_mingguan'] = $rata_mingguan;
     
     $selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
 
     $data['indikator_panen_mingguan'] = [
-        'nilai' => number_format($total_minggu_ini, 2, ',', '.'),
+        'nilai' => number_format($total_minggu_ini, 1, ',', '.'),
         'persen' => round(abs($selisih_persen_minggu), 1),
         'naik' => $selisih_persen_minggu >= 0
     ];

@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -141,18 +143,27 @@
                         <div class="info-box">
                             <div class="label">Total Panen Bulan Ini</div>
                             <div class="value"><?= $indikator_panen['nilai']; ?> Kg</div>
-                            <div class="label" style="color:<?= $indikator_panen['naik'] ? 'green' : 'red'; ?>">
-                                <?= $indikator_panen['naik'] ? '▲' : '▼'; ?> 
-                                <?= $indikator_panen['persen']; ?>% dari rata-rata bulanan
-                            </div>
+                            <?php if ($indikator_panen['nilai'] == '0,00' && $indikator_panen['persen'] == 0): ?>
+                                <div class="label" style="color:gray;"><em>📉 Belum ada data panen.</em></div>
+                            <?php else: ?>
+                                <div class="label" style="color:<?= $indikator_panen['naik'] ? 'green' : 'red'; ?>">
+                                    <?= $indikator_panen['naik'] ? '▲' : '▼'; ?> 
+                                    <?= $indikator_panen['persen']; ?>% dari rata-rata bulanan
+                                </div>
+                            <?php endif; ?>
+
                         </div>
                         <div class="info-box">
                             <div class="label">Total Panen Minggu Ini</div>
                                 <div class="value"><?= $indikator_panen_mingguan['nilai']; ?> Kg</div>
+                                <?php if ($indikator_panen_mingguan['nilai'] == '0,00' && $indikator_panen_mingguan['persen'] == 0): ?>
+                                <div class="label" style="color:gray;"><em>📉 Belum ada data panen.</em></div>
+                                <?php else: ?>
                                 <div class="label" style="color:<?= $indikator_panen_mingguan['naik'] ? 'green' : 'red'; ?>">
                                     <?= $indikator_panen_mingguan['naik'] ? '▲' : '▼'; ?>
                                     <?= $indikator_panen_mingguan['persen']; ?>% dari rata-rata mingguan
                                 </div>
+                                <?php endif; ?>
                         </div>
 
                     </div>
@@ -290,21 +301,51 @@ document.addEventListener('click', function(event) {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
+                datasets: [
+                {
                     label: 'Total Panen (Kg)',
                     data: panenData,
-                    borderColor: 'rgb(31, 4, 154)',
+                    borderColor: 'rgb(31, 4, 154)', // garis biru
                     fill: false,
-                    tension: 0.1
-                }]
+                    tension: 0.1,
+                    pointBackgroundColor: panenData.map(p => p >= <?= (float)$rata_panen_bulanan ?> ? 'green' : 'red'), // warna titik
+                    pointBorderWidth: 0, // tanpa border
+                    pointRadius: 5
+                }
+                ]
+
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                annotation: {
+                    annotations: {
+                        garisRataRata: {
+                            type: 'line',
+                            yMin: <?= (float)$rata_panen_bulanan ?>,
+                            yMax: <?= (float)$rata_panen_bulanan ?>,
+                            borderColor: 'rgb(31, 4, 154)',
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    offset: true,
+                    grid: { display: false }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { display: true }
                 }
             }
+        }
+
+
         });
     }
 
@@ -429,62 +470,54 @@ document.addEventListener('click', function(event) {
 <script>
     const ctx = document.getElementById('panenMingguanKebunChart').getContext('2d');
 
-const labels = <?= json_encode($labels); ?>;
-const datasets = <?= json_encode($datasets); ?>;
+    const labels = <?= json_encode($labels); ?>;
+    const datasets = <?= json_encode($datasets); ?>;
+    const rataMingguan = <?= json_encode($rata_panen_mingguan); ?>;
 
-new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: datasets
-    },
-    options: {
-        indexAxis: 'x', // horizontal bar
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            x: {
-                beginAtZero: true,
-                title: {
-                    display: false,
-                    text: 'Minggu'
-                },
-                ticks: {
-            callback: function(val, index) {
-                // Biarkan default parsing \n sebagai line break
-                return this.getLabelForValue(val).split('\n');
-            }
-        }
-            },
-            y: {
-                title: {
-                    display: false,
-                    text: 'Total Panen (Kg)'
-                }
-            }
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
         },
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    font: {
-                        size: 11
+        options: {
+            indexAxis: 'x',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: { display: false },
+                    ticks: {
+                        callback: function (val, index) {
+                            return this.getLabelForValue(val).split('\n');
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: false }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 11 } }
+                },
+                annotation: {
+                    annotations: {
+                        garisRataRata: {
+                            type: 'line',
+                            yMin: rataMingguan,
+                            yMax: rataMingguan,
+                            borderColor: 'rgb(31, 4, 154)',
+                            borderWidth: 1.5,
+                            borderDash: [5, 5]
+                        }
                     }
                 }
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'end',
-                color: 'grey',
-                font: {
-                    size: 10
-                }
             }
         }
-    },
-    plugins: [ChartDataLabels]
-});
-
+    });
 </script>
 
 <script>
