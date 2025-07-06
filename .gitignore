@@ -15,3 +15,8 @@ application/logs/
 
 pentaho/pdi.zip
 
+# Ignore some transformation files
+.pentaho/main_job_testing.kjb
+.pentaho/step_login_cadangan.ktr
+.pentaho/dim_user_testing.ktr
+

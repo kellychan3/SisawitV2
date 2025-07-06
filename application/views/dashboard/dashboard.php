@@ -45,40 +45,57 @@
 
                 </div>
      
-                <div class="filter-form">
-                <!-- Form filter -->
-                    <form method="get" action="">
-                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                            
-                            <div class="field">
-                                <label for="tahun">Tahun</label>
-                                <select id="tahun" name="tahun" onchange="this.form.submit()">
-                                    <?php foreach($tahun_list as $t): ?>
-                                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
-                                            <?= $t['tahun']; ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                <<div class="filter-form">
+    <form method="get" action="">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            
+            <!-- Tahun -->
+            <div class="field">
+                <label for="tahun">Tahun</label>
+                <select id="tahun" name="tahun">
+                    <?php foreach($tahun_list as $t): ?>
+                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
+                            <?= $t['tahun']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-                            <div class="field">
+            <!-- Bulan -->
+            <!-- Bulan -->
+<div class="field">
     <label for="bulan">Bulan</label>
     <div class="custom-dropdown">
         <?php
-    $bulan_valid = array_column($bulan_list, 'bulan'); // Ambil bulan valid dari DB
-    $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid); // Bandingkan dengan yang dipilih
-    $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
-?>
+            $bulan_indonesia = [
+                1 => 'Januari',
+                2 => 'Februari',
+                3 => 'Maret',
+                4 => 'April',
+                5 => 'Mei',
+                6 => 'Juni',
+                7 => 'Juli',
+                8 => 'Agustus',
+                9 => 'September',
+                10 => 'Oktober',
+                11 => 'November',
+                12 => 'Desember'
+            ];
+
+            $bulan_valid = array_column($bulan_list, 'bulan');
+            $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid);
+            $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
+        ?>
         <div class="dropdown-label" onclick="toggleDropdown('bulan')">
-    <?= $label_bulan ?> ▾
-</div>
+            <?= $label_bulan ?> ▾
+        </div>
         <div class="dropdown-checkboxes" id="dropdown-bulan">
             <?php foreach($bulan_list as $b): 
                 $bulan_num = (int)$b['bulan'];
-                $nama_bulan = date("F", mktime(0, 0, 0, $bulan_num, 1));
+                $nama_bulan = $bulan_indonesia[$bulan_num];
             ?>
                 <label>
-                    <input type="checkbox" onchange="this.form.submit()" name="bulan[]" value="<?= $bulan_num ?>"
+                    <input type="checkbox" name="bulan[]" value="<?= $bulan_num ?>"
                         <?= (is_array($filter['bulan']) && in_array($bulan_num, $filter['bulan'])) ? 'checked' : '' ?>>
                     <?= $nama_bulan ?>
                 </label>
@@ -87,38 +104,36 @@
     </div>
 </div>
 
-                            <div class="field">
-                                <label for="kebun">Kebun</label>
-    <div class="custom-dropdown">
 
-        <?php
-        // Gunakan sk_kebun sebagai value dan pembanding
-        $kebun_valid = array_column($kebun_list, 'sk_kebun');
-        $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
-        $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
-        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
-        ?>
-
-        <div class="dropdown-label" onclick="toggleDropdown('kebun')">
-            <?= $label_kebun ?> ▾
-        </div>
-        
-        <div class="dropdown-checkboxes" id="dropdown-kebun">
-            <?php foreach($kebun_list as $k): ?>
-                <label>
-                    <input type="checkbox" onchange="this.form.submit()" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
-                        <?= in_array($k['sk_kebun'], $filter_kebun) ? 'checked' : ''; ?>>
-                    <?= $k['nama_kebun']; ?>
-                </label>
-            <?php endforeach; ?>
-        </div>
-        
-    </div>
-                            </div>
-
-                        </div>
-                    </form>
+            <!-- Kebun -->
+            <div class="field">
+                <label for="kebun">Kebun</label>
+                <div class="custom-dropdown">
+                    <?php
+                        $kebun_valid = array_column($kebun_list, 'sk_kebun');
+                        $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
+                        $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
+                        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
+                    ?>
+                    <div class="dropdown-label" onclick="toggleDropdown('kebun')">
+                        <?= $label_kebun ?> ▾
+                    </div>
+                    <div class="dropdown-checkboxes" id="dropdown-kebun">
+                        <?php foreach($kebun_list as $k): ?>
+                            <label>
+                                <input type="checkbox" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
+                                    <?= in_array($k['sk_kebun'], $filter_kebun) ? 'checked' : ''; ?>>
+                                <?= $k['nama_kebun']; ?>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
             </div>
             
             <div class="dashboard-container-row">
@@ -145,20 +160,27 @@
                             <div class="value"><?= $indikator_panen['nilai']; ?> Kg</div>
                             <?php if ($indikator_panen['nilai'] == '0,00' && $indikator_panen['persen'] == 0): ?>
                                 <div class="label" style="color:gray;"><em>📉 Belum ada data panen.</em></div>
+                            <?php elseif ($indikator_panen['persen'] == 0): ?>
+                                <div class="label" style="color:gray;">
+                                    <em>Sama dengan rata-rata bulanan</em>
+                                </div>
                             <?php else: ?>
                                 <div class="label" style="color:<?= $indikator_panen['naik'] ? 'green' : 'red'; ?>">
                                     <?= $indikator_panen['naik'] ? '▲' : '▼'; ?> 
                                     <?= $indikator_panen['persen']; ?>% dari rata-rata bulanan
                                 </div>
                             <?php endif; ?>
-
                         </div>
                         <div class="info-box">
                             <div class="label">Total Panen Minggu Ini</div>
                                 <div class="value"><?= $indikator_panen_mingguan['nilai']; ?> Kg</div>
                                 <?php if ($indikator_panen_mingguan['nilai'] == '0,00' && $indikator_panen_mingguan['persen'] == 0): ?>
                                 <div class="label" style="color:gray;"><em>📉 Belum ada data panen.</em></div>
-                                <?php else: ?>
+                                <?php elseif ($indikator_panen_mingguan['persen'] == 0): ?>
+                                    <div class="label" style="color:gray;">
+                                <em>Sama dengan rata-rata mingguan</em>
+                            </div>
+                        <?php else: ?>
                                 <div class="label" style="color:<?= $indikator_panen_mingguan['naik'] ? 'green' : 'red'; ?>">
                                     <?= $indikator_panen_mingguan['naik'] ? '▲' : '▼'; ?>
                                     <?= $indikator_panen_mingguan['persen']; ?>% dari rata-rata mingguan
@@ -274,6 +296,17 @@ document.addEventListener('click', function(event) {
     ['kebun', 'bulan'].forEach(type => {
         const dropdown = document.getElementById('dropdown-' + type);
         if (dropdown && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+});
+
+document.addEventListener('click', function(event) {
+    ['kebun', 'bulan'].forEach(type => {
+        const dropdown = document.getElementById('dropdown-' + type);
+        const label = document.querySelector(`.dropdown-label[onclick*="${type}"]`);
+
+        if (dropdown && !dropdown.contains(event.target) && !label.contains(event.target)) {
             dropdown.style.display = 'none';
         }
     });
@@ -521,22 +554,84 @@ document.addEventListener('click', function(event) {
 </script>
 
 <script>
-    $('#tahun_select').change(function() {
-    var tahun = $(this).val();
-    $.ajax({
-        url: 'dashboard/get_bulan_by_tahun',
-        type: 'POST',
-        data: { tahun: tahun },
-        success: function(data) {
-            $('#bulan_select').empty();
-            $.each(JSON.parse(data), function(index, value) {
-                $('#bulan_select').append('<option value="' + value.bulan + '">' + value.nama + '</option>');
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.filter-form form');
+    const tahunSelect = document.getElementById('tahun');
+    const bulanContainer = document.getElementById('dropdown-bulan');
+    const bulanLabel = document.querySelector('.dropdown-label[onclick*="bulan"]');
+
+    function updateLabelBulan() {
+        const checked = bulanContainer.querySelectorAll('input[type="checkbox"]:checked').length;
+        bulanLabel.textContent = checked === 0 ? 'Semua ▾' : `Dipilih (${checked}) ▾`;
+    }
+
+    // Fungsi: pasang ulang event listener ke semua checkbox
+    function attachCheckboxListeners() {
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
+                form.submit();
             });
-        }
-    });
+        });
+    }
+
+    // Pasang event pertama kali
+    attachCheckboxListeners();
+
+    // Jika tahun diubah
+    tahunSelect.addEventListener('change', function () {
+        const selectedTahun = this.value;
+
+        fetch("<?= base_url('dashboard/get_bulan_by_tahun') ?>", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `tahun=${encodeURIComponent(selectedTahun)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            bulanContainer.innerHTML = '';
+
+            if (data.length === 0) {
+                bulanContainer.innerHTML = '<p>Tidak ada bulan tersedia</p>';
+                return;
+            }
+
+            // Tambahkan checkbox baru (semua checked)
+            data.forEach(b => {
+                const namaBulan = b.nama; 
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.name = 'bulan[]';
+                input.value = b.bulan;
+                input.checked = true;
+                input.addEventListener('click', function(event) {
+    event.stopPropagation(); // agar klik tidak menutup dropdown
 });
 
+                input.addEventListener('change', () => form.submit());
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(' ' + namaBulan));
+                bulanContainer.appendChild(label);
+            });
+
+            updateLabelBulan();
+            attachCheckboxListeners();
+
+            // Submit otomatis setelah update bulan
+            setTimeout(() => {
+                form.submit();
+            }, 200);
+        })
+        .catch(error => {
+            alert('Gagal memuat data bulan');
+            console.error(error);
+        });
+    });
+});
 </script>
+
+
 
 </body>
 </html>

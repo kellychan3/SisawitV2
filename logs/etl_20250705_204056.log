@@ -1,0 +1,317 @@
+#######################################################################
+WARNING:  no libwebkitgtk-1.0 detected, some features will be unavailable
+    Consider installing the package with apt-get or yum.
+    e.g. 'sudo apt-get install libwebkitgtk-1.0-0'
+#######################################################################
+2025-07-05 13:40:58,837 main ERROR RollingFileManager (logs/pdi.log) java.io.FileNotFoundException: logs/pdi.log (Permission denied) java.io.FileNotFoundException: logs/pdi.log (Permission denied)
+	at java.base/java.io.FileOutputStream.open0(Native Method)
+	at java.base/java.io.FileOutputStream.open(FileOutputStream.java:298)
+	at java.base/java.io.FileOutputStream.<init>(FileOutputStream.java:237)
+	at java.base/java.io.FileOutputStream.<init>(FileOutputStream.java:158)
+	at org.apache.logging.log4j.core.appender.rolling.RollingFileManager$RollingFileManagerFactory.createManager(RollingFileManager.java:746)
+	at org.apache.logging.log4j.core.appender.rolling.RollingFileManager$RollingFileManagerFactory.createManager(RollingFileManager.java:716)
+	at org.apache.logging.log4j.core.appender.AbstractManager.getManager(AbstractManager.java:114)
+	at org.apache.logging.log4j.core.appender.OutputStreamManager.getManager(OutputStreamManager.java:100)
+	at org.apache.logging.log4j.core.appender.rolling.RollingFileManager.getFileManager(RollingFileManager.java:217)
+	at org.apache.logging.log4j.core.appender.RollingFileAppender$Builder.build(RollingFileAppender.java:146)
+	at org.apache.logging.log4j.core.appender.RollingFileAppender$Builder.build(RollingFileAppender.java:62)
+	at org.apache.logging.log4j.core.config.plugins.util.PluginBuilder.build(PluginBuilder.java:122)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createPluginObject(AbstractConfiguration.java:1120)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1045)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1037)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.doConfigure(AbstractConfiguration.java:651)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.initialize(AbstractConfiguration.java:247)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.start(AbstractConfiguration.java:293)
+	at org.apache.logging.log4j.core.LoggerContext.setConfiguration(LoggerContext.java:626)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:699)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:716)
+	at org.apache.logging.log4j.core.LoggerContext.start(LoggerContext.java:270)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:155)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:47)
+	at org.apache.logging.log4j.LogManager.getContext(LogManager.java:196)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getContext(AbstractLoggerAdapter.java:137)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getContext(Log4jLoggerFactory.java:55)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getLogger(AbstractLoggerAdapter.java:47)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getLogger(Log4jLoggerFactory.java:33)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:284)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:304)
+	at org.pentaho.di.i18n.GlobalMessageUtil.<clinit>(GlobalMessageUtil.java:50)
+	at org.pentaho.di.i18n.LAFMessageHandler.calculateString(LAFMessageHandler.java:94)
+	at org.pentaho.di.i18n.GlobalMessages.getString(GlobalMessages.java:177)
+	at org.pentaho.di.i18n.BaseMessages.getString(BaseMessages.java:86)
+	at org.pentaho.di.core.logging.LogLevel.<clinit>(LogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.<init>(DefaultLogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getInstance(DefaultLogLevel.java:41)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getLogLevel(DefaultLogLevel.java:50)
+	at org.pentaho.di.core.logging.LogChannel.<init>(LogChannel.java:80)
+	at org.pentaho.di.core.logging.LogChannel.<clinit>(LogChannel.java:41)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:82)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:95)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.<init>(RepositoryPluginType.java:54)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.getInstance(RepositoryPluginType.java:64)
+	at org.pentaho.di.kitchen.Kitchen.main(Kitchen.java:73)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.pentaho.commons.launcher.Launcher.main(Launcher.java:92)
+
+2025-07-05 13:40:58,848 main ERROR Could not create plugin of type class org.apache.logging.log4j.core.appender.RollingFileAppender for element RollingFile: java.lang.IllegalStateException: ManagerFactory [org.apache.logging.log4j.core.appender.rolling.RollingFileManager$RollingFileManagerFactory@7eecb5b8] unable to create manager for [logs/pdi.log] with data [org.apache.logging.log4j.core.appender.rolling.RollingFileManager$FactoryData@126253fd[pattern=logs/pdi.%d{yyyy-MM-dd}.log, append=true, bufferedIO=true, bufferSize=8192, policy=CompositeTriggeringPolicy(policies=[TimeBasedTriggeringPolicy(nextRolloverMillis=0, interval=1, modulate=false)]), strategy=DefaultRolloverStrategy(min=1, max=7, useMax=true), advertiseURI=null, layout=%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p <%t> %m%n, filePermissions=null, fileOwner=null]] java.lang.IllegalStateException: ManagerFactory [org.apache.logging.log4j.core.appender.rolling.RollingFileManager$RollingFileManagerFactory@7eecb5b8] unable to create manager for [logs/pdi.log] with data [org.apache.logging.log4j.core.appender.rolling.RollingFileManager$FactoryData@126253fd[pattern=logs/pdi.%d{yyyy-MM-dd}.log, append=true, bufferedIO=true, bufferSize=8192, policy=CompositeTriggeringPolicy(policies=[TimeBasedTriggeringPolicy(nextRolloverMillis=0, interval=1, modulate=false)]), strategy=DefaultRolloverStrategy(min=1, max=7, useMax=true), advertiseURI=null, layout=%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p <%t> %m%n, filePermissions=null, fileOwner=null]]
+	at org.apache.logging.log4j.core.appender.AbstractManager.getManager(AbstractManager.java:116)
+	at org.apache.logging.log4j.core.appender.OutputStreamManager.getManager(OutputStreamManager.java:100)
+	at org.apache.logging.log4j.core.appender.rolling.RollingFileManager.getFileManager(RollingFileManager.java:217)
+	at org.apache.logging.log4j.core.appender.RollingFileAppender$Builder.build(RollingFileAppender.java:146)
+	at org.apache.logging.log4j.core.appender.RollingFileAppender$Builder.build(RollingFileAppender.java:62)
+	at org.apache.logging.log4j.core.config.plugins.util.PluginBuilder.build(PluginBuilder.java:122)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createPluginObject(AbstractConfiguration.java:1120)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1045)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1037)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.doConfigure(AbstractConfiguration.java:651)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.initialize(AbstractConfiguration.java:247)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.start(AbstractConfiguration.java:293)
+	at org.apache.logging.log4j.core.LoggerContext.setConfiguration(LoggerContext.java:626)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:699)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:716)
+	at org.apache.logging.log4j.core.LoggerContext.start(LoggerContext.java:270)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:155)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:47)
+	at org.apache.logging.log4j.LogManager.getContext(LogManager.java:196)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getContext(AbstractLoggerAdapter.java:137)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getContext(Log4jLoggerFactory.java:55)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getLogger(AbstractLoggerAdapter.java:47)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getLogger(Log4jLoggerFactory.java:33)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:284)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:304)
+	at org.pentaho.di.i18n.GlobalMessageUtil.<clinit>(GlobalMessageUtil.java:50)
+	at org.pentaho.di.i18n.LAFMessageHandler.calculateString(LAFMessageHandler.java:94)
+	at org.pentaho.di.i18n.GlobalMessages.getString(GlobalMessages.java:177)
+	at org.pentaho.di.i18n.BaseMessages.getString(BaseMessages.java:86)
+	at org.pentaho.di.core.logging.LogLevel.<clinit>(LogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.<init>(DefaultLogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getInstance(DefaultLogLevel.java:41)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getLogLevel(DefaultLogLevel.java:50)
+	at org.pentaho.di.core.logging.LogChannel.<init>(LogChannel.java:80)
+	at org.pentaho.di.core.logging.LogChannel.<clinit>(LogChannel.java:41)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:82)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:95)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.<init>(RepositoryPluginType.java:54)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.getInstance(RepositoryPluginType.java:64)
+	at org.pentaho.di.kitchen.Kitchen.main(Kitchen.java:73)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.pentaho.commons.launcher.Launcher.main(Launcher.java:92)
+
+2025-07-05 13:40:58,853 main ERROR Unable to invoke factory method in class org.apache.logging.log4j.core.appender.RollingFileAppender for element RollingFile: java.lang.IllegalStateException: No factory method found for class org.apache.logging.log4j.core.appender.RollingFileAppender java.lang.IllegalStateException: No factory method found for class org.apache.logging.log4j.core.appender.RollingFileAppender
+	at org.apache.logging.log4j.core.config.plugins.util.PluginBuilder.findFactoryMethod(PluginBuilder.java:236)
+	at org.apache.logging.log4j.core.config.plugins.util.PluginBuilder.build(PluginBuilder.java:134)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createPluginObject(AbstractConfiguration.java:1120)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1045)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.createConfiguration(AbstractConfiguration.java:1037)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.doConfigure(AbstractConfiguration.java:651)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.initialize(AbstractConfiguration.java:247)
+	at org.apache.logging.log4j.core.config.AbstractConfiguration.start(AbstractConfiguration.java:293)
+	at org.apache.logging.log4j.core.LoggerContext.setConfiguration(LoggerContext.java:626)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:699)
+	at org.apache.logging.log4j.core.LoggerContext.reconfigure(LoggerContext.java:716)
+	at org.apache.logging.log4j.core.LoggerContext.start(LoggerContext.java:270)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:155)
+	at org.apache.logging.log4j.core.impl.Log4jContextFactory.getContext(Log4jContextFactory.java:47)
+	at org.apache.logging.log4j.LogManager.getContext(LogManager.java:196)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getContext(AbstractLoggerAdapter.java:137)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getContext(Log4jLoggerFactory.java:55)
+	at org.apache.logging.log4j.spi.AbstractLoggerAdapter.getLogger(AbstractLoggerAdapter.java:47)
+	at org.apache.logging.slf4j.Log4jLoggerFactory.getLogger(Log4jLoggerFactory.java:33)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:284)
+	at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:304)
+	at org.pentaho.di.i18n.GlobalMessageUtil.<clinit>(GlobalMessageUtil.java:50)
+	at org.pentaho.di.i18n.LAFMessageHandler.calculateString(LAFMessageHandler.java:94)
+	at org.pentaho.di.i18n.GlobalMessages.getString(GlobalMessages.java:177)
+	at org.pentaho.di.i18n.BaseMessages.getString(BaseMessages.java:86)
+	at org.pentaho.di.core.logging.LogLevel.<clinit>(LogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.<init>(DefaultLogLevel.java:36)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getInstance(DefaultLogLevel.java:41)
+	at org.pentaho.di.core.logging.DefaultLogLevel.getLogLevel(DefaultLogLevel.java:50)
+	at org.pentaho.di.core.logging.LogChannel.<init>(LogChannel.java:80)
+	at org.pentaho.di.core.logging.LogChannel.<clinit>(LogChannel.java:41)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:82)
+	at org.pentaho.di.core.plugins.BasePluginType.<init>(BasePluginType.java:95)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.<init>(RepositoryPluginType.java:54)
+	at org.pentaho.di.core.plugins.RepositoryPluginType.getInstance(RepositoryPluginType.java:64)
+	at org.pentaho.di.kitchen.Kitchen.main(Kitchen.java:73)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.pentaho.commons.launcher.Launcher.main(Launcher.java:92)
+
+2025-07-05 13:40:58,857 main ERROR Null object returned for RollingFile in Appenders.
+2025-07-05 13:40:58,875 main ERROR Unable to locate appender "pdi-execution-appender" for logger config "org.pentaho.di.trans.Trans"
+2025-07-05 13:40:58,876 main ERROR Unable to locate appender "pdi-execution-appender" for logger config "org.pentaho.di.job.Job"
+2025/07/05 13:41:00 - Kitchen - Start of run.
+2025/07/05 13:41:03 - main_job - Start of job execution
+2025/07/05 13:41:03 - main_job - Starting entry [Token Login]
+2025/07/05 13:41:03 - Token Login - Using run configuration [Pentaho local]
+2025/07/05 13:41:03 - step_login - Dispatching started for transformation [step_login]
+2025/07/05 13:41:03 - api_tokens.0 - Finished reading query, closing connection
+2025/07/05 13:41:03 - api_tokens.0 - Finished processing (I=1, O=0, R=0, W=1, U=0, E=0)
+2025/07/05 13:41:04 - Token Login.0 - Optimization level set to 9.
+2025/07/05 13:41:04 - Set variables.0 - Setting environment variables...
+2025/07/05 13:41:04 - Token Login.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - Set variables.0 - Set variable token_bearer to value [Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTAzLjE1MC4xMDEuMTAvYXBpL2xvZ2luIiwiaWF0IjoxNzUxNzIyMDM2LCJleHAiOjE3NTE4MDg0MzYsIm5iZiI6MTc1MTcyMjAzNiwianRpIjoibm9HVlVmamVJMkVYUDk1biIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.kiqDnhi8pJppNUsTmeTd5DXxHbM7VNQ5j7-axzxms8c]
+2025/07/05 13:41:04 - Set variables.0 - Set variable id_organisasi to value [1]
+2025/07/05 13:41:04 - Set variables.0 - Finished after 1 rows.
+2025/07/05 13:41:04 - Set variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - main_job - Starting entry [dim_organisasi]
+2025/07/05 13:41:04 - dim_organisasi - Using run configuration [Pentaho local]
+2025/07/05 13:41:04 - dim_organisasi - Dispatching started for transformation [dim_organisasi]
+2025/07/05 13:41:04 - dim_organisasi.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:04 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - Select values 2.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - dim_organisasi_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:04 - dim_organisasi_db.0 - Finished processing (I=12, O=0, R=0, W=12, U=0, E=0)
+2025/07/05 13:41:04 - Data Ada?.0 - Finished processing (I=0, O=0, R=13, W=1, U=0, E=0)
+2025/07/05 13:41:04 - Filter - Data belum di db.0 - Finished processing (I=0, O=0, R=1, W=0, U=0, E=0)
+2025/07/05 13:41:04 - main_job - Starting entry [set_sk_organisasi]
+2025/07/05 13:41:04 - set_sk_organisasi - Using run configuration [Pentaho local]
+2025/07/05 13:41:04 - get_sk_organisasi - Dispatching started for transformation [get_sk_organisasi]
+2025/07/05 13:41:04 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - dim_organisasi_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:04 - dim_organisasi_db.0 - Finished processing (I=12, O=0, R=0, W=12, U=0, E=0)
+2025/07/05 13:41:04 - Set variables.0 - Setting environment variables...
+2025/07/05 13:41:04 - Set variables.0 - Set variable sk_organisasi to value [1]
+2025/07/05 13:41:04 - Data Ada?.0 - Finished processing (I=0, O=0, R=13, W=1, U=0, E=0)
+2025/07/05 13:41:04 - Set variables.0 - Finished after 1 rows.
+2025/07/05 13:41:04 - Set variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - main_job - Starting entry [dim_user]
+2025/07/05 13:41:04 - dim_user - Using run configuration [Pentaho local]
+2025/07/05 13:41:04 - dim_user - Dispatching started for transformation [dim_user]
+2025/07/05 13:41:04 - dim_user.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:04 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:04 - dim_user_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:04 - Table input.0 - Finished reading query, closing connection
+2025/07/05 13:41:04 - dim_user_db.0 - Finished processing (I=21, O=0, R=0, W=21, U=0, E=0)
+2025/07/05 13:41:04 - Table input.0 - Finished processing (I=7, O=0, R=0, W=7, U=0, E=0)
+2025/07/05 13:41:06 - REST Organisasi & User.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:06 - Output User.0 - Finished processing (I=7, O=0, R=1, W=14, U=0, E=0)
+2025/07/05 13:41:06 - Data Ada?.0 - Finished processing (I=0, O=0, R=28, W=7, U=0, E=0)
+2025/07/05 13:41:06 - Filter - Data belum di db.0 - Finished processing (I=0, O=0, R=7, W=0, U=0, E=0)
+2025/07/05 13:41:06 - Stream lookup 3.0 - Finished processing (I=0, O=0, R=14, W=7, U=0, E=0)
+2025/07/05 13:41:06 - Filter - Data berubah di API 2.0 - Finished processing (I=0, O=0, R=7, W=0, U=0, E=0)
+2025/07/05 13:41:06 - main_job - Starting entry [dim_kebun]
+2025/07/05 13:41:06 - dim_kebun - Using run configuration [Pentaho local]
+2025/07/05 13:41:06 - dimkebun13042025 - Dispatching started for transformation [dimkebun13042025]
+2025/07/05 13:41:06 - dim_kebun.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:06 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:06 - dim_kebun_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:06 - Table input.0 - Finished reading query, closing connection
+2025/07/05 13:41:06 - dim_kebun_db.0 - Finished processing (I=18, O=0, R=0, W=18, U=0, E=0)
+2025/07/05 13:41:06 - Table input.0 - Finished processing (I=5, O=0, R=0, W=5, U=0, E=0)
+2025/07/05 13:41:07 - REST Kebun.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:07 - Output Kebun.0 - Finished processing (I=5, O=0, R=1, W=10, U=0, E=0)
+2025/07/05 13:41:07 - Data Ada?.0 - Finished processing (I=0, O=0, R=23, W=5, U=0, E=0)
+2025/07/05 13:41:07 - Filter - Data belum ada di db.0 - Finished processing (I=0, O=0, R=5, W=5, U=0, E=0)
+2025/07/05 13:41:07 - Filter - Data berubah di API.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:07 - Stream lookup 3.0 - Finished processing (I=0, O=0, R=10, W=5, U=0, E=0)
+2025/07/05 13:41:07 - Filter - Data berubah di API 2.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:07 - main_job - Starting entry [dim_kategori_aset]
+2025/07/05 13:41:07 - dim_kategori_aset - Using run configuration [Pentaho local]
+2025/07/05 13:41:07 - dimkategoriaset200425 - Dispatching started for transformation [dimkategoriaset200425]
+2025/07/05 13:41:07 - dim_kategori_aset.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:07 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:07 - dim_kategori_aset_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:07 - dim_kategori_aset_db.0 - Finished processing (I=2, O=0, R=0, W=2, U=0, E=0)
+2025/07/05 13:41:08 - REST Kategori Aset.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:08 - Output Kategori Aset.0 - Finished processing (I=2, O=0, R=1, W=2, U=0, E=0)
+2025/07/05 13:41:08 - Data Ada?.0 - Finished processing (I=0, O=0, R=4, W=2, U=0, E=0)
+2025/07/05 13:41:08 - Filter - Data belum di db.0 - Finished processing (I=0, O=0, R=2, W=2, U=0, E=0)
+2025/07/05 13:41:08 - Filter - Data berubah di API.0 - Finished processing (I=0, O=0, R=2, W=0, U=0, E=0)
+2025/07/05 13:41:08 - main_job - Starting entry [dim_aset]
+2025/07/05 13:41:08 - dim_aset - Using run configuration [Pentaho local]
+2025/07/05 13:41:08 - dimaset200425 - Dispatching started for transformation [dimaset200425]
+2025/07/05 13:41:08 - dim_aset.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:08 - Table input.0 - Finished reading query, closing connection
+2025/07/05 13:41:08 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:08 - Table input.0 - Finished processing (I=25, O=0, R=0, W=25, U=0, E=0)
+2025/07/05 13:41:08 - dim_kebun_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:08 - dim_kategori_aset_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:08 - dim_aset_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:08 - dim_kategori_aset_db.0 - Finished processing (I=2, O=0, R=0, W=2, U=0, E=0)
+2025/07/05 13:41:08 - dim_kebun_db.0 - Finished processing (I=18, O=0, R=0, W=18, U=0, E=0)
+2025/07/05 13:41:08 - dim_aset_db.0 - Finished processing (I=35, O=0, R=0, W=35, U=0, E=0)
+2025/07/05 13:41:08 - REST Aset.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:08 - Output Aset.0 - Finished processing (I=25, O=0, R=1, W=50, U=0, E=0)
+2025/07/05 13:41:08 - Data Ada?.0 - Finished processing (I=0, O=0, R=60, W=25, U=0, E=0)
+2025/07/05 13:41:08 - sk_kategori_aset.0 - Finished processing (I=0, O=0, R=27, W=25, U=0, E=0)
+2025/07/05 13:41:08 - sk_kebun.0 - Finished processing (I=0, O=0, R=43, W=75, U=0, E=0)
+2025/07/05 13:41:08 - Filter - Data belum ada di db.0 - Finished processing (I=0, O=0, R=25, W=0, U=0, E=0)
+2025/07/05 13:41:08 - Filter - Nama berubah di API.0 - Finished processing (I=0, O=0, R=25, W=0, U=0, E=0)
+2025/07/05 13:41:08 - Filter - Jumlah berubah di API 2.0 - Finished processing (I=0, O=0, R=25, W=0, U=0, E=0)
+2025/07/05 13:41:09 - Stream lookup 3.0 - Finished processing (I=0, O=0, R=50, W=25, U=0, E=0)
+2025/07/05 13:41:09 - Filter - Data berubah di API 2.0 - Finished processing (I=0, O=0, R=25, W=0, U=0, E=0)
+2025/07/05 13:41:09 - main_job - Starting entry [fact_luas_kebun]
+2025/07/05 13:41:09 - fact_luas_kebun - Using run configuration [Pentaho local]
+2025/07/05 13:41:09 - fact_luas_kebun - Dispatching started for transformation [fact_luas_kebun]
+2025/07/05 13:41:09 - fact_luas_kebun.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:09 - dim_user_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:09 - dim_kebun_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:09 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:09 - dim_user_db.0 - Finished processing (I=21, O=0, R=0, W=21, U=0, E=0)
+2025/07/05 13:41:09 - Table input.0 - Finished reading query, closing connection
+2025/07/05 13:41:09 - fact_luas_kebun_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:09 - dim_kebun_db.0 - Finished processing (I=18, O=0, R=0, W=18, U=0, E=0)
+2025/07/05 13:41:09 - Table input.0 - Finished processing (I=5, O=0, R=0, W=5, U=0, E=0)
+2025/07/05 13:41:09 - fact_luas_kebun_db.0 - Finished processing (I=18, O=0, R=0, W=18, U=0, E=0)
+2025/07/05 13:41:09 - dim_waktu_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:09 - dim_waktu_db.0 - Finished processing (I=11323, O=0, R=0, W=11323, U=0, E=0)
+2025/07/05 13:41:09 - REST Kebun.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:09 - Output Kebun.0 - Finished processing (I=5, O=0, R=1, W=5, U=0, E=0)
+2025/07/05 13:41:09 - sk_kebun 2.0 - Finished processing (I=0, O=0, R=23, W=10, U=0, E=0)
+2025/07/05 13:41:09 - Data Ada?.0 - Finished processing (I=0, O=0, R=23, W=5, U=0, E=0)
+2025/07/05 13:41:09 - sk_user.0 - Finished processing (I=0, O=0, R=26, W=5, U=0, E=0)
+2025/07/05 13:41:09 - sk_waktu.0 - Finished processing (I=0, O=0, R=11328, W=15, U=0, E=0)
+2025/07/05 13:41:09 - Filter - Luas berubah di API.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:09 - Filter - Data belum ada di db.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:09 - Filter - Waktu berubah di API.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:10 - Stream lookup 3.0 - Finished processing (I=0, O=0, R=10, W=5, U=0, E=0)
+2025/07/05 13:41:10 - Filter - Data berubah di API 2.0 - Finished processing (I=0, O=0, R=5, W=0, U=0, E=0)
+2025/07/05 13:41:10 - main_job - Starting entry [fact_panen]
+2025/07/05 13:41:10 - fact_panen - Using run configuration [Pentaho local]
+2025/07/05 13:41:10 - fact_panen - Dispatching started for transformation [fact_panen]
+2025/07/05 13:41:10 - fact_panen.0 - Connected to database [dw_sawit_new] (commit=1000)
+2025/07/05 13:41:10 - dim_user_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:10 - fact_panen_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:10 - Get variables.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:10 - dim_user_db.0 - Finished processing (I=21, O=0, R=0, W=21, U=0, E=0)
+2025/07/05 13:41:10 - fact_panen_db.0 - Finished processing (I=331, O=0, R=0, W=331, U=0, E=0)
+2025/07/05 13:41:10 - dim_kebun_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:10 - dim_kebun_db.0 - Finished processing (I=18, O=0, R=0, W=18, U=0, E=0)
+2025/07/05 13:41:10 - Table input.0 - Finished reading query, closing connection
+2025/07/05 13:41:10 - Table input.0 - Finished processing (I=314, O=0, R=0, W=314, U=0, E=0)
+2025/07/05 13:41:10 - dim_waktu_db.0 - Finished reading query, closing connection
+2025/07/05 13:41:10 - dim_waktu_db.0 - Finished processing (I=11323, O=0, R=0, W=11323, U=0, E=0)
+2025/07/05 13:41:11 - REST Panen.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)
+2025/07/05 13:41:11 - Output Panen.0 - Finished processing (I=314, O=0, R=1, W=628, U=0, E=0)
+2025/07/05 13:41:11 - Data Ada?.0 - Finished processing (I=0, O=0, R=645, W=314, U=0, E=0)
+2025/07/05 13:41:11 - sk_kebun.0 - Finished processing (I=0, O=0, R=332, W=314, U=0, E=0)
+2025/07/05 13:41:11 - sk_user.0 - Finished processing (I=0, O=0, R=335, W=314, U=0, E=0)
+2025/07/05 13:41:11 - sk_waktu.0 - Finished processing (I=0, O=0, R=11637, W=942, U=0, E=0)
+2025/07/05 13:41:11 - Filter - Data belum ada di db.0 - Finished processing (I=0, O=0, R=314, W=0, U=0, E=0)
+2025/07/05 13:41:11 - Filter - Jumlah berubah di API.0 - Finished processing (I=0, O=0, R=314, W=0, U=0, E=0)
+2025/07/05 13:41:11 - Filter - Waktu berubah di API.0 - Finished processing (I=0, O=0, R=314, W=0, U=0, E=0)
+2025/07/05 13:41:11 - Stream lookup 3.0 - Finished processing (I=0, O=0, R=628, W=314, U=0, E=0)
+2025/07/05 13:41:11 - Filter - Data berubah di API 2.0 - Finished processing (I=0, O=0, R=314, W=0, U=0, E=0)
+2025/07/05 13:41:11 - main_job - Finished job entry [fact_panen] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [fact_luas_kebun] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [dim_aset] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [dim_kategori_aset] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [dim_kebun] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [dim_user] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [set_sk_organisasi] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [dim_organisasi] (result=[true])
+2025/07/05 13:41:11 - main_job - Finished job entry [Token Login] (result=[true])
+2025/07/05 13:41:11 - main_job - Job execution finished
+2025/07/05 13:41:11 - Kitchen - Finished!
+2025/07/05 13:41:11 - Kitchen - Start=2025/07/05 13:41:02.987, Stop=2025/07/05 13:41:11.343
+2025/07/05 13:41:11 - Kitchen - Processing ended after 8 seconds.

@@ -511,18 +511,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Seleksi Kolom Kebun</from>
-      <to>fact_prediksi_panen</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Get variables</from>
       <to>REST Prediksi Panen</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>dim_waktu_db</from>
-      <to>sk_waktu</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -531,8 +521,23 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>Select values</from>
+      <to>sk_kebun</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Seleksi Kolom Kebun</from>
+      <to>fact_prediksi_panen</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>dim_kebun_db</from>
       <to>sk_kebun</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>dim_waktu_db</from>
+      <to>sk_waktu</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -541,8 +546,28 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Select values</from>
-      <to>sk_kebun</to>
+      <from>Filter - Data berubah di API</from>
+      <to>Insert / update</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>fact prediksi panen db</from>
+      <to>jumlah </to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>jumlah </from>
+      <to>Filter rows</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter rows</from>
+      <to>Seleksi Kolom Kebun</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter rows</from>
+      <to>Filter - Data berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -552,59 +577,10 @@
     </hop>
     <hop>
       <from>sk_waktu</from>
-      <to>Filter rows</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter rows</from>
-      <to>Seleksi Kolom Kebun</to>
+      <to>jumlah </to>
       <enabled>Y</enabled>
     </hop>
   </order>
-  <step>
-    <name>Filter rows</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Seleksi Kolom Kebun</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>jumlah</leftvalue>
-        <function>=</function>
-        <rightvalue/>
-        <value>
-          <name>constant</name>
-          <type>Integer</type>
-          <text>0</text>
-          <length>-1</length>
-          <precision>0</precision>
-          <isnull>N</isnull>
-          <mask>####0;-####0</mask>
-        </value>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>576</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
   <step>
     <name>Get variables</name>
     <type>GetVariable</type>
@@ -630,8 +606,8 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>sk_organisasi_api</name>
-        <variable>${sk_organisasi_api}</variable>
+        <name>sk_organisasi</name>
+        <variable>${sk_organisasi}</variable>
         <type>String</type>
         <format/>
         <currency/>
@@ -973,47 +949,29 @@ if (response_body != null &amp;&amp;
     </partitioning>
     <fields>
       <field>
-        <name>sk_organisasi_api</name>
-        <rename>sk_organisasi</rename>
-      </field>
-      <field>
-        <name>nama_kebun_lengkap</name>
-        <rename>nama_kebun</rename>
-      </field>
-      <field>
-        <name>waktu_lengkap</name>
+        <name>sk_organisasi</name>
+        <rename/>
       </field>
       <field>
         <name>jumlah_prediksi_panen_api</name>
+        <rename/>
       </field>
       <field>
-        <name>jumlah</name>
+        <name>nama_kebun_lengkap</name>
+        <rename/>
+      </field>
+      <field>
+        <name>waktu_lengkap</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
         <name>waktu_lengkap</name>
-        <rename>waktu</rename>
+        <rename>waktu_lengkap</rename>
         <type>Date</type>
         <length>-2</length>
         <precision>-2</precision>
         <conversion_mask>yyyy-MM-dd</conversion_mask>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-      <meta>
-        <name>jumlah</name>
-        <rename>jumlah</rename>
-        <type>Integer</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale/>
         <date_format_timezone/>
@@ -1034,7 +992,7 @@ if (response_body != null &amp;&amp;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>112</xloc>
+      <xloc>128</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1052,6 +1010,10 @@ if (response_body != null &amp;&amp;
     </partitioning>
     <fields>
       <field>
+        <name>jumlah_prediksi_panen_api</name>
+        <rename>jumlah_prediksi_panen</rename>
+      </field>
+      <field>
         <name>sk_kebun</name>
       </field>
       <field>
@@ -1059,10 +1021,6 @@ if (response_body != null &amp;&amp;
       </field>
       <field>
         <name>sk_organisasi</name>
-      </field>
-      <field>
-        <name>jumlah_prediksi_panen_api</name>
-        <rename>jumlah_prediksi_panen</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -1075,8 +1033,8 @@ if (response_body != null &amp;&amp;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>832</xloc>
-      <yloc>272</yloc>
+      <xloc>1008</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1208,7 +1166,7 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
+      <xloc>256</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1437,7 +1395,7 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
+      <xloc>400</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1501,8 +1459,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1040</xloc>
-      <yloc>272</yloc>
+      <xloc>1216</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1524,14 +1482,14 @@ FROM dw_sawit.dim_waktu
     <integer_pair>N</integer_pair>
     <lookup>
       <key>
-        <name>nama_kebun</name>
+        <name>nama_kebun_lengkap</name>
         <field>nama_kebun</field>
       </key>
       <value>
         <name>sk_kebun</name>
         <rename>sk_kebun</rename>
         <default/>
-        <type>None</type>
+        <type>Integer</type>
       </value>
     </lookup>
     <attributes/>
@@ -1543,7 +1501,7 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
+      <xloc>256</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1566,7 +1524,7 @@ FROM dw_sawit.dim_waktu
     <integer_pair>N</integer_pair>
     <lookup>
       <key>
-        <name>waktu</name>
+        <name>waktu_lengkap</name>
         <field>tanggal</field>
       </key>
       <value>
@@ -1585,8 +1543,330 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
+      <xloc>400</xloc>
       <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter - Data berubah di API</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+        <function>&lt;></function>
+        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>832</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Insert / update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema>dw_sawit</schema>
+      <table>fact_prediksi_panen</table>
+      <key>
+        <name>sk_kebun</name>
+        <field>sk_kebun</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>sk_waktu</name>
+        <field>sk_waktu</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>jumlah_prediksi_panen</name>
+        <rename>jumlah_prediksi_panen_api</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1040</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact prediksi panen db</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_fact_prediksi
+, sk_kebun
+, sk_waktu
+, sk_organisasi
+, jumlah_prediksi_panen
+FROM dw_sawit.fact_prediksi_panen
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>sk_fact_prediksi</name>
+        <length>16</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>sk_fact_prediksi</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>sk_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_waktu</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>sk_waktu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>sk_organisasi</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Number</type>
+        <storagetype>normal</storagetype>
+        <name>jumlah_prediksi_panen</name>
+        <length>15</length>
+        <precision>2</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>jumlah_prediksi_panen</comments>
+        <conversion_Mask>####0.0#########;-####0.0#########</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>jumlah </name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>fact prediksi panen db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>sk_kebun</name>
+        <field>sk_kebun</field>
+      </key>
+      <key>
+        <name>sk_waktu</name>
+        <field>sk_waktu</field>
+      </key>
+      <value>
+        <name>jumlah_prediksi_panen</name>
+        <rename>jumlah_prediksi_panen_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>672</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kebun</send_true_to>
+    <send_false_to>Filter - Data berubah di API</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

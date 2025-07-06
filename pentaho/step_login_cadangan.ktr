@@ -443,7 +443,7 @@
   </notepads>
   <connection>
     <name>dw_sawit_new</name>
-    <server>localhost</server>
+    <server>db</server>
     <type>MYSQL</type>
     <access>Native</access>
     <database>dw_sawit</database>
@@ -553,7 +553,7 @@
     </fields>
     <data>
       <line>
-        <item>{"no_hp":"chintya21ti@mahasiswa.pcr.ac.id","password":"passwordku"}</item>
+        <item>{"no_hp":"pemilik1@example.com","password":"password"}</item>
       </line>
     </data>
     <attributes/>
