@@ -470,6 +470,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -501,17 +505,17 @@
   </connection>
   <order>
     <hop>
-      <from>Filter - Data belum ada di db</from>
-      <to>Filter - Data berubah di API</to>
+      <from>Data Belum Ada di DB</from>
+      <to>Nama Kebun Berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data belum ada di db</from>
-      <to>Seleksi Kolom Kebun</to>
+      <from>Data Belum Ada di DB</from>
+      <to>Select values</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data berubah di API</from>
+      <from>Nama Kebun Berubah di API</from>
       <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
@@ -522,16 +526,16 @@
     </hop>
     <hop>
       <from>Output Kebun</from>
-      <to>Stream lookup 3</to>
+      <to>Cek data di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Kebun</from>
+      <from>REST API Kebun</from>
       <to>Output Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Seleksi Kolom Kebun</from>
+      <from>Select values</from>
       <to>dim_kebun</to>
       <enabled>Y</enabled>
     </hop>
@@ -541,28 +545,28 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup 3</from>
-      <to>Filter - Data berubah di API 2</to>
+      <from>Cek data di API</from>
+      <to>Data sudah tidak ada di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data berubah di API 2</from>
+      <from>Data sudah tidak ada di API</from>
       <to>Delete</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Table input</from>
-      <to>Stream lookup 3</to>
+      <from>dim_kebun_db 2</from>
+      <to>Cek data di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>REST Kebun</to>
+      <to>REST API Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Data Ada?</from>
-      <to>Filter - Data belum ada di db</to>
+      <to>Data Belum Ada di DB</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -647,12 +651,12 @@
     </remotesteps>
     <GUI>
       <xloc>1056</xloc>
-      <yloc>480</yloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data belum ada di db</name>
+    <name>Data Belum Ada di DB</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -662,8 +666,8 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Seleksi Kolom Kebun</send_true_to>
-    <send_false_to>Filter - Data berubah di API</send_false_to>
+    <send_true_to>Select values</send_true_to>
+    <send_false_to>Nama Kebun Berubah di API</send_false_to>
     <compare>
       <condition>
         <negated>N</negated>
@@ -693,13 +697,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>880</xloc>
+      <xloc>848</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data berubah di API</name>
+    <name>Nama Kebun Berubah di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -728,13 +732,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>880</xloc>
-      <yloc>384</yloc>
+      <xloc>848</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data berubah di API 2</name>
+    <name>Data sudah tidak ada di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -769,7 +773,7 @@
     </remotesteps>
     <GUI>
       <xloc>864</xloc>
-      <yloc>480</yloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -819,7 +823,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>128</xloc>
+      <xloc>208</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -862,8 +866,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1088</xloc>
-      <yloc>384</yloc>
+      <xloc>1056</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -946,13 +950,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
+      <xloc>528</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>REST Kebun</name>
+    <name>REST API Kebun</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -1002,13 +1006,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>304</xloc>
+      <xloc>368</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Seleksi Kolom Kebun</name>
+    <name>Select values</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -1029,6 +1033,7 @@
       </field>
       <field>
         <name>sk_organisasi</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -1041,13 +1046,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
+      <xloc>1056</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Stream lookup 3</name>
+    <name>Cek data di API</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -1083,13 +1088,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>480</yloc>
+      <xloc>528</xloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Table input</name>
+    <name>dim_kebun_db 2</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1217,8 +1222,8 @@ where sk_organisasi = ${sk_organisasi}
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>480</yloc>
+      <xloc>352</xloc>
+      <yloc>528</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1277,7 +1282,7 @@ where sk_organisasi = ${sk_organisasi}
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1328</xloc>
+      <xloc>1200</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>

@@ -470,10 +470,6 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -664,7 +660,7 @@
     </remotesteps>
     <GUI>
       <xloc>800</xloc>
-      <yloc>384</yloc>
+      <yloc>416</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -746,7 +742,7 @@
     </remotesteps>
     <GUI>
       <xloc>1008</xloc>
-      <yloc>384</yloc>
+      <yloc>416</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1087,7 +1083,7 @@ FROM dw_sawit.dim_kategori_aset
     </remotesteps>
     <GUI>
       <xloc>624</xloc>
-      <yloc>160</yloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

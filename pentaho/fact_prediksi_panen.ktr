@@ -506,13 +506,13 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Prediksi Panen</from>
+      <from>REST API Prediksi Panen</from>
       <to>Modified JavaScript value</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>REST Prediksi Panen</to>
+      <to>REST API Prediksi Panen</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -546,7 +546,7 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data berubah di API</from>
+      <from>Jumlah prediksi berubah</from>
       <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
@@ -557,17 +557,17 @@
     </hop>
     <hop>
       <from>jumlah </from>
-      <to>Filter rows</to>
+      <to>Tidak Ada Data di DB</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter rows</from>
+      <from>Tidak Ada Data di DB</from>
       <to>Seleksi Kolom Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter rows</from>
-      <to>Filter - Data berubah di API</to>
+      <from>Tidak Ada Data di DB</from>
+      <to>Jumlah prediksi berubah</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -581,6 +581,76 @@
       <enabled>Y</enabled>
     </hop>
   </order>
+  <step>
+    <name>Jumlah prediksi berubah</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+        <function>&lt;></function>
+        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Tidak Ada Data di DB</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kebun</send_true_to>
+    <send_false_to>Jumlah prediksi berubah</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Get variables</name>
     <type>GetVariable</type>
@@ -641,6 +711,55 @@
     <GUI>
       <xloc>112</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Insert / update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema>dw_sawit</schema>
+      <table>fact_prediksi_panen</table>
+      <key>
+        <name>sk_kebun</name>
+        <field>sk_kebun</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>sk_waktu</name>
+        <field>sk_waktu</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>jumlah_prediksi_panen</name>
+        <rename>jumlah_prediksi_panen_api</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>944</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -881,7 +1000,7 @@ if (response_body != null &amp;&amp;
     </GUI>
   </step>
   <step>
-    <name>REST Prediksi Panen</name>
+    <name>REST API Prediksi Panen</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -950,19 +1069,15 @@ if (response_body != null &amp;&amp;
     <fields>
       <field>
         <name>sk_organisasi</name>
-        <rename/>
       </field>
       <field>
         <name>jumlah_prediksi_panen_api</name>
-        <rename/>
       </field>
       <field>
         <name>nama_kebun_lengkap</name>
-        <rename/>
       </field>
       <field>
         <name>waktu_lengkap</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -1033,8 +1148,8 @@ if (response_body != null &amp;&amp;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>288</yloc>
+      <xloc>944</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1401,238 +1516,6 @@ FROM dw_sawit.dim_waktu
     </GUI>
   </step>
   <step>
-    <name>fact_prediksi_panen</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <schema>dw_sawit</schema>
-    <table>fact_prediksi_panen</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>sk_fact_kebun</column_name>
-        <stream_name>sk_fact_kebun</stream_name>
-      </field>
-      <field>
-        <column_name>sk_kebun</column_name>
-        <stream_name>sk_kebun</stream_name>
-      </field>
-      <field>
-        <column_name>sk_user</column_name>
-        <stream_name>sk_user</stream_name>
-      </field>
-      <field>
-        <column_name>sk_waktu</column_name>
-        <stream_name>sk_waktu</stream_name>
-      </field>
-      <field>
-        <column_name>luas_kebun_ha</column_name>
-        <stream_name>luas_kebun_ha</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1216</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sk_kebun</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_kebun_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>N</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>nama_kebun_lengkap</name>
-        <field>nama_kebun</field>
-      </key>
-      <value>
-        <name>sk_kebun</name>
-        <rename>sk_kebun</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>256</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sk_waktu</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_waktu_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>waktu_lengkap</name>
-        <field>tanggal</field>
-      </key>
-      <value>
-        <name>sk_waktu</name>
-        <rename>sk_waktu</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>400</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter - Data berubah di API</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Insert / update</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
-        <function>&lt;></function>
-        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>832</xloc>
-      <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Insert / update</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema>dw_sawit</schema>
-      <table>fact_prediksi_panen</table>
-      <key>
-        <name>sk_kebun</name>
-        <field>sk_kebun</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>sk_waktu</name>
-        <field>sk_waktu</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>jumlah_prediksi_panen</name>
-        <rename>jumlah_prediksi_panen_api</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1040</xloc>
-      <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>fact prediksi panen db</name>
     <type>TableInput</type>
     <description/>
@@ -1784,8 +1667,72 @@ FROM dw_sawit.fact_prediksi_panen
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
+      <xloc>576</xloc>
       <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_prediksi_panen</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <schema>dw_sawit</schema>
+    <table>fact_prediksi_panen</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>sk_fact_kebun</column_name>
+        <stream_name>sk_fact_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_kebun</column_name>
+        <stream_name>sk_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_user</column_name>
+        <stream_name>sk_user</stream_name>
+      </field>
+      <field>
+        <column_name>sk_waktu</column_name>
+        <stream_name>sk_waktu</stream_name>
+      </field>
+      <field>
+        <column_name>luas_kebun_ha</column_name>
+        <stream_name>luas_kebun_ha</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1152</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1830,14 +1777,14 @@ FROM dw_sawit.fact_prediksi_panen
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
+      <xloc>576</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter rows</name>
-    <type>FilterRows</type>
+    <name>sk_kebun</name>
+    <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1846,16 +1793,23 @@ FROM dw_sawit.fact_prediksi_panen
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Seleksi Kolom Kebun</send_true_to>
-    <send_false_to>Filter - Data berubah di API</send_false_to>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
-      </condition>
-    </compare>
+    <from>dim_kebun_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>N</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>nama_kebun_lengkap</name>
+        <field>nama_kebun</field>
+      </key>
+      <value>
+        <name>sk_kebun</name>
+        <rename>sk_kebun</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1865,8 +1819,50 @@ FROM dw_sawit.fact_prediksi_panen
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
-      <yloc>288</yloc>
+      <xloc>256</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_waktu</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_waktu_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>waktu_lengkap</name>
+        <field>tanggal</field>
+      </key>
+      <value>
+        <name>sk_waktu</name>
+        <rename>sk_waktu</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

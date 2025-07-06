@@ -470,10 +470,6 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -505,18 +501,18 @@
   </connection>
   <order>
     <hop>
-      <from>Filter - Data berubah di API 2</from>
+      <from>Data sudah tidak ada di API</from>
       <to>Delete</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup 3</from>
-      <to>Filter - Data berubah di API 2</to>
+      <from>Cek data di API</from>
+      <to>Data sudah tidak ada di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Table input</from>
-      <to>Stream lookup 3</to>
+      <to>Cek data di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -525,13 +521,8 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data belum ada di db</from>
+      <from>Data belum ada di db</from>
       <to>Seleksi Kolom Kebun</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Nama berubah di API</from>
-      <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -540,7 +531,7 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Aset</from>
+      <from>REST API Aset</from>
       <to>Output Aset</to>
       <enabled>Y</enabled>
     </hop>
@@ -571,32 +562,27 @@
     </hop>
     <hop>
       <from>sk_kebun</from>
-      <to>Filter - Data belum ada di db</to>
+      <to>Data belum ada di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>sk_kebun</from>
-      <to>Filter - Nama berubah di API</to>
+      <to>Jumlah aset berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun</from>
-      <to>Filter - Jumlah berubah di API 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Filter - Jumlah berubah di API 2</from>
-      <to>Insert / update 2</to>
+      <from>Jumlah aset berubah di API</from>
+      <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>REST Aset</to>
+      <to>REST API Aset</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Output Aset</from>
-      <to>Stream lookup 3</to>
+      <to>Cek data di API</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -686,13 +672,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1056</xloc>
-      <yloc>512</yloc>
+      <xloc>1312</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data belum ada di db</name>
+    <name>Data belum ada di db</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -739,7 +725,7 @@
     </GUI>
   </step>
   <step>
-    <name>Filter - Data berubah di API 2</name>
+    <name>Data sudah tidak ada di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -773,13 +759,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>864</xloc>
-      <yloc>512</yloc>
+      <xloc>1088</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Jumlah berubah di API 2</name>
+    <name>Jumlah aset berubah di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -789,7 +775,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Insert / update 2</send_true_to>
+    <send_true_to>Insert / update</send_true_to>
     <send_false_to/>
     <compare>
       <condition>
@@ -821,54 +807,7 @@
     </remotesteps>
     <GUI>
       <xloc>1088</xloc>
-      <yloc>416</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter - Nama berubah di API</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Insert / update</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>nama_aset_api</leftvalue>
-            <function>&lt;></function>
-            <rightvalue>nama_aset_db</rightvalue>
-          </condition>
-          <condition>
-            <negated>N</negated>
-            <operator>AND</operator>
-            <leftvalue>id_aset_db</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1088</xloc>
-      <yloc>304</yloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -947,49 +886,6 @@
         <name2/>
       </key>
       <value>
-        <name>nama_aset</name>
-        <rename>nama_aset_api</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1296</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Insert / update 2</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema>dw_sawit</schema>
-      <table>dim_aset</table>
-      <key>
-        <name>id_aset_api</name>
-        <field>id_aset</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
         <name>jumlah_aset</name>
         <rename>jumlah_aset_api</rename>
         <update>Y</update>
@@ -1004,8 +900,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1296</xloc>
-      <yloc>416</yloc>
+      <xloc>1312</xloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1133,7 +1029,7 @@
     </GUI>
   </step>
   <step>
-    <name>REST Aset</name>
+    <name>REST API Aset</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -1229,13 +1125,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1344</xloc>
+      <xloc>1312</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Stream lookup 3</name>
+    <name>Cek data di API</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -1271,8 +1167,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>512</yloc>
+      <xloc>848</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1455,8 +1351,8 @@ WHERE k.sk_organisasi = ${sk_organisasi};
       </output>
     </remotesteps>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>512</yloc>
+      <xloc>720</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1523,7 +1419,7 @@ WHERE k.sk_organisasi = ${sk_organisasi};
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1520</xloc>
+      <xloc>1472</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>

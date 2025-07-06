@@ -72,7 +72,7 @@ class Authentication extends CI_Controller
     redirect('Dashboard');
 }
 else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email atau Password salah!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email/Nomor HP atau Kata Sandi salah!</div>');
             redirect('Authentication');
         }
     }

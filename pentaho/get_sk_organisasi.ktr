@@ -469,6 +469,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -501,22 +505,22 @@
   <order>
     <hop>
       <from>dim_organisasi_db</from>
-      <to>Data Ada?</to>
+      <to>sk_organisasi</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>Data Ada?</to>
+      <to>sk_organisasi</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Data Ada?</from>
+      <from>sk_organisasi</from>
       <to>Set variables</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Data Ada?</name>
+    <name>sk_organisasi</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -552,8 +556,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>431</xloc>
-      <yloc>361</yloc>
+      <xloc>448</xloc>
+      <yloc>352</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -625,8 +629,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>575</xloc>
-      <yloc>364</yloc>
+      <xloc>608</xloc>
+      <yloc>352</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -710,8 +714,8 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>431</xloc>
-      <yloc>249</yloc>
+      <xloc>448</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

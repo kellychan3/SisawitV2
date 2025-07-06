@@ -469,6 +469,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -501,21 +505,21 @@
   <order>
     <hop>
       <from>Data Ada?</from>
-      <to>Filter - Data belum di db</to>
+      <to>Data Belum Ada di DB</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data belum di db</from>
-      <to>Select values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select values</from>
-      <to>dim_organisasi</to>
+      <from>Data Belum Ada di DB</from>
+      <to>Select values 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Select values 2</from>
+      <to>dim_organisasi</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values 1</from>
       <to>Data Ada?</to>
       <enabled>Y</enabled>
     </hop>
@@ -526,7 +530,7 @@
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>Select values 2</to>
+      <to>Select values 1</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -573,7 +577,7 @@
     </GUI>
   </step>
   <step>
-    <name>Filter - Data belum di db</name>
+    <name>Data Belum Ada di DB</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -583,8 +587,8 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Select values</send_true_to>
-    <send_false_to>sk_organisasi</send_false_to>
+    <send_true_to>Select values 2</send_true_to>
+    <send_false_to/>
     <compare>
       <condition>
         <negated>N</negated>
@@ -671,7 +675,7 @@
     </GUI>
   </step>
   <step>
-    <name>Select values</name>
+    <name>Select values 2</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -684,6 +688,7 @@
     <fields>
       <field>
         <name>id_organisasi</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -702,7 +707,7 @@
     </GUI>
   </step>
   <step>
-    <name>Select values 2</name>
+    <name>Select values 1</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -715,9 +720,11 @@
     <fields>
       <field>
         <name>id_organisasi</name>
+        <rename/>
       </field>
       <field>
         <name>token_bearer</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <meta>
@@ -889,7 +896,7 @@ FROM dw_sawit.dim_organisasi
     </remotesteps>
     <GUI>
       <xloc>528</xloc>
-      <yloc>80</yloc>
+      <yloc>64</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

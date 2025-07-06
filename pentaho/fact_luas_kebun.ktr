@@ -510,17 +510,17 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data belum ada di db</from>
+      <from>Data belum ada di db</from>
       <to>Seleksi Kolom Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Output Kebun</from>
-      <to>sk_kebun 2</to>
+      <to>sk_kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST Kebun</from>
+      <from>REST API Kebun</from>
       <to>Output Kebun</to>
       <enabled>Y</enabled>
     </hop>
@@ -531,7 +531,7 @@
     </hop>
     <hop>
       <from>dim_kebun_db</from>
-      <to>sk_kebun 2</to>
+      <to>sk_kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -550,7 +550,7 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun 2</from>
+      <from>sk_kebun</from>
       <to>Data Ada?</to>
       <enabled>Y</enabled>
     </hop>
@@ -561,52 +561,52 @@
     </hop>
     <hop>
       <from>sk_waktu</from>
-      <to>Filter - Data belum ada di db</to>
+      <to>Data belum ada di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>sk_waktu</from>
-      <to>Filter - Luas berubah di API</to>
+      <to>Luas berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>sk_waktu</from>
-      <to>Filter - Waktu berubah di API</to>
+      <to>Waktu berubah di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Luas berubah di API</from>
-      <to>Insert / update</to>
+      <from>Luas berubah di API</from>
+      <to>Insert / update 1</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Waktu berubah di API</from>
+      <from>Waktu berubah di API</from>
       <to>Insert / update 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get variables</from>
-      <to>REST Kebun</to>
+      <to>REST API Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Table input</from>
-      <to>Stream lookup 3</to>
+      <from>fact_luas_kebun_db 2</from>
+      <to>Cek Data di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Stream lookup 3</from>
-      <to>Filter - Data berubah di API 2</to>
+      <from>Cek Data di API</from>
+      <to>Data sudah tidak ada di API</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filter - Data berubah di API 2</from>
+      <from>Data sudah tidak ada di API</from>
       <to>Delete</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_kebun 2</from>
-      <to>Stream lookup 3</to>
+      <from>sk_kebun</from>
+      <to>Cek Data di API</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -659,7 +659,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>624</xloc>
+      <xloc>656</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -696,13 +696,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1009</xloc>
-      <yloc>457</yloc>
+      <xloc>1360</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data belum ada di db</name>
+    <name>Data belum ada di db</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -743,13 +743,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1104</xloc>
+      <xloc>1136</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Data berubah di API 2</name>
+    <name>Data sudah tidak ada di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -783,13 +783,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>817</xloc>
-      <yloc>457</yloc>
+      <xloc>1136</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Luas berubah di API</name>
+    <name>Luas berubah di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -799,7 +799,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Insert / update</send_true_to>
+    <send_true_to>Insert / update 1</send_true_to>
     <send_false_to/>
     <compare>
       <condition>
@@ -830,13 +830,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1104</xloc>
+      <xloc>1136</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filter - Waktu berubah di API</name>
+    <name>Waktu berubah di API</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -877,7 +877,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1104</xloc>
+      <xloc>1136</xloc>
       <yloc>352</yloc>
       <draw>Y</draw>
     </GUI>
@@ -934,7 +934,7 @@
     </GUI>
   </step>
   <step>
-    <name>Insert / update</name>
+    <name>Insert / update 1</name>
     <type>InsertUpdate</type>
     <description/>
     <distribute>Y</distribute>
@@ -971,7 +971,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1360</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1014,7 +1014,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1360</xloc>
       <yloc>352</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1124,13 +1124,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>320</xloc>
+      <xloc>352</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>REST Kebun</name>
+    <name>REST API Kebun</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -1229,7 +1229,7 @@
     </GUI>
   </step>
   <step>
-    <name>Stream lookup 3</name>
+    <name>Cek Data di API</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>Y</distribute>
@@ -1239,7 +1239,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <from>sk_kebun 2</from>
+    <from>sk_kebun</from>
     <input_sorted>N</input_sorted>
     <preserve_memory>Y</preserve_memory>
     <sorted_list>N</sorted_list>
@@ -1265,13 +1265,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>593</xloc>
-      <yloc>457</yloc>
+      <xloc>896</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Table input</name>
+    <name>fact_luas_kebun_db 2</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1401,8 +1401,8 @@ WHERE u.sk_organisasi = ${sk_organisasi}
       </output>
     </remotesteps>
     <GUI>
-      <xloc>321</xloc>
-      <yloc>457</yloc>
+      <xloc>704</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1534,8 +1534,8 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
-      <yloc>48</yloc>
+      <xloc>480</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1643,8 +1643,8 @@ FROM dw_sawit.dim_user
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>48</yloc>
+      <xloc>816</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1872,8 +1872,8 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>912</xloc>
-      <yloc>48</yloc>
+      <xloc>944</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2093,13 +2093,13 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>48</yloc>
+      <xloc>656</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>sk_kebun 2</name>
+    <name>sk_kebun</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>N</distribute>
@@ -2135,7 +2135,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
+      <xloc>480</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -2177,7 +2177,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
+      <xloc>816</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -2219,7 +2219,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>912</xloc>
+      <xloc>944</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>

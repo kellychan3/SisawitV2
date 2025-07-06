@@ -505,7 +505,7 @@
   </connection>
   <order>
     <hop>
-      <from>tanggal awal</from>
+      <from>Set tanggal pertama</from>
       <to>Hari Selanjutnya</to>
       <enabled>Y</enabled>
     </hop>
@@ -515,18 +515,18 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>sk_waktu</from>
-      <to>Seleksi Kolom Waktu</to>
+      <from>sk_waktu &amp; minggu_ke_dalam_bulan</from>
+      <to>Seleksi Kolom</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Seleksi Kolom Waktu</from>
+      <from>Seleksi Kolom</from>
       <to>dim_waktu</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Hitung Hari</from>
-      <to>sk_waktu</to>
+      <to>sk_waktu &amp; minggu_ke_dalam_bulan</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -560,7 +560,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>544</xloc>
+      <xloc>368</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
@@ -706,13 +706,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>688</xloc>
+      <xloc>512</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Seleksi Kolom Waktu</name>
+    <name>Seleksi Kolom</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -766,7 +766,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>992</xloc>
+      <xloc>1008</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
@@ -838,13 +838,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1184</xloc>
+      <xloc>1152</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>sk_waktu</name>
+    <name>sk_waktu &amp; minggu_ke_dalam_bulan</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -900,13 +900,13 @@ var minggu_ke_dalam_bulan = Math.ceil((jsDate.getDate() + offset) / 7);
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
+      <xloc>736</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>tanggal awal</name>
+    <name>Set tanggal pertama</name>
     <type>RowGenerator</type>
     <description/>
     <distribute>Y</distribute>
@@ -944,7 +944,7 @@ var minggu_ke_dalam_bulan = Math.ceil((jsDate.getDate() + offset) / 7);
       </output>
     </remotesteps>
     <GUI>
-      <xloc>384</xloc>
+      <xloc>176</xloc>
       <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
