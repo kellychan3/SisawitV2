@@ -12,7 +12,7 @@ $(function() {
 		}),
 
 		$(".mobile-toggle-menu").on("click", function() {
-			$(".wrapper").addClass("toggled")
+			$(".wrapper").toggleClass("toggled")
 		}),
 		
 		
