@@ -2,7 +2,7 @@
 .env
 
 # Ignore Docker init scripts (contains raw SQL)
-docker/mysql-init/01_create_dw_sawit.sql
+docker/mysql-init/
 
 # Ignore Composer vendor directory
 /vendor/
