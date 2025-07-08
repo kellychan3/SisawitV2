@@ -45,98 +45,96 @@
 
                 </div>
      
-                <<div class="filter-form">
-    <form method="get" action="">
-        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-            
-            <!-- Tahun -->
-            <div class="field">
-                <label for="tahun">Tahun</label>
-                <select id="tahun" name="tahun">
-                    <?php foreach($tahun_list as $t): ?>
-                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
-                            <?= $t['tahun']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                <div class="filter-form">
+                    <form method="get" action="">
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            
+                            <!-- Tahun -->
+                            <div class="field">
+                                <label for="tahun">Tahun</label>
+                                <select id="tahun" name="tahun">
+                                    <?php foreach($tahun_list as $t): ?>
+                                        <option value="<?= $t['tahun']; ?>" <?= ($filter['tahun'] == $t['tahun']) ? 'selected' : ''; ?>>
+                                            <?= $t['tahun']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-            <!-- Bulan -->
-            <!-- Bulan -->
-<div class="field">
-    <label for="bulan">Bulan</label>
-    <div class="custom-dropdown">
-        <?php
-            $bulan_indonesia = [
-                1 => 'Januari',
-                2 => 'Februari',
-                3 => 'Maret',
-                4 => 'April',
-                5 => 'Mei',
-                6 => 'Juni',
-                7 => 'Juli',
-                8 => 'Agustus',
-                9 => 'September',
-                10 => 'Oktober',
-                11 => 'November',
-                12 => 'Desember'
-            ];
+                            <!-- Bulan -->
+                            <div class="field">
+                                <label for="bulan">Bulan</label>
+                                <div class="custom-dropdown">
+                                    <?php
+                                        $bulan_indonesia = [
+                                            1 => 'Januari',
+                                            2 => 'Februari',
+                                            3 => 'Maret',
+                                            4 => 'April',
+                                            5 => 'Mei',
+                                            6 => 'Juni',
+                                            7 => 'Juli',
+                                            8 => 'Agustus',
+                                            9 => 'September',
+                                            10 => 'Oktober',
+                                            11 => 'November',
+                                            12 => 'Desember'
+                                        ];
 
-            $bulan_valid = array_column($bulan_list, 'bulan');
-            $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid);
-            $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
-        ?>
-        <div class="dropdown-label" onclick="toggleDropdown('bulan')">
-            <?= $label_bulan ?> ▾
-        </div>
-        <div class="dropdown-checkboxes" id="dropdown-bulan">
-            <?php foreach($bulan_list as $b): 
-                $bulan_num = (int)$b['bulan'];
-                $nama_bulan = $bulan_indonesia[$bulan_num];
-            ?>
-                <label>
-                    <input type="checkbox" name="bulan[]" value="<?= $bulan_num ?>"
-                        <?= (is_array($filter['bulan']) && in_array($bulan_num, $filter['bulan'])) ? 'checked' : '' ?>>
-                    <?= $nama_bulan ?>
-                </label>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</div>
+                                        $bulan_valid = array_column($bulan_list, 'bulan');
+                                        $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid);
+                                        $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
+                                    ?>
+                                    <div class="dropdown-label" onclick="toggleDropdown('bulan')">
+                                        <?= $label_bulan ?> ▾
+                                    </div>
+                                    <div class="dropdown-checkboxes" id="dropdown-bulan">
+                                        <?php foreach($bulan_list as $b): 
+                                            $bulan_num = (int)$b['bulan'];
+                                            $nama_bulan = $bulan_indonesia[$bulan_num];
+                                        ?>
+                                            <label>
+                                                <input type="checkbox" name="bulan[]" value="<?= $bulan_num ?>"
+                                                    <?= (is_array($filter['bulan']) && in_array($bulan_num, $filter['bulan'])) ? 'checked' : '' ?>>
+                                                <?= $nama_bulan ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- Kebun -->
+                            <div class="field">
+                                <label for="kebun">Kebun</label>
+                                <div class="custom-dropdown">
+                                    <?php
+                                        $kebun_valid = array_column($kebun_list, 'sk_kebun');
+                                        $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
+                                        $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
+                                        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
+                                    ?>
+                                    <div class="dropdown-label" onclick="toggleDropdown('kebun')">
+                                        <?= $label_kebun ?> ▾
+                                    </div>
+                                    <div class="dropdown-checkboxes" id="dropdown-kebun">
+                                        <?php foreach($kebun_list as $k): ?>
+                                            <label>
+                                                <input type="checkbox" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
+                                                    <?= in_array($k['sk_kebun'], $filter_kebun) ? 'checked' : ''; ?>>
+                                                <?= $k['nama_kebun']; ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
 
-            <!-- Kebun -->
-            <div class="field">
-                <label for="kebun">Kebun</label>
-                <div class="custom-dropdown">
-                    <?php
-                        $kebun_valid = array_column($kebun_list, 'sk_kebun');
-                        $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
-                        $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
-                        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
-                    ?>
-                    <div class="dropdown-label" onclick="toggleDropdown('kebun')">
-                        <?= $label_kebun ?> ▾
-                    </div>
-                    <div class="dropdown-checkboxes" id="dropdown-kebun">
-                        <?php foreach($kebun_list as $k): ?>
-                            <label>
-                                <input type="checkbox" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
-                                    <?= in_array($k['sk_kebun'], $filter_kebun) ? 'checked' : ''; ?>>
-                                <?= $k['nama_kebun']; ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-
-        </div>
-    </form>
-</div>
 
             </div>
             
-            <div class="dashboard-container-row">
+            <div class="dashboard-container-row  first-row">
                 <!-- Resume -->
                 <div class="resume-box">
                     <div class = "title-box">
@@ -192,7 +190,7 @@
                 </div>
 
                 <!-- Grafik Panen Bulanan-->
-                <div class="dashboard-box chart-box">
+                <div class="dashboard-box chart-box panen-bulanan">
                     <h3>Total Panen per Bulan (Kg)</h3>
                     <?php if (empty($panen_per_bulan )): ?>
                         <div class="empty-chart">
@@ -203,9 +201,8 @@
                     <?php endif; ?>
                 </div>
 
-
                 <!-- Grafik Luas Kebun -->
-                <div class="dashboard-box chart-box piechart">
+                <div class="dashboard-box chart-box piechart luas-kebun">
                     <h3 style="text-align: center;">Luas Kebun</h3>
                     <?php if (empty($luas_kebun )): ?>
                         <div class="empty-chart">
@@ -245,11 +242,10 @@
                     <?php endif; ?>
                 </div>
             </div>
-
-            <div class="dashboard-container-row">
                 
+            <div class="dashboard-container-row second-row">
                 <!-- Grafik Persentase Panen per Kebun -->
-                <div class="dashboard-box chart-box donut">
+                <div class="dashboard-box chart-box donut persentase-panen">
                     <h3>Persentase Panen per Kebun</h3>
                     <?php if (empty($persentase_panen_kebun )): ?>
                         <div class="empty-chart">
@@ -261,7 +257,7 @@
                 </div>
 
                 <!-- Grafik Panen Mingguan-->
-                <div class="dashboard-box chart-box">
+                <div class="dashboard-box chart-box panen-mingguan">
                     <h3>Total Panen per Minggu per Kebun (Kg)</h3>
                     <?php if (empty($panen_mingguan_kebun )): ?>
                         <div class="empty-chart">
@@ -281,25 +277,6 @@ function toggleDropdown(type) {
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     event.stopPropagation(); // tambahkan ini
 }
-
-
-document.querySelectorAll('.dropdown-label').forEach(label => {
-    label.addEventListener('click', function(event) {
-        event.stopPropagation();
-        const type = this.getAttribute('data-type');
-        const dropdown = document.getElementById('dropdown-' + type);
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    });
-});
-
-document.addEventListener('click', function(event) {
-    ['kebun', 'bulan'].forEach(type => {
-        const dropdown = document.getElementById('dropdown-' + type);
-        if (dropdown && !dropdown.contains(event.target)) {
-            dropdown.style.display = 'none';
-        }
-    });
-});
 
 document.addEventListener('click', function(event) {
     ['kebun', 'bulan'].forEach(type => {
@@ -351,6 +328,7 @@ document.addEventListener('click', function(event) {
             options: {
             responsive: true,
             maintainAspectRatio: false,
+            
             plugins: {
                 legend: { display: false },
                 annotation: {

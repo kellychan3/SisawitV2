@@ -25,61 +25,173 @@ body {
     font-size: 12px;
 }
 
-/* Layout */
+/* Base Layout - Mobile First Approach */
 .dashboard-container-row {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 15px;
-    justify-content: space-between;
     margin-top: 15px;
 }
+
 .dashboard-box {
-    flex: 1;
     background-color: white;
     padding: 15px;
-    max-height: 270px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 230px;
+    /* Add these: */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Add some padding */
+}
+
 .chart-box {
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    min-height: 270px;
+    /* Add these: */
+    overflow: visible; /* Change from hidden to visible */
+    padding-bottom: 20px; /* Add bottom padding */
 }
+
+/* Chrome, Edge, and Safari */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .chart-box {
+        height: calc(100% - 20px); /* Adjust as needed */
+    }
+    canvas {
+        max-height: 95% !important;
+    }
+}
+
+.dashboard-box.chart-box {
+    min-height: 270px;  /* Minimum height */
+    max-height: 350px;  /* Maximum height (adjust as needed) */
+    height: auto;       /* Flexible height between min and max */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;   /* Keep this to prevent container overflow */
+}
+
 .chart-box canvas {
-    flex-grow: 1;
-    width: 100%;
-    height: 230px;
-    max-height: 230px;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
     display: block;
 }
 
-/* Chart Box Variants */
-.dashboard-box.chart-box.pupuk {
-    flex: 0 0 268px;
-    max-width: 280px;
-    max-height: 268px;
-}
-.dashboard-box.chart-box.donut {
-    flex: 0 0 270px;
-    max-width: 260px;
-    max-height: 270px;
-}
-.dashboard-box.chart-box.piechart {
-    flex: 0 0 280px;
-    max-width: 280px;
-}
-
-/* Resume */
+/* Resume Box */
 .resume-box {
     background-color: white;
-    flex: 0 0 260px;
-    max-height: 268px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    width: 100%;
 }
+
+/* Desktop Layout (1024px and up) */
+/* Desktop Layout (1024px and up) */
+@media (min-width: 1024px) {
+    /* First Row - All 4 components in one row */
+    .dashboard-container-row.first-row {
+        display: grid;
+        grid-template-columns: 260px 1fr 280px 280px;
+        gap: 15px;
+    }
+    
+    .first-row .resume-box {
+        grid-column: 1;
+    }
+    
+    .first-row .panen-bulanan {
+        grid-column: 2;
+    }
+    
+    .first-row .luas-kebun {
+        grid-column: 3;
+    }
+    
+    .first-row .pupuk {
+        grid-column: 4;
+    }
+    
+    /* Second Row - Modified layout (1/4 - 3/4 split) */
+.dashboard-container-row.second-row {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 15px;
+    /* Add this: */
+    min-height: 300px; /* Ensure minimum height */
+}
+
+/* Style for the donut chart (Persentase Panen) */
+.second-row .persentase-panen {
+    grid-column: 1;
+}
+
+/* Style for the weekly chart (Panen Mingguan) */
+.second-row .panen-mingguan {
+    grid-column: 2;
+}
+
+/* Optional: Match first row height */
+.second-row .dashboard-box {
+    height: 100%;
+    /* Add these: */
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+    
+    /* Ensure consistent heights */
+    .dashboard-box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chart-box {
+        flex: 1;
+        min-height: 270px;
+    }
+    
+    /* Specific box adjustments */
+    .dashboard-box.chart-box.pupuk,
+    .dashboard-box.chart-box.donut,
+    .dashboard-box.chart-box.piechart {
+        flex: 1;
+        max-width: none;
+    }
+}
+
+/* Mobile Layout (default - already set above) */
+/* Specific adjustments for mobile */
+@media (max-width: 1023px) {
+    /* Remove fixed widths for mobile */
+    .dashboard-box.chart-box.pupuk,
+    .dashboard-box.chart-box.donut,
+    .dashboard-box.chart-box.piechart,
+    .resume-box {
+        flex: 1;
+        max-width: 100%;
+        min-width: 0;
+    }
+    
+    /* Ensure charts have enough height */
+    .chart-box {
+        min-height: 300px;
+    }
+}
+
+/* Resume Box Content */
 .resume-box .title-box {
     background: #1F049A;
 }
@@ -110,7 +222,7 @@ body {
     flex: 1;
 }
 
-/* Filter */
+/* Filter Styles (unchanged) */
 .filter-container {
     display: flex;
     justify-content: space-between;
@@ -128,14 +240,13 @@ body {
     padding: 10px;
     justify-content: space-between;
     align-items: flex-start;
-    flex-wrap: wrap; /* jika tampilan kecil */
+    flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 15px;
 }
 .refresh-form {
-    flex: 0 0 auto; /* hanya sebesar kontennya */
+    flex: 0 0 auto;
 }
-
 .filter-form {
     flex: 1;
     display: flex;
@@ -154,8 +265,10 @@ body {
     width: 160px;
     height: 30px;
 }
+
+/* Empty Chart */
 .empty-chart {
-    height: 300px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,8 +281,7 @@ body {
     padding: 0 16px;
 }
 
-
-/* Custom Dropdown */
+/* Custom Dropdown (unchanged) */
 .custom-dropdown {
     position: relative;
     display: inline-block;
@@ -201,55 +313,15 @@ body {
     text-align: left;
 }
 
-/* Multi-select Dropdown (legacy?) */
-.multi-select-dropdown {
-    position: relative;
-    width: 180px;
-    user-select: none;
-}
-.dropdown-btn {
-    border: 1px solid #ccc;
-    padding: 6px 10px;
-    cursor: pointer;
-    background-color: white;
-}
-.dropdown-list {
-    position: absolute;
-    background-color: black;
-    border: 1px solid #ccc;
-    width: 100%;
-    max-height: 150px;
-    overflow-y: auto;
-    z-index: 10;
-    margin-top: 2px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-.dropdown-item {
-    display: block;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-.dropdown-item:hover {
-    background-color: #f1f1f1;
-}
-.dropdown-item input {
-    margin-right: 8px;
-}
-#selected-count {
-    float: right;
-    font-weight: bold;
-    color: #555;
-}
-.hide {
-    display: none;
-}
-
 /* Table */
 .scrollable-table {
     flex: 1;
-    max-height: 300px;
+    max-height: 210px; /* Match your table height */
     overflow-y: auto;
-    overflow-x: auto;
+    overflow-x: hidden; /* Change to hidden */
+    /* Add these: */
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 table {
     width: 100%;
@@ -259,11 +331,4 @@ table {
 table th, table td {
     padding: 8px;
     border: 1px solid #ccc;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .dashboard-container-row {
-        flex-direction: column;
-    }
 }
