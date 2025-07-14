@@ -156,16 +156,11 @@
 		</div>
 	</div>
 
-	<!-- jQuery FIRST -->
+	<!-- At the end of your body tag, ensure this order -->
 <script src="<?= base_url('assets/'); ?>js/jquery.min.js"></script>
-
-<!-- Then Bootstrap -->
 <script src="<?= base_url('assets/'); ?>js/bootstrap.bundle.min.js"></script>
-
-<!-- Then MetisMenu -->
 <script src="<?= base_url('assets/'); ?>plugins/metismenu/js/metisMenu.min.js"></script>
-
-<!-- Then your custom JS -->
+<script src="<?= base_url('assets/'); ?>plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
 <script src="<?= base_url('assets/'); ?>js/app.js"></script>
 
 	<!-- Overlay for mobile sidebar -->
