@@ -32,7 +32,7 @@
             </div>
         </div>
         <!--end breadcrumb-->
-<?php if ($data_prediksi_tersedia): ?>
+
             <!-- Filter Atas -->
             <div class="filter-box">
                 <!-- Refresh Button -->
@@ -69,48 +69,49 @@
                     </form>
                 </div>
             </div>
-
+<?php if ($data_prediksi_tersedia): ?>
             <div class="dashboard-container-row">
-                <div class="resume-box">
-                    <div class="title-box">
-                        <div class="resume-title">Resume Laporan</div>
-                    </div>
-                    <div class="info-box-wrap">
-                        <div class="info-box">
-                            <div class="label">Prediksi Total Hasil Panen</div>
-                            <div class="value"><?= number_format($total_prediksi, 0, ',', '.') ?> Kg</div>
+                <!-- Left Column (Resume and Kebun Filter) -->
+                <div class="left-column">
+                    <div class="resume-box">
+                        <div class="title-box">
+                            <div class="resume-title">Resume Laporan</div>
                         </div>
-                        <div class="info-box">
-                            <div class="label">Realita Total Hasil Panen</div>
-                            <?php $color = ($total_aktual >= $total_prediksi) ? 'green' : 'red'; ?>
-                            <div class="value" style="color: <?= $color ?>;">
-                                <?= number_format($total_aktual, 0, ',', '.') ?> Kg
+                        <div class="info-box-wrap">
+                            <div class="info-box">
+                                <div class="label">Prediksi Total Hasil Panen</div>
+                                <div class="value"><?= number_format($total_prediksi, 0, ',', '.') ?> Kg</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="label">Realita Total Hasil Panen</div>
+                                <?php $color = ($total_aktual >= $total_prediksi) ? 'green' : 'red'; ?>
+                                <div class="value" style="color: <?= $color ?>;">
+                                    <?= number_format($total_aktual, 0, ',', '.') ?> Kg
+                                </div>
                             </div>
                         </div>
-
-                        <div class="info-box">
-                        <!-- Filter Kebun -->
-                            <form method="get" action="">
-                                <input type="hidden" name="tahun" value="<?= $filter['tahun'] ?>">
-
-                                <strong style="display: block; margin-bottom: 8px;">FILTER KEBUN</strong>
-                                <div style="display: flex; flex-direction: column; gap: 6px;">
-                                    <?php foreach ($kebun_list as $k): ?>
-                                        <?php $id = $k['kebun']; ?>
-                                        <label style="display: flex; justify-content: space-between; align-items: center; font-weight: normal;">
-                                            <span><?= $k['nama_kebun'] ?></span>
-                                            <input type="checkbox" name="kebun[]" value="<?= $id ?>" <?= in_array($id, $filter['kebun']) ? 'checked' : '' ?> onchange="this.form.submit()" <?= $id === '' ? 'disabled' : '' ?>>
-                                        </label>
-                                    <?php endforeach; ?>
-
-                                </div>
-                            </form>
-                        </div>
                     </div>
 
-                    
+                    <!-- Filter Kebun - Now positioned below Resume but still in left column -->
+                    <div class="kebun-filter-box">
+                        <form method="get" action="">
+                            <input type="hidden" name="tahun" value="<?= $filter['tahun'] ?>">
+
+                            <strong style="display: block; margin-bottom: 8px;">FILTER KEBUN</strong>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <?php foreach ($kebun_list as $k): ?>
+                                    <?php $id = $k['kebun']; ?>
+                                    <label style="display: flex; justify-content: space-between; align-items: center; font-weight: normal;">
+                                        <span><?= $k['nama_kebun'] ?></span>
+                                        <input type="checkbox" name="kebun[]" value="<?= $id ?>" <?= in_array($id, $filter['kebun']) ? 'checked' : '' ?> onchange="this.form.submit()" <?= $id === '' ? 'disabled' : '' ?>>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
+                <!-- Right Column (Chart) -->
                 <div class="dashboard-box chart-box">
                     <h3>Prediksi vs Aktual Hasil Panen (kg)</h3>
                     <canvas id="panenChart"></canvas>
@@ -187,7 +188,6 @@ new Chart(ctx, {
     }
 });
 </script>
-
 
 </body>
 </html>

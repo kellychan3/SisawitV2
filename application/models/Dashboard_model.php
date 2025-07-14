@@ -387,7 +387,7 @@ public function get_rata2_panen_mingguan_bulan($tahun, $organisasi_id = null, $k
 
     public function get_persediaan_pupuk($organisasi_id = null, $kebun = null)
 {
-    $sql = "SELECT a.nama_aset, a.jumlah_aset, a.sk_kebun
+    $sql = "SELECT a.nama_aset, SUM(a.jumlah_aset) as jumlah_aset
             FROM dim_aset a
             JOIN dim_kategori_aset ka ON a.sk_kategori_aset = ka.sk_kategori_aset
             JOIN dim_kebun k ON a.sk_kebun = k.sk_kebun
@@ -412,10 +412,26 @@ public function get_rata2_panen_mingguan_bulan($tahun, $organisasi_id = null, $k
         }
     }
 
+    $sql .= " GROUP BY a.nama_aset";
+
     return $this->db->query($sql, $params)->result();
 }
 
+    public function get_months_with_harvest($tahun, $organisasi_id)
+{
+    $this->db->select('DISTINCT w.bulan')
+             ->from('fact_panen f')
+             ->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu')
+             ->join('dim_user u', 'f.sk_user = u.sk_user')
+             ->join('dim_organisasi o', 'u.sk_organisasi = o.sk_organisasi')
+             ->where('w.tahun', $tahun)
+             ->where('o.id_organisasi', $organisasi_id)
+             ->where('f.jumlah_panen >', 0)
+             ->order_by('w.bulan', 'DESC');
 
+    $result = $this->db->get()->result_array();
+    return array_column($result, 'bulan');
+}
 
     public function get_persen_panen_per_kebun($organisasi_id, $tahun, $bulan_arr, $kebun = null)
     {

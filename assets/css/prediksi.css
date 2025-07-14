@@ -74,7 +74,7 @@ body {
     flex-grow: 1;
     width: 100% !important;
     height: auto !important;
-    max-height: 260px;
+    max-height: 320px;
 }
 
 /* Filter Bar (atas) */
@@ -110,17 +110,62 @@ body {
     height: 30px;
 }
 
-/* Filter Kebun Box */
-.filter-kebun-box {
-    background-color: white;
-    padding: 10px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    max-width: 200px;
-    min-width: 180px;
-    flex: 0 0 200px;
-    font-size: 12px;
+/* Left Column Container */
+.left-column {
+    flex: 0 0 300px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
+
+/* Kebun Filter Box */
+/* Kebun Filter Box - Modified for alternating colors only */
+.kebun-filter-box {
+    background-color: white;
+    padding: 10px; /* Changed from 15px to 0 since we'll pad the labels instead */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.kebun-filter-box label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #555;
+    padding: 5px;
+    margin: 0;
+}
+
+/* Alternating row colors */
+.kebun-filter-box label:nth-child(even) {
+    background-color: #f8f8f8; /* Light gray for even rows */
+}
+
+/* Keep white for odd rows (default) */
+.kebun-filter-box label:nth-child(odd) {
+    background-color: white;
+}
+
+/* Hover effect */
+.kebun-filter-box label:hover {
+    background-color: #f0f0f0; /* Slightly darker gray on hover */
+}
+
+.kebun-filter-box input[type="checkbox"] {
+    margin-left: 10px;
+    /* Keep existing checkbox styles */
+}
+
+/* Adjust the resume box to remove fixed height */
+.resume-box {
+    flex: 0 0 auto; /* Changed from fixed height */
+    max-width: 300px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    min-width: 300px;
+}
+
 .filter-kebun-box label {
     display: flex;
     justify-content: space-between;
@@ -128,20 +173,24 @@ body {
     font-weight: normal;
 }
 
-/* Responsiveness */
 @media (max-width: 768px) {
     .dashboard-container-row {
         flex-direction: column;
     }
 
-    .resume-box,
-    .chart-box {
+    .left-column {
         flex: 1 1 100%;
         max-width: 100%;
+        order: 1;
     }
 
-    .filter-box {
-        flex-direction: column;
-        align-items: flex-start;
+    .chart-box {
+        order: 2;
+    }
+
+    .resume-box,
+    .kebun-filter-box {
+        max-width: 100%;
+        min-width: 100%;
     }
 }

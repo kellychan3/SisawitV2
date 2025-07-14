@@ -12,6 +12,7 @@ services:
       - db
     networks:
       - sisawitnet
+      # - app_network
 
   db:
     image: mysql:8.0
@@ -33,3 +34,5 @@ volumes:
 
 networks:
   sisawitnet:
+  app_network:
+    external: true

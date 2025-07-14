@@ -131,18 +131,24 @@ public function get_aktual_bulanan($tahun, $kebun = [], $organisasi_id = null)
 
 public function get_all_kebun($organisasi_id = null)
 {
-    $this->db->select('fp.sk_kebun as kebun, dk.nama_kebun');
-    $this->db->from('fact_prediksi_panen fp');
-    $this->db->join('dim_kebun dk', 'fp.sk_kebun = dk.sk_kebun');
+    $this->db->select('dk.sk_kebun as kebun, dk.nama_kebun');
+    $this->db->from('dim_kebun dk');
+    
+    // Join with fact_prediksi_panen to ensure we only get kebuns with predictions
+    $this->db->join('fact_prediksi_panen fp', 'dk.sk_kebun = fp.sk_kebun', 'inner');
+    
+    // Join with dim_organisasi for organization filtering
     $this->db->join('dim_organisasi do', 'fp.sk_organisasi = do.sk_organisasi');
-
+    
     if ($organisasi_id !== null) {
         $this->db->where('do.id_organisasi', $organisasi_id);
     }
-
-    $this->db->group_by(['fp.sk_kebun', 'dk.nama_kebun']);
+    
+    // Group by the primary key of dim_kebun to ensure uniqueness
+    $this->db->group_by('dk.sk_kebun');
+    
     $this->db->order_by('dk.nama_kebun', 'ASC');
-
+    
     return $this->db->get()->result_array();
 }
 

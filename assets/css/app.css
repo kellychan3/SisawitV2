@@ -93,13 +93,12 @@ a {
 
 .page-wrapper {
 	height: 100%;
-	margin-top: 60px;
 	margin-bottom: 30px;
 	margin-left: 250px
 }
 
 .page-content {
-	padding: 1.5rem 1.5rem 0.7rem 1.5rem
+	padding: 1rem 1rem 1rem 1rem
 }
 
 .page-footer {
@@ -2410,196 +2409,77 @@ input.search-control-2::placeholder {
 
 }
 
-@media screen and (max-width:1024px) {
-	.topbar {
-		left: 0!important
-	}
-	.mobile-search-icon {
-		display: block
-	}
-	.mobile-toggle-menu {
-		display: block
-	}
-	.sidebar-wrapper {
-		left: -300px;
-		box-shadow: none
-	}
-	.page-wrapper {
-		margin-left: 0
-	}
-	.page-footer {
-		left: 0
-	}
-	.search-bar {
-		display: none
-	}
-	.full-search-bar {
-		display: flex;
-		align-items: center;
-		width: 100%;
-		position: absolute;
-		left: 0;
-		z-index: 100;
-		background: #ffffff;
-		height: 60px;
-		padding: 0 1.4rem
-	}
-	.search-bar-box {
-		width: 100%
-	}
-	.search-close {
-		display: block
-	}
-	.search-show {
-		left: 15px;
-		right: auto
-	}
-	.search-control {
-		background-color: #fff;
-		border: 1px solid #f2efef00;
-		padding-left: 2.5rem
-	}
-	.search-control-2 {
-		color: #fff;
-		background-color: #212529;
-		border: 1px solid rgb(255 255 255 / 12%)!important;
-		padding-left: 2.5rem
-	}
-	.wrapper.toggled .sidebar-wrapper {
-		left: 0
-	}
-	.wrapper.toggled .page-wrapper {
-		margin-left: 0
-	}
-	.wrapper.toggled .overlay {
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		background: #000;
-		opacity: .6;
-		z-index: 10;
-		display: block;
-		cursor: move;
-		transition: all .2s ease-out
-	}
-	.error-404 {
-		height: auto;
-		padding: 6rem 1rem
-	}
-	.chat-header {
-		border-top-left-radius: .25rem
-	}
-	.chat-footer {
-		border-bottom-left-radius: .25rem
-	}
-	.chat-sidebar {
-		left: -370px
-	}
-	.chat-content {
-		margin-left: 0
-	}
-	.chat-header {
-		left: 0
-	}
-	.chat-footer {
-		left: 0
-	}
-	.chat-toggled .chat-sidebar {
-		left: 0
-	}
-	.chat-toggled .overlay {
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 340px;
-		background: #000;
-		opacity: .5;
-		z-index: 11;
-		display: block;
-		cursor: move;
-		transition: all .3s ease-out
-	}
-	.email-header {
-		border-top-left-radius: .25rem
-	}
-	.email-sidebar {
-		left: -280px
-	}
-	.email-content {
-		margin-left: 0
-	}
-	.email-header {
-		left: 0
-	}
-	.email-toggled .email-sidebar {
-		left: 0
-	}
-	.email-toggled .overlay {
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 250px;
-		background: #000;
-		opacity: .5;
-		z-index: 9;
-		display: block;
-		cursor: move;
-		transition: all .3s ease-out
-	}
+/* Mobile View Styles */
+@media (max-width: 991.98px) {
+    .sidebar-wrapper {
+        position: fixed;
+        left: -250px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar-wrapper.active {
+        left: 0;
+    }
+    
+    .page-wrapper {
+        margin-left: 0 !important;
+        width: 100%;
+    }
+    
+    .topbar {
+        left: 0 !important;
+        width: 100%;
+    }
+    
+    .mobile-toggle-menu {
+        display: block !important;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .sidebar-wrapper.active + .sidebar-overlay {
+        display: block;
+    }
 }
 
-@media screen and (max-width:991px) {
-	.section-authentication-signin {
-		height: 100%;
-		margin-top: 6rem;
-		margin-bottom: 2rem
-	}
-	.authentication-reset-password {
-		height: auto;
-		padding: 2rem 1rem
-	}
-	.authentication-lock-screen {
-		height: auto;
-		padding: 2rem 1rem
-	}
-	.compose-mail-popup {
-		width: auto;
-		position: fixed;
-		bottom: -30px;
-		right: 0;
-		left: 0
-	}
+/* Ensure sidebar is visible on desktop */
+@media (min-width: 992px) {
+    .sidebar-wrapper {
+        left: 0 !important;
+    }
+    
+    .sidebar-overlay {
+        display: none !important;
+    }
 }
 
-@media screen and (max-width:767px) {
-	.user-box .user-info {
-		display: none
-	}
-	.authentication-forgot {
-		height: auto;
-		padding: 2.5rem 1rem
-	}
+/* Complete styling for menu items */
+.metismenu a {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    transition: all 0.3s;
 }
 
-@media screen and (max-width:620px) {
-	.topbar .navbar .dropdown-menu::after {
-		display: none
-	}
-	.topbar .navbar .dropdown {
-		position: static!important
-	}
-	.topbar .navbar .dropdown-menu {
-		width: 100%!important
-	}
+.metismenu i {
+    margin-right: 12px;
+    font-size: 1.1em;
+    transition: all 0.3s;
 }
 
-@media screen and (max-width:520px) {
-	.chat-footer-menu,
-	.chat-top-header-menu {
-		display: none
-	}
+.metismenu a:hover i {
+    transform: scale(1.1); /* Slight zoom on hover */
 }

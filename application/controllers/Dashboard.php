@@ -22,18 +22,18 @@ class Dashboard extends CI_Controller
 
         // === Filter input: tahun, bulan, kebun ===
         $tahun = $this->input->get('tahun') ?? date('Y');
-
         $bulan_input = $this->input->get('bulan');
 
-        // Ambil bulan yang ada datanya untuk tahun tersebut
+        // Get months with data for the selected year
         $bulan_list_db = $this->Dashboard_model->get_bulan_list($organisasi_id, $tahun);
+        $bulan_with_data = array_column($bulan_list_db, 'bulan');
 
         if ($bulan_input) {
-            // Jika user memilih bulan secara manual
-            $bulan = is_array($bulan_input) ? array_map('intval', $bulan_input) : [(int)$bulan_input];
+        // If user manually selects months
+        $bulan = is_array($bulan_input) ? array_map('intval', $bulan_input) : [(int)$bulan_input];
         } else {
-            // Jika user tidak memilih bulan, pilih semua bulan dari database
-            $bulan = array_column($bulan_list_db, 'bulan');
+            // If no month selection, get last 2 months with harvest data
+            $bulan = $this->get_last_two_months_with_harvest($tahun, $organisasi_id, $bulan_with_data);
         }
 
         $kebun = $this->input->get('kebun');
@@ -170,6 +170,36 @@ class Dashboard extends CI_Controller
     echo json_encode($bulan_list);
 }
 
+private function get_last_two_months_with_harvest($tahun, $organisasi_id, $bulan_with_data)
+{
+    // Get current month and previous month
+    $current_month = (int)date('n');
+    $current_year = (int)date('Y');
+    
+    $months_to_check = [];
+    
+    if ($tahun == $current_year) {
+        // For current year, use actual current and previous month
+        $months_to_check[] = $current_month;
+        $prev_month = $current_month - 1;
+        $months_to_check[] = $prev_month > 0 ? $prev_month : 12;
+    } else {
+        // For other years, get last 2 months from the available data
+        rsort($bulan_with_data);
+        $months_to_check = array_slice($bulan_with_data, 0, 2);
+    }
+    
+    // Filter months that actually have harvest data
+    $valid_months = [];
+    foreach ($months_to_check as $month) {
+        if (in_array($month, $bulan_with_data)) {
+            $valid_months[] = $month;
+        }
+    }
+    
+    // If no valid months, return all months (fallback)
+    return empty($valid_months) ? $bulan_with_data : $valid_months;
+}
 
     public function refresh_data()
     {

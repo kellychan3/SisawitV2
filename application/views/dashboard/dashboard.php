@@ -222,23 +222,27 @@
                         </div>
                     <?php else: ?>
                         <div class="scrollable-table">
-                            <table style="height: 210px">
-                                <thead>
-                                    <tr>
-                                        <th>Nama Pupuk</th>
-                                        <th>Stok</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($persediaan_pupuk as $row): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($row->nama_aset); ?></td>
-                                            <td><?= number_format($row->jumlah_aset); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+    <table style="height: 210px">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)" style="cursor:pointer;">
+                    Nama Pupuk <span id="sort-icon-nama">↕</span>
+                </th>
+                <th onclick="sortTable(1)" style="cursor:pointer;">
+                    Stok <span id="sort-icon-stok">↕</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="pupuk-table-body">
+            <?php foreach($persediaan_pupuk as $row): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row->nama_aset); ?></td>
+                    <td><?= number_format($row->jumlah_aset); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -246,7 +250,7 @@
             <div class="dashboard-container-row second-row">
                 <!-- Grafik Persentase Panen per Kebun -->
                 <div class="dashboard-box chart-box donut persentase-panen">
-                    <h3>Persentase Panen per Kebun</h3>
+                    <h3 style="text-align: center;">Persentase Panen per Kebun</h3>
                     <?php if (empty($persentase_panen_kebun )): ?>
                         <div class="empty-chart">
                             <p>📉 Belum ada data kebun. Silahkan inputkan melalui aplikasi mobile</p>
@@ -479,6 +483,72 @@ document.addEventListener('click', function(event) {
 </script>
 
 <script>
+    let currentSortColumn = -1;
+    let currentSortDirection = 0; // 0 = unsorted, 1 = ascending, 2 = descending
+
+    function sortTable(columnIndex) {
+        const tableBody = document.getElementById('pupuk-table-body');
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        const sortIconNama = document.getElementById('sort-icon-nama');
+        const sortIconStok = document.getElementById('sort-icon-stok');
+        
+        // Reset all sort icons
+        sortIconNama.textContent = '↕';
+        sortIconStok.textContent = '↕';
+        
+        // If clicking same column, toggle direction. Else start with ascending.
+        if (currentSortColumn === columnIndex) {
+            currentSortDirection = (currentSortDirection + 1) % 3;
+        } else {
+            currentSortColumn = columnIndex;
+            currentSortDirection = 1;
+        }
+        
+        // Get the appropriate sort icon for the current column
+        const currentSortIcon = columnIndex === 0 ? sortIconNama : sortIconStok;
+        
+        // Update sort icon based on direction
+        if (currentSortDirection === 1) {
+            currentSortIcon.textContent = '↑';
+        } else if (currentSortDirection === 2) {
+            currentSortIcon.textContent = '↓';
+        } else {
+            currentSortIcon.textContent = '↕';
+        }
+        
+        // If unsorted, return to original order
+        if (currentSortDirection === 0) {
+            tableBody.innerHTML = '';
+            rows.forEach(row => tableBody.appendChild(row.cloneNode(true)));
+            return;
+        }
+        
+        const isAscending = currentSortDirection === 1;
+        
+        rows.sort((a, b) => {
+            const aValue = a.cells[columnIndex].textContent.trim();
+            const bValue = b.cells[columnIndex].textContent.trim();
+            
+            if (columnIndex === 1) {
+                // Numeric sorting for Stok column
+                const aNum = parseFloat(aValue.replace(/,/g, ''));
+                const bNum = parseFloat(bValue.replace(/,/g, ''));
+                return isAscending ? aNum - bNum : bNum - aNum;
+            } else {
+                // Alphabetical sorting for Nama Pupuk column
+                return isAscending 
+                    ? aValue.localeCompare(bValue, 'id') 
+                    : bValue.localeCompare(aValue, 'id');
+            }
+        });
+        
+        // Clear and re-append sorted rows
+        tableBody.innerHTML = '';
+        rows.forEach(row => tableBody.appendChild(row));
+    }
+</script>
+
+<script>
     const ctx = document.getElementById('panenMingguanKebunChart').getContext('2d');
 
     const labels = <?= json_encode($labels); ?>;
@@ -532,7 +602,7 @@ document.addEventListener('click', function(event) {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('.filter-form form');
     const tahunSelect = document.getElementById('tahun');
     const bulanContainer = document.getElementById('dropdown-bulan');
@@ -543,7 +613,6 @@ document.addEventListener('DOMContentLoaded', function () {
         bulanLabel.textContent = checked === 0 ? 'Semua ▾' : `Dipilih (${checked}) ▾`;
     }
 
-    // Fungsi: pasang ulang event listener ke semua checkbox
     function attachCheckboxListeners() {
         const checkboxes = form.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
@@ -553,10 +622,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Pasang event pertama kali
     attachCheckboxListeners();
 
-    // Jika tahun diubah
     tahunSelect.addEventListener('change', function () {
         const selectedTahun = this.value;
 
@@ -574,7 +641,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Tambahkan checkbox baru (semua checked)
+            // Sort months in descending order (newest first)
+            data.sort((a, b) => parseInt(b.bulan) - parseInt(a.bulan));
+            
+            // Only select the first 2 months by default
+            const monthsToSelect = data.slice(0, 2).map(item => item.bulan);
+
             data.forEach(b => {
                 const namaBulan = b.nama; 
                 const label = document.createElement('label');
@@ -582,12 +654,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 input.type = 'checkbox';
                 input.name = 'bulan[]';
                 input.value = b.bulan;
-                input.checked = true;
+                input.checked = monthsToSelect.includes(b.bulan.toString());
                 input.addEventListener('click', function(event) {
-    event.stopPropagation(); // agar klik tidak menutup dropdown
-});
+                    event.stopPropagation();
+                });
 
-                input.addEventListener('change', () => form.submit());
                 label.appendChild(input);
                 label.appendChild(document.createTextNode(' ' + namaBulan));
                 bulanContainer.appendChild(label);
@@ -596,14 +667,13 @@ document.addEventListener('DOMContentLoaded', function () {
             updateLabelBulan();
             attachCheckboxListeners();
 
-            // Submit otomatis setelah update bulan
+            // Submit automatically after updating months
             setTimeout(() => {
                 form.submit();
             }, 200);
         })
         .catch(error => {
-            alert('Gagal memuat data bulan');
-            console.error(error);
+            console.error('Error:', error);
         });
     });
 });

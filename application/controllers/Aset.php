@@ -223,5 +223,23 @@ public function deleteAset()
     redirect('Aset');
 }
 
+public function getAllAssets()
+{
+    $token = $this->session->userdata('token');
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "http://103.150.101.10/api/aset",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Bearer $token",
+            "Accept: application/json"
+        ],
+    ]);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    
+    header('Content-Type: application/json');
+    echo $response;
+}
 
 }

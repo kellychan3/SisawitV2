@@ -470,6 +470,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -581,76 +585,6 @@
       <enabled>Y</enabled>
     </hop>
   </order>
-  <step>
-    <name>Jumlah prediksi berubah</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Insert / update</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
-        <function>&lt;></function>
-        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>752</xloc>
-      <yloc>400</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Tidak Ada Data di DB</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Seleksi Kolom Kebun</send_true_to>
-    <send_false_to>Jumlah prediksi berubah</send_false_to>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>752</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
   <step>
     <name>Get variables</name>
     <type>GetVariable</type>
@@ -857,6 +791,41 @@
     <GUI>
       <xloc>736</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Jumlah prediksi berubah</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+        <function>&lt;></function>
+        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1149,6 +1118,41 @@ if (response_body != null &amp;&amp;
     </remotesteps>
     <GUI>
       <xloc>944</xloc>
+      <yloc>272</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Tidak Ada Data di DB</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kebun</send_true_to>
+    <send_false_to>Jumlah prediksi berubah</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
+        <function>IS NULL</function>
+        <rightvalue/>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
       <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1802,6 +1806,10 @@ FROM dw_sawit.fact_prediksi_panen
       <key>
         <name>nama_kebun_lengkap</name>
         <field>nama_kebun</field>
+      </key>
+      <key>
+        <name>sk_organisasi</name>
+        <field>sk_organisasi</field>
       </key>
       <value>
         <name>sk_kebun</name>
