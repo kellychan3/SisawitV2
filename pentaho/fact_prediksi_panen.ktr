@@ -470,10 +470,6 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
-        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -810,9 +806,21 @@
     <compare>
       <condition>
         <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_api</leftvalue>
-        <function>&lt;></function>
-        <rightvalue>jumlah_prediksi_panen_db</rightvalue>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>jumlah_prediksi_panen_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
       </condition>
     </compare>
     <attributes/>
@@ -1138,9 +1146,21 @@ if (response_body != null &amp;&amp;
     <compare>
       <condition>
         <negated>N</negated>
-        <leftvalue>jumlah_prediksi_panen_db</leftvalue>
-        <function>IS NULL</function>
-        <rightvalue/>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>jumlah_prediksi_panen_db</leftvalue>
+            <function>IS NULL</function>
+            <rightvalue/>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>jumlah_prediksi_panen_api</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
       </condition>
     </compare>
     <attributes/>

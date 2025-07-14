@@ -255,8 +255,7 @@ class Dashboard_model extends CI_Model
     return ($jumlah_bulan_ada_panen > 0) ? ($total_panen / $jumlah_bulan_ada_panen) : 0;
 }
 
-    public function get_total_panen_minggu_ini($tahun, $bulan, $minggu_ke, $organisasi_id = null, $kebun = null)
-{
+    public function get_total_panen_minggu_ini($tahun, $bulan, $minggu_ke, $organisasi_id = null, $kebun = null) {
     $this->db->select_sum('f.jumlah_panen', 'total');
     $this->db->from('fact_panen f');
     $this->db->join('dim_waktu w', 'f.sk_waktu = w.sk_waktu');
@@ -272,12 +271,19 @@ class Dashboard_model extends CI_Model
     }
 
     if ($kebun !== null && is_array($kebun) && !empty($kebun)) {
-    $this->db->where_in('f.sk_kebun', $kebun);
-}
+        $this->db->where_in('f.sk_kebun', $kebun);
+    }
 
     $query = $this->db->get();
-    $result = $query->row();
-    return $result ? (float)$result->total : 0;
+    return $query->row()->total ?? 0;
+}
+
+public function get_current_week_in_month() {
+    $this->db->select('minggu_ke_dalam_bulan');
+    $this->db->from('dim_waktu');
+    $this->db->where('tanggal', date('Y-m-d'));
+    $query = $this->db->get();
+    return $query->row()->minggu_ke_dalam_bulan ?? ceil(date('j') / 7);
 }
 
 public function get_minggu_terakhir_ada_panen($tahun, $bulan, $organisasi_id = null, $kebun = null)

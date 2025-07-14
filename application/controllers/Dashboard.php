@@ -120,13 +120,18 @@ class Dashboard extends CI_Controller
         // === Indikator mingguan ===
         $is_current_month = (int)$tahun === (int)date('Y') && in_array((int)date('n'), $bulan);
         $bulan_terpilih = $is_current_month ? (int)date('n') : $bulan_terakhir;
+        
         $minggu_ke = $is_current_month
-            ? (int)ceil(date('j') / 7)
-            : $this->Dashboard_model->get_minggu_terakhir_ada_panen($tahun, $bulan_terpilih, $organisasi_id, $kebun);
+    ? $this->Dashboard_model->get_current_week_in_month()
+    : $this->Dashboard_model->get_minggu_terakhir_ada_panen($tahun, $bulan_terpilih, $organisasi_id, $kebun);
 
-        $total_minggu_ini = $minggu_ke
-            ? $this->Dashboard_model->get_total_panen_minggu_ini($tahun, $bulan_terpilih, $minggu_ke, $organisasi_id, $kebun)
-            : 0;
+$total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini(
+    $tahun, 
+    $bulan_terpilih, 
+    $minggu_ke, 
+    $organisasi_id, 
+    $kebun
+);
 
         $rata_mingguan = $this->Dashboard_model->get_rata2_panen_mingguan_bulan($tahun, $organisasi_id, $kebun) ?? 0;
         $selisih_persen_minggu = $rata_mingguan ? (($total_minggu_ini - $rata_mingguan) / $rata_mingguan * 100) : 0;
