@@ -76,8 +76,8 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="jenisaset" class="form-label">Jenis Aset</label>
-                        <input type="text" class="form-control" id="jenisaset" disabled>
+                        <label for="jenis_aset" class="form-label">Jenis Aset</label>
+                        <input type="text" class="form-control" id="jenis_aset" disabled>
                         <input type="hidden" id="kategori_id" name="kategori_id">
                     </div>
                        
@@ -95,8 +95,8 @@
                     <div class="col-md-6">
                         <label for="jumlahaset" class="form-label">Jumlah Aset (Pupuk: Kg)</label>
                         <input type="number" class="form-control" id="jumlahaset" name="jumlahaset" required 
-                              oninvalid="this.setCustomValidity('Jumlah aset wajib diisi')" 
-                              oninput="this.setCustomValidity('')" disabled>
+       min="0" oninvalid="this.setCustomValidity('Harap isi jumlah dengan angka')" 
+       oninput="this.setCustomValidity('')" disabled>
                     </div>
 
                     <div class="modal-footer">
@@ -129,7 +129,7 @@
 
             <div class="col-md-6">
               <label class="form-label">Jenis Aset</label>
-              <input type="text" id="edit_jenisaset" class="form-control" disabled>
+              <input type="text" id="edit_jenis_aset" class="form-control" disabled>
             </div>
 
             <div class="col-md-6">
@@ -233,75 +233,112 @@
     </div>
   </div>
 
-  <!-- Script dependencies -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script>
-    $(document).ready(function () {
-    $('#aset').DataTable({
-        columnDefs: [{ targets: 1, searchable: false }],
-        language: {
-            lengthMenu: "Menampilkan _MENU_ entri",
-            zeroRecords: "Data tidak ditemukan",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-            infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-            infoFiltered: "(disaring dari _MAX_ total entri)",
-            search: "Cari:",
-            paginate: {
-                first: "Pertama", last: "Terakhir", next: "Berikutnya >", previous: "< Sebelumnya"
-            }
-        }
-    });
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+$(document).ready(function () {
+    // Inisialisasi DataTables dengan error handling
+    try {
+        $('#aset').DataTable({
+            columnDefs: [
+                { targets: 1, searchable: false }, // Kolom jumlah aset tidak bisa dicari
+                { targets: [4], orderable: false } // Kolom aksi tidak bisa di-sort
+            ],
+            language: {
+                lengthMenu: "Menampilkan _MENU_ entri",
+                zeroRecords: "Data tidak ditemukan",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
+                infoFiltered: "(disaring dari _MAX_ total entri)",
+                search: "Cari:",
+                paginate: {
+                    first: "Pertama", 
+                    last: "Terakhir", 
+                    next: "Berikutnya >", 
+                    previous: "< Sebelumnya"
+                }
+            },
+            // Pastikan DataTables tidak menginisialisasi ulang jika sudah ada
+            initComplete: function(settings, json) {
+                console.log('DataTables initialized successfully');
+            }
+        });
+    } catch (e) {
+        console.error('Error initializing DataTables:', e);
+        // Fallback jika DataTables gagal
+        $('#aset').addClass('table').css('width', '100%');
+    }
+
+    // Mapping jenis aset
     const kategoriMap = {
-        'Dolomite': 'Pupuk', 'MOP': 'Pupuk', 'NPK': 'Pupuk', 'RP': 'Pupuk',
-        'Traktor': 'Alat Berat', 'TSP': 'Pupuk', 'Urea': 'Pupuk'
+        'Dolomite': 'Pupuk', 
+        'MOP': 'Pupuk', 
+        'NPK': 'Pupuk', 
+        'RP': 'Pupuk',
+        'Traktor': 'Alat Berat', 
+        'TSP': 'Pupuk', 
+        'Urea': 'Pupuk'
     };
 
+    // Mapping ID kategori dari PHP
     const kategoriIdMap = {};
     <?php foreach ($kategori as $k): ?>
         kategoriIdMap["<?= addslashes($k['nama_kategori']) ?>"] = "<?= $k['id'] ?>";
     <?php endforeach; ?>
 
-    let allAssets = []; // To store all assets data
+    let allAssets = []; // Untuk menyimpan semua data aset
 
-    // Fetch all assets on page load
+    // Fungsi untuk mengambil semua aset
     function fetchAllAssets() {
         $.ajax({
-            url: "<?= base_url('Aset/getAllAssets') ?>", // You'll need to create this endpoint
+            url: "<?= base_url('Aset/getAllAssets') ?>",
             method: "GET",
             headers: {
                 "Authorization": "Bearer <?= $this->session->userdata('token') ?>",
                 "Accept": "application/json"
             },
             success: function(response) {
-                allAssets = response;
+                if (response && Array.isArray(response)) {
+                    allAssets = response;
+                    console.log('Assets loaded:', allAssets.length);
+                } else {
+                    console.error('Invalid response format');
+                }
             },
-            error: function() {
-                console.error("Failed to fetch assets");
+            error: function(xhr, status, error) {
+                console.error("Failed to fetch assets:", error);
             }
         });
     }
 
-    fetchAllAssets();
+    // Panggil fungsi fetchAllAssets saat modal tambah dibuka
+    $('#addAssetModal').on('show.bs.modal', function() {
+        fetchAllAssets();
+        $('#kebun_id, #jumlahaset').prop('disabled', true);
+    });
 
-    // Function to filter kebun dropdown
+    // Fungsi untuk memfilter dropdown kebun
     function filterKebunDropdown(selectedAsset) {
         const kebunDropdown = $('#kebun_id');
         const currentValue = kebunDropdown.val();
         
-        // Get kebun IDs that already have this asset
+        if (!Array.isArray(allAssets)) {
+            console.error('allAssets is not an array');
+            return;
+        }
+
+        // Dapatkan ID kebun yang sudah memiliki aset ini
         const usedKebunIds = allAssets
             .filter(asset => asset.nama_aset === selectedAsset)
-            .map(asset => asset.kebun?.id)
-            .filter(id => id !== undefined);
+            .map(asset => asset.kebun ? asset.kebun.id : null)
+            .filter(id => id !== null && id !== undefined);
 
-        // Enable all options first
+        // Aktifkan semua opsi terlebih dahulu
         kebunDropdown.find('option').prop('disabled', false);
 
-        // Disable options that already have this asset
+        // Nonaktifkan opsi yang sudah memiliki aset ini
         if (selectedAsset) {
             kebunDropdown.find('option').each(function() {
                 const option = $(this);
@@ -315,76 +352,83 @@
         }
     }
 
-    // Update kebun dropdown when asset selection changes
-$('#namaaset').on('change', function() {
-    const selectedAsset = $(this).val();
-    const kategori = kategoriMap[selectedAsset];
+    // Handler perubahan select nama aset
+    $('#namaaset').on('change', function() {
+        const selectedAsset = $(this).val();
+        const kategori = kategoriMap[selectedAsset];
+        
+        if (selectedAsset) {
+            $('#kebun_id, #jumlahaset').prop('disabled', false);
+            
+            // Perbaikan: Gunakan ID yang sesuai dari HTML Anda
+            $('#jenis_aset').val(kategori); // Kolom jenis aset yang disabled
+            $('#kategori_id').val(kategoriIdMap[kategori] || '');
+            
+            filterKebunDropdown(selectedAsset);
+        } else {
+            $('#kebun_id').prop('disabled', true).val('');
+            $('#jumlahaset').prop('disabled', true).val('');
+            $('#jenis_aset').val('');
+            $('#kategori_id').val('');
+        }
+    });
+
+    // Pada bagian script Anda
+$('#jumlahaset').on('input', function(e) {
+    // Hapus karakter non-digit
+    this.value = this.value.replace(/[^0-9]/g, '');
     
-    // Enable/disable fields based on selection
-    if (selectedAsset) {
-        $('#kebun_id').prop('disabled', false);
-        $('#jumlahaset').prop('disabled', false);
-        
-        // Update jenis aset
-        $('#jenisaset').val(kategori);
-        $('#kategori_id').val(kategoriIdMap[kategori] || '');
-        
-        // Filter kebun options
-        filterKebunDropdown(selectedAsset);
-    } else {
-        // If no asset selected, disable fields and clear values
-        $('#kebun_id').prop('disabled', true).val('');
-        $('#jumlahaset').prop('disabled', true).val('');
-        $('#jenisaset').val('');
-        $('#kategori_id').val('');
+    // Jika ingin batasan minimal (contoh: tidak boleh 0)
+    if (this.value <= 0) {
+        this.value = '';
     }
 });
 
-// Initialize fields as disabled on modal show
-$('#addAssetModal').on('show.bs.modal', function() {
-    $('#kebun_id').prop('disabled', true);
-    $('#jumlahaset').prop('disabled', true);
-});
-
+    // Inisialisasi modal
     const editModal = new bootstrap.Modal(document.getElementById('editAssetModal'));
     const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
 
+    // Handler tombol edit
     $(document).on('click', '.edit-btn', function () {
         $('#edit_id').val($(this).data('id'));
         $('#edit_namaaset').val($(this).data('nama'));
-        $('#edit_jenisaset').val($(this).data('jenis'));
+        $('#edit_jenis_aset').val($(this).data('jenis'));
         $('#edit_namakebun').val($(this).data('kebun-nama'));
         $('#edit_kebun_id').val($(this).data('kebun-id'));
         $('#edit_jumlahaset').val($(this).data('jumlah'));
         editModal.show();
     });
 
+    // Handler tombol hapus
     $(document).on('click', '.delete-btn', function () {
         $('#delete_id').val($(this).data('id'));
         deleteModal.show();
     });
 
+    // Handler konfirmasi hapus
     $('#confirmDeleteBtn').on('click', function () {
         const id = $('#delete_id').val();
         $.ajax({
-            url: `http://103.150.101.10/api/aset/${id}`,
+            url: `<?= base_url('Aset/deleteAset') ?>/${id}`,
             method: 'DELETE',
             headers: {
                 'Authorization': 'Bearer <?= $this->session->userdata('token') ?>',
                 'Accept': 'application/json'
             },
             success: function () {
-                $('body').prepend('<div class="alert alert-success">Aset berhasil diubah.</div>');
+                $('body').prepend('<div class="alert alert-success">Aset berhasil dihapus.</div>');
                 setTimeout(() => location.reload(), 1500);
             },
-            error: function () {
-                alert('Gagal menghapus aset.');
+            error: function (xhr) {
+                alert('Gagal menghapus aset: ' + (xhr.responseJSON?.message || 'Error tidak diketahui'));
             }
         });
     });
 });
 
+// Set error mode untuk DataTables
 $.fn.dataTable.ext.errMode = 'none';
-  </script>
+</script>
+
 </body>
 </html>

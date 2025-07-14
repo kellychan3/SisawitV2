@@ -17,12 +17,6 @@
     <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
 <body>
-    <?php if($this->session->flashdata('message')): ?>
-    <div class="alert-success">
-        <?= $this->session->flashdata('message'); ?>
-    </div>
-    <?php endif; ?>
-
     <div class="page-wrapper">
         <div class="page-content">
             <div class="filter-box">

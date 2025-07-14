@@ -17,9 +17,10 @@
             </div>
         </div>
 
+        <?php if ($kebun): ?>
         <a class="btn btn-warning mb-3" href="<?= base_url('KebunPdf'); ?>" target="_blank">Cetak File PDF</a>
 
-        <?php if ($kebun): ?>
+        
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5">
             <?php foreach ($kebun as $k) : ?>
                 <div class="col mb-4">
