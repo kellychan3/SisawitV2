@@ -520,11 +520,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST API Kebun</from>
-      <to>Output Kebun</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Seleksi Kolom Kebun</from>
       <to>fact_luas_kebun</to>
       <enabled>Y</enabled>
@@ -609,7 +604,59 @@
       <to>Cek Data di API</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>REST API Kebun</from>
+      <to>Filter Null</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter Null</from>
+      <to>Output Kebun</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <step>
+    <name>Cek Data di API</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>sk_kebun</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>sk_kebun</name>
+        <field>sk_kebun_api</field>
+      </key>
+      <value>
+        <name>sk_kebun_api</name>
+        <rename>sk_kebun_api</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1008</xloc>
+      <yloc>448</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Data Ada?</name>
     <type>StreamLookup</type>
@@ -659,45 +706,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>656</xloc>
+      <xloc>768</xloc>
       <yloc>160</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Delete</name>
-    <type>Delete</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <commit>100</commit>
-    <lookup>
-      <schema>dw_sawit</schema>
-      <table>fact_luas_kebun</table>
-      <key>
-        <name>sk_kebun</name>
-        <field>sk_kebun</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1360</xloc>
-      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -720,12 +730,6 @@
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>id_kebun_api</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-          <condition>
-            <negated>N</negated>
             <operator>AND</operator>
             <leftvalue>sk_fact_luas_kebun_db</leftvalue>
             <function>IS NULL</function>
@@ -743,7 +747,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
+      <xloc>1248</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -783,14 +787,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
+      <xloc>1248</xloc>
       <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Luas berubah di API</name>
-    <type>FilterRows</type>
+    <name>Delete</name>
+    <type>Delete</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -799,28 +803,18 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Insert / update 1</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>luas_kebun_api</leftvalue>
-            <function>&lt;></function>
-            <rightvalue>luas_kebun_db</rightvalue>
-          </condition>
-          <condition>
-            <negated>N</negated>
-            <operator>AND</operator>
-            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
+    <connection>dw_sawit_new</connection>
+    <commit>100</commit>
+    <lookup>
+      <schema>dw_sawit</schema>
+      <table>fact_luas_kebun</table>
+      <key>
+        <name>sk_kebun</name>
+        <field>sk_kebun</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+    </lookup>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -830,13 +824,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
-      <yloc>256</yloc>
+      <xloc>1472</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Waktu berubah di API</name>
+    <name>Filter Null</name>
     <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -846,7 +840,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Insert / update 2</send_true_to>
+    <send_true_to>Output Kebun</send_true_to>
     <send_false_to/>
     <compare>
       <condition>
@@ -854,16 +848,18 @@
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>sk_waktu_api</leftvalue>
+            <leftvalue>result_kebun</leftvalue>
             <function>&lt;></function>
-            <rightvalue>sk_waktu_db</rightvalue>
-          </condition>
-          <condition>
-            <negated>N</negated>
-            <operator>AND</operator>
-            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
-            <function>IS NOT NULL</function>
             <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>[]</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
           </condition>
         </conditions>
       </condition>
@@ -877,8 +873,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1136</xloc>
-      <yloc>352</yloc>
+      <xloc>352</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -971,7 +967,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1360</xloc>
+      <xloc>1472</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1014,8 +1010,55 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1360</xloc>
+      <xloc>1472</xloc>
       <yloc>352</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Luas berubah di API</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update 1</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>luas_kebun_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>luas_kebun_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1248</xloc>
+      <yloc>256</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1124,7 +1167,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>352</xloc>
+      <xloc>464</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1180,7 +1223,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>192</xloc>
+      <xloc>224</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1223,14 +1266,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1360</xloc>
+      <xloc>1472</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Cek Data di API</name>
-    <type>StreamLookup</type>
+    <name>Waktu berubah di API</name>
+    <type>FilterRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1239,23 +1282,28 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <from>sk_kebun</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>sk_kebun</name>
-        <field>sk_kebun_api</field>
-      </key>
-      <value>
-        <name>sk_kebun_api</name>
-        <rename>sk_kebun_api</rename>
-        <default/>
-        <type>None</type>
-      </value>
-    </lookup>
+    <send_true_to>Insert / update 2</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>sk_waktu_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>sk_waktu_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -1265,144 +1313,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>896</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>fact_luas_kebun_db 2</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <sql>SELECT 
-  f.sk_fact_luas_kebun,
-  f.sk_kebun,
-  f.sk_user,
-  f.sk_waktu,
-  f.luas_kebun
-FROM dw_sawit.fact_luas_kebun f
-JOIN dw_sawit.dim_user u ON f.sk_user = u.sk_user
-WHERE u.sk_organisasi = ${sk_organisasi}
-</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>Y</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cached_row_meta_active>N</cached_row_meta_active>
-    <row-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_kebun</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>Table input</origin>
-        <comments>sk_kebun</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>id_kebun</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>Table input</origin>
-        <comments>id_kebun</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>String</type>
-        <storagetype>normal</storagetype>
-        <name>nama_kebun</name>
-        <length>63</length>
-        <precision>-1</precision>
-        <origin>Table input</origin>
-        <comments>nama_kebun</comments>
-        <conversion_Mask/>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_organisasi</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>Table input</origin>
-        <comments>sk_organisasi</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-    </row-meta>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>704</xloc>
-      <yloc>448</yloc>
+      <xloc>1248</xloc>
+      <yloc>352</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1534,7 +1446,7 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
+      <xloc>592</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1643,7 +1555,7 @@ FROM dw_sawit.dim_user
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
+      <xloc>928</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1664,7 +1576,6 @@ FROM dw_sawit.dim_user
   sk_waktu
 , tanggal
 , tahun
-, kuartal
 , bulan
 , minggu
 , hari
@@ -1872,7 +1783,7 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>944</xloc>
+      <xloc>1056</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1936,7 +1847,7 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1552</xloc>
+      <xloc>1664</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -2093,8 +2004,144 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>656</xloc>
+      <xloc>768</xloc>
       <yloc>16</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun_db 2</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT 
+  f.sk_fact_luas_kebun,
+  f.sk_kebun,
+  f.sk_user,
+  f.sk_waktu,
+  f.luas_kebun
+FROM dw_sawit.fact_luas_kebun f
+JOIN dw_sawit.dim_user u ON f.sk_user = u.sk_user
+WHERE u.sk_organisasi = ${sk_organisasi}
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>Table input</origin>
+        <comments>sk_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>id_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>Table input</origin>
+        <comments>id_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>nama_kebun</name>
+        <length>63</length>
+        <precision>-1</precision>
+        <origin>Table input</origin>
+        <comments>nama_kebun</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>Table input</origin>
+        <comments>sk_organisasi</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>448</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2135,7 +2182,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
+      <xloc>592</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -2177,7 +2224,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
+      <xloc>928</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
@@ -2219,7 +2266,7 @@ FROM dw_sawit.fact_luas_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>944</xloc>
+      <xloc>1056</xloc>
       <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>

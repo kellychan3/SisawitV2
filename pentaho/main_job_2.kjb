@@ -51,6 +51,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -417,7 +421,7 @@
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>get_sk_organisasi</name>
+      <name>set_sk_organisasi</name>
       <description/>
       <type>TRANS</type>
       <attributes/>
@@ -545,7 +549,7 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>get_sk_organisasi</from>
+      <from>set_sk_organisasi</from>
       <to>fact_prediksi_panen</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -564,7 +568,7 @@
     </hop>
     <hop>
       <from>dim_organisasi</from>
-      <to>get_sk_organisasi</to>
+      <to>set_sk_organisasi</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

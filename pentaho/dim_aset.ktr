@@ -470,6 +470,10 @@
         <attribute>N</attribute>
       </attribute>
       <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>3306</attribute>
       </attribute>
@@ -531,11 +535,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST API Aset</from>
-      <to>Output Aset</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Seleksi Kolom Kebun</from>
       <to>dim_aset</to>
       <enabled>Y</enabled>
@@ -585,7 +584,59 @@
       <to>Cek data di API</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>REST API Aset</from>
+      <to>Filter Null</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Filter Null</from>
+      <to>Output Aset</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <step>
+    <name>Cek data di API</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>Output Aset</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_aset</name>
+        <field>id_aset_api</field>
+      </key>
+      <value>
+        <name>id_aset_api</name>
+        <rename>id_aset_api</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>912</xloc>
+      <yloc>432</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Data Ada?</name>
     <type>StreamLookup</type>
@@ -635,45 +686,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
+      <xloc>592</xloc>
       <yloc>208</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Delete</name>
-    <type>Delete</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <commit>100</commit>
-    <lookup>
-      <schema>dw_sawit</schema>
-      <table>dim_aset</table>
-      <key>
-        <name>id_aset</name>
-        <field>id_aset</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1312</xloc>
-      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -696,12 +710,6 @@
         <conditions>
           <condition>
             <negated>N</negated>
-            <leftvalue>id_aset_api</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-          <condition>
-            <negated>N</negated>
             <operator>AND</operator>
             <leftvalue>id_aset_db</leftvalue>
             <function>IS NULL</function>
@@ -719,7 +727,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1088</xloc>
+      <xloc>1152</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
@@ -759,14 +767,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1088</xloc>
+      <xloc>1152</xloc>
       <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Jumlah aset berubah di API</name>
-    <type>FilterRows</type>
+    <name>Delete</name>
+    <type>Delete</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -775,28 +783,18 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Insert / update</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>jumlah_aset_api</leftvalue>
-            <function>&lt;></function>
-            <rightvalue>jumlah_aset_db</rightvalue>
-          </condition>
-          <condition>
-            <negated>N</negated>
-            <operator>AND</operator>
-            <leftvalue>id_aset_db</leftvalue>
-            <function>IS NOT NULL</function>
-            <rightvalue/>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
+    <connection>dw_sawit_new</connection>
+    <commit>100</commit>
+    <lookup>
+      <schema>dw_sawit</schema>
+      <table>dim_aset</table>
+      <key>
+        <name>id_aset</name>
+        <field>id_aset</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+    </lookup>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -806,8 +804,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1088</xloc>
-      <yloc>320</yloc>
+      <xloc>1376</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -857,8 +855,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>118</xloc>
-      <yloc>211</yloc>
+      <xloc>48</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -900,7 +898,54 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1376</xloc>
+      <yloc>320</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Jumlah aset berubah di API</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Insert / update</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>jumlah_aset_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>jumlah_aset_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>id_aset_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1152</xloc>
       <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1023,7 +1068,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>384</xloc>
+      <xloc>448</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1079,7 +1124,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
+      <xloc>192</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1125,50 +1170,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1312</xloc>
+      <xloc>1376</xloc>
       <yloc>208</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Cek data di API</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>Output Aset</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_aset</name>
-        <field>id_aset_api</field>
-      </key>
-      <value>
-        <name>id_aset_api</name>
-        <rename>id_aset_api</rename>
-        <default/>
-        <type>None</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>848</xloc>
-      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1351,7 +1354,7 @@ WHERE k.sk_organisasi = ${sk_organisasi};
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
+      <xloc>784</xloc>
       <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1419,7 +1422,7 @@ WHERE k.sk_organisasi = ${sk_organisasi};
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1472</xloc>
+      <xloc>1536</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1600,7 +1603,7 @@ FROM dw_sawit.dim_aset
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
+      <xloc>592</xloc>
       <yloc>64</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1709,7 +1712,7 @@ FROM dw_sawit.dim_kategori_aset
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
+      <xloc>784</xloc>
       <yloc>64</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1842,7 +1845,7 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>896</xloc>
+      <xloc>960</xloc>
       <yloc>64</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1884,7 +1887,7 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
+      <xloc>784</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1926,7 +1929,56 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>896</xloc>
+      <xloc>960</xloc>
+      <yloc>208</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter Null</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Output Aset</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>result_aset</leftvalue>
+            <function>&lt;></function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>[]</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>320</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>

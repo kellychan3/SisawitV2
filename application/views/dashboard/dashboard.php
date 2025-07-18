@@ -223,7 +223,7 @@
                     Nama Pupuk <span id="sort-icon-nama">↕</span>
                 </th>
                 <th onclick="sortTable(1)" style="cursor:pointer;">
-                    Stok <span id="sort-icon-stok">↕</span>
+                    Stok (Kg) <span id="sort-icon-stok">↕</span>
                 </th>
             </tr>
         </thead>
