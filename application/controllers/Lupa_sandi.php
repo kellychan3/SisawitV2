@@ -52,6 +52,11 @@ class Lupa_sandi extends CI_Controller {
 }
 
     public function verifikasi_otp() {
+        if (!$this->session->userdata('email')) {
+        redirect('lupa_sandi');
+        return;
+    }
+
         $this->load->view('layout/auth_header');
         $this->load->view('auth/verifikasi_otp');
         $this->load->view('layout/auth_footer');
@@ -100,6 +105,11 @@ class Lupa_sandi extends CI_Controller {
     }
 
     public function reset_password() {
+        if (!$this->session->userdata('reset_token') || !$this->session->userdata('email')) {
+        redirect('lupa_sandi');
+        return;
+    }
+
         $this->load->view('layout/auth_header');
         $this->load->view('auth/reset_password');
         $this->load->view('layout/auth_footer');
@@ -111,6 +121,13 @@ class Lupa_sandi extends CI_Controller {
     $reset_token = $this->session->userdata('reset_token');
     $email = $this->session->userdata('email');
 
+    // Validasi minimum panjang dan kecocokan
+    if (strlen($password) < 6) {
+        $this->session->set_flashdata('error', 'Password minimal 6 karakter.');
+        redirect('lupa_sandi/reset');
+        return;
+    }
+    
     if (!$email || !$reset_token) {
         $this->session->set_flashdata('error', 'Token atau email tidak ditemukan.');
         redirect('lupa_sandi/reset_password');

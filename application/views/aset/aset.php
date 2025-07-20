@@ -188,42 +188,37 @@
                   <th>Jumlah Aset</th>
                   <th>Jenis Aset</th>
                   <th>Kebun</th>
-                  <?php if ($this->session->userdata('role') !== 'mandor'): ?>
-                    <th>Aksi</th>
-                  <?php endif; ?>
+                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php if (empty($asset)): ?>
-                  <tr><td colspan="5" class="text-center">Belum ada aset ditambahkan.</td></tr>
-                <?php else: ?>
-                  <?php foreach ($asset as $a): ?>
-                    <tr>
-                      <td><?= htmlspecialchars($a['nama_aset']); ?></td>
-                      <td>
-  <?= htmlspecialchars($a['jumlah_aset']); ?>
-  <?= (isset($a['kategori_aset']['nama_kategori']) && $a['kategori_aset']['nama_kategori'] === 'Pupuk') ? ' kg' : ''; ?>
-</td>
-
-                      <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
-                      <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
-                      <?php if ($this->session->userdata('role') == 'pemilik'): ?>
-                        <td>
-                          <button class="btn btn-warning edit-btn"
-                            data-id="<?= $a['id']; ?>"
-                            data-nama="<?= htmlspecialchars($a['nama_aset']); ?>"
-                            data-jenis="<?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?>"
-                            data-kebun-id="<?= $a['kebun']['id'] ?? ''; ?>"
-                            data-kebun-nama="<?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?>"
-                            data-jumlah="<?= $a['jumlah_aset']; ?>">
-                            Ubah
-                          </button>
-                          <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
+                <?php foreach ($asset as $a): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($a['nama_aset']); ?></td>
+                    <td>
+                      <?= htmlspecialchars($a['jumlah_aset']); ?>
+                      <?= (isset($a['kategori_aset']['nama_kategori']) && $a['kategori_aset']['nama_kategori'] === 'Pupuk') ? ' kg' : ''; ?>
+                    </td>
+                    <td><?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?></td>
+                    <td><?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?></td>
+                    <td>
+                      <?php if ($this->session->userdata('role') === 'pemilik'): ?>
+                                        <button class="btn btn-warning edit-btn"
+                                          data-id="<?= $a['id']; ?>"
+                                          data-nama="<?= htmlspecialchars($a['nama_aset']); ?>"
+                                          data-jenis="<?= htmlspecialchars($a['kategori_aset']['nama_kategori'] ?? '-'); ?>"
+                                          data-kebun-id="<?= $a['kebun']['id'] ?? ''; ?>"
+                                          data-kebun-nama="<?= htmlspecialchars($a['kebun']['nama_kebun'] ?? '-'); ?>"
+                                          data-jumlah="<?= $a['jumlah_aset']; ?>">
+                                          Ubah
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" data-id="<?= $a['id']; ?>">Hapus</button>
+                                      <?php else: ?>
+                        <span class="text-muted">-</span> <!-- atau kosong -->
+                          <?php endif; ?>
                         </td>
-                      <?php endif; ?>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php endif; ?>
+                      </tr>
+                    <?php endforeach; ?>
               </tbody>
             </table>
           </div>

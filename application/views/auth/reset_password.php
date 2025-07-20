@@ -1,3 +1,4 @@
+<!-- reset_password.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,8 +6,6 @@
     <meta charset="UTF-8">
     <title>Reset Password</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/icons.css" rel="stylesheet">
     <style>
@@ -15,7 +14,6 @@
         }
 
         input.form-control:focus {
-            height: 45px;
             box-shadow: none;
         }
 
@@ -34,10 +32,6 @@
         }
 
         .invalid-feedback {
-            display: none;
-        }
-
-        input:invalid + .invalid-feedback {
             display: block;
         }
     </style>
@@ -59,7 +53,6 @@
                                         <h3>Ubah Kata Sandi</h3>
                                     </div>
 
-                                    <!-- Flash message -->
                                     <?php if ($this->session->flashdata('error')): ?>
                                         <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
                                     <?php endif; ?>
@@ -68,22 +61,22 @@
                                     <?php endif; ?>
 
                                     <div class="form-body">
-                                        <form class="row g-3 needs-validation" method="post" action="<?= site_url('lupa_sandi/submit_reset_password'); ?>" novalidate>
+                                        <form id="resetPasswordForm" class="row g-3" method="post" action="<?= site_url('lupa_sandi/submit_reset_password'); ?>">
                                             <div class="col-12">
                                                 <label for="password">Kata Sandi Baru</label>
                                                 <div class="position-relative">
-                                                    <input type="password" class="form-control" name="password" id="password" placeholder="Masukkan Kata Sandi Baru" required>
+                                                    <input type="password" class="form-control" name="password" id="password" placeholder="Masukkan Kata Sandi Baru">
                                                     <i class="bx bx-show password-toggle-icon" onclick="togglePassword('password', this)"></i>
                                                 </div>
-                                                <div class="invalid-feedback">Kolom ini wajib diisi.</div>
+                                                <div class="invalid-feedback" id="passwordError"></div>
                                             </div>
                                             <div class="col-12">
                                                 <label for="password_konfirmasi">Ulangi Kata Sandi Baru</label>
                                                 <div class="position-relative">
-                                                    <input type="password" class="form-control" name="password_konfirmasi" id="password_konfirmasi" placeholder="Masukkan Kembali Kata Sandi Baru" required>
+                                                    <input type="password" class="form-control" name="password_konfirmasi" id="password_konfirmasi" placeholder="Masukkan Kembali Kata Sandi Baru">
                                                     <i class="bx bx-show password-toggle-icon" onclick="togglePassword('password_konfirmasi', this)"></i>
                                                 </div>
-                                                <div class="invalid-feedback">Kolom ini wajib diisi.</div>
+                                                <div class="invalid-feedback" id="confirmError"></div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="d-grid">
@@ -102,25 +95,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap & JS -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Bootstrap validation script
-        (() => {
-            'use strict';
-            const forms = document.querySelectorAll('.needs-validation');
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-
-        // Toggle show/hide password
         function togglePassword(id, icon) {
             const input = document.getElementById(id);
             if (input.type === "password") {
@@ -133,6 +109,49 @@
                 icon.classList.add('bx-show');
             }
         }
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // stop default submit
+            let isValid = true;
+
+            const password = document.getElementById('password');
+            const confirm = document.getElementById('password_konfirmasi');
+            const passwordError = document.getElementById('passwordError');
+            const confirmError = document.getElementById('confirmError');
+
+            // Reset
+            password.classList.remove('is-invalid');
+            confirm.classList.remove('is-invalid');
+            passwordError.textContent = '';
+            confirmError.textContent = '';
+
+            // Validasi Password
+            if (!password.value.trim()) {
+                password.classList.add('is-invalid');
+                passwordError.textContent = 'Kolom kata sandi wajib diisi.';
+                isValid = false;
+            } else if (password.value.length < 6) {
+                password.classList.add('is-invalid');
+                passwordError.textContent = 'Password minimal 6 karakter.';
+                isValid = false;
+            }
+
+            // Validasi Konfirmasi
+            if (!confirm.value.trim()) {
+                confirm.classList.add('is-invalid');
+                confirmError.textContent = 'Kolom konfirmasi wajib diisi.';
+                isValid = false;
+            } else if (confirm.value !== password.value) {
+                confirm.classList.add('is-invalid');
+                confirmError.textContent = 'Konfirmasi password tidak cocok.';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Kirim form secara manual
+                this.submit();
+            }
+        });
     </script>
 </body>
 

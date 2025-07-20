@@ -112,7 +112,7 @@ class Dashboard extends CI_Controller
         $selisih_persen_bulan = $rata_bulanan ? (($total_bulan_ini - $rata_bulanan) / $rata_bulanan * 100) : 0;
         $data['rata_panen_bulanan'] = $rata_bulanan;
         $data['indikator_panen'] = [
-            'nilai'  => number_format($total_bulan_ini, 1, ',', '.'),
+            'nilai'  => number_format($total_bulan_ini, 0, ',', '.'),
             'persen' => round(abs($selisih_persen_bulan), 1),
             'naik'   => $selisih_persen_bulan >= 0,
         ];
@@ -138,7 +138,7 @@ $total_minggu_ini = $this->Dashboard_model->get_total_panen_minggu_ini(
 
         $data['rata_panen_mingguan'] = $rata_mingguan;
         $data['indikator_panen_mingguan'] = [
-            'nilai'  => number_format($total_minggu_ini, 1, ',', '.'),
+            'nilai'  => number_format($total_minggu_ini, 0, ',', '.'),
             'persen' => round(abs($selisih_persen_minggu), 1),
             'naik'   => $selisih_persen_minggu >= 0,
         ];
