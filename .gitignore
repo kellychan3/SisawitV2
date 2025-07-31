@@ -20,3 +20,5 @@ pentaho/pdi.zip
 .pentaho/step_login_cadangan.ktr
 .pentaho/dim_user_testing.ktr
 
+/application/cache/
+
