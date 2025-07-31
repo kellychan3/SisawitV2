@@ -283,6 +283,18 @@ body {
     padding: 0 16px;
 }
 
+.select-all-label {
+    display: block;
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.select-all-label input {
+    margin-right: 8px;
+}
+
 /* Custom Dropdown (unchanged) */
 .custom-dropdown {
     position: relative;

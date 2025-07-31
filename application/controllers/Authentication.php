@@ -6,6 +6,8 @@ class Authentication extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('Login_model');
+        $this->load->helper('sisawit');
     }
 
     public function index()
@@ -20,71 +22,53 @@ class Authentication extends CI_Controller
     $email = $this->input->post('email');
     $password = $this->input->post('password');
 
-    // Setup CURL untuk call API login eksternal
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/login",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode([
-            "no_hp" => $email,
-            "password" => $password,
-        ]),
-        CURLOPT_HTTPHEADER => [
-            "Content-Type: application/json"
-        ],
-    ]);
-
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-    curl_close($curl);
-
-    if ($err) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Koneksi ke server gagal!</div>');
+    if (empty($email) || empty($password)) {
+        set_alert('danger', 'Email/No.HP dan Password wajib diisi!');
         redirect('Authentication');
+        return;
+    }
+
+    $result = $this->Login_model->login_api($email, $password);
+
+    if (isset($result['error']) && $result['error']) {
+        set_alert('danger', $result['message']);
+        redirect('Authentication');
+        return;
+    }
+
+    if (isset($result['message']) && $result['message'] == "Success") {
+        $user = $result['user'];
+        $token = $result['token'];
+
+        $this->session->set_userdata([
+            'id_user' => $user['id'],
+            'email' => $user['email'],
+            'nama' => $user['nama'],
+            'role' => $user['role'],
+            'token' => $token,
+            'organisasi_id' => $user['organisasi_id'],
+        ]);
+
+        $this->db->insert('api_tokens', [
+            'id_user' => $user['id'],
+            'id_organisasi' => $user['organisasi_id'],
+            'token' => $token,
+            'created_at' => date('Y-m-d H:i:s') 
+        ]);
+
+        redirect('Dashboard');
     } else {
-        $result = json_decode($response, true);
-
-        if (isset($result['message']) && $result['message'] == "Success") {
-    $user = $result['user'];
-    $token = $result['token'];
-
-    $this->session->set_userdata([
-        'id_user' => $user['id'],
-        'email' => $user['email'],
-        'nama' => $user['nama'],
-        'role' => $user['role'],
-        'token' => $token,
-        'organisasi_id' => $user['organisasi_id'],
-    ]);
-
-    $this->db->insert('api_tokens', [
-        'id_user' => $user['id'],
-        'id_organisasi' => $user['organisasi_id'],
-        'token' => $token,
-        'created_at' => date('Y-m-d H:i:s') // jika DB tidak auto timestamp
-    ]);
-
-    redirect('Dashboard');
-}
-else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email/Nomor HP atau Kata Sandi salah!</div>');
-            redirect('Authentication');
-        }
+        set_alert('danger', 'Email/Nomor HP atau Kata Sandi salah!');
+        redirect('Authentication');
     }
 }
 
     public function logout()
-{
-    $this->session->sess_destroy();
-    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Logout berhasil</div>');
-    redirect('Authentication');
-}
-
+    {
+        $this->session->sess_destroy();
+        set_alert('success', 'Logout berhasil');
+        redirect('Authentication');
+    }
 
     public function lupa_sandi()
     {

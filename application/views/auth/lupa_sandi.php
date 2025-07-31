@@ -56,34 +56,37 @@
         </div>
     </div>
 
-    <script>
-document.querySelector('form').addEventListener('submit', function (e) {
+<script>
+    function validateEmailField() {
     const emailInput = document.getElementById('email');
     const value = emailInput.value.trim();
     const emptyFeedback = document.getElementById('emailEmptyFeedback');
     const formatFeedback = document.getElementById('emailFormatFeedback');
 
-    // Reset
+    // Reset state
     emailInput.classList.remove('is-invalid');
     emptyFeedback.style.display = 'none';
     formatFeedback.style.display = 'none';
 
-    let valid = true;
-
     if (!value) {
         emailInput.classList.add('is-invalid');
         emptyFeedback.style.display = 'block';
-        valid = false;
+        return false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         emailInput.classList.add('is-invalid');
         formatFeedback.style.display = 'block';
-        valid = false;
+        return false;
     }
 
-    if (!valid) {
+    return true;
+}
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+    if (!validateEmailField()) {
         e.preventDefault();
     }
 });
+
 </script>
 
 </body>

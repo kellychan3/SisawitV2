@@ -10,38 +10,14 @@ class Aset extends CI_Controller
 
     private function getKategori()
     {
-        $token = $this->session->userdata('token');
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/kategori-aset",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $token",
-                "Accept: application/json"
-            ],
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return json_decode($response, true) ?: [];
+        list($status, $data) = apiRequest("http://103.150.101.10/api/kategori-aset");
+        return $data ?: [];
     }
 
     private function getKebun()
     {
-        $token = $this->session->userdata('token');
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/kebun",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $token",
-                "Accept: application/json"
-            ],
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return json_decode($response, true) ?: [];
+        list($status, $data) = apiRequest("http://103.150.101.10/api/kebun");
+        return $data ?: [];
     }
 
     public function index()
@@ -50,19 +26,8 @@ class Aset extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id');
         if (!$token || !$organisasi_id) redirect('authentication');
 
-        // Ambil data aset
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/aset",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $token",
-                "Accept: application/json"
-            ],
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $allAssets = json_decode($response, true) ?: [];
+        list($status, $allAssets) = apiRequest("http://103.150.101.10/api/aset");
+        $allAssets = $allAssets ?: [];
 
         $data['asset'] = $allAssets;
         $data['kategori'] = $this->getKategori();
@@ -80,36 +45,30 @@ class Aset extends CI_Controller
     }
 
     public function addAset()
-{
-    $token = $this->session->userdata('token');
-    $organisasi_id = $this->session->userdata('organisasi_id');
-    if (!$token || !$organisasi_id) redirect('authentication');
+    {
+        $token = $this->session->userdata('token');
+        $organisasi_id = $this->session->userdata('organisasi_id');
+        if (!$token || !$organisasi_id) redirect('authentication');
 
-    $nama_aset = $this->input->post('namaaset');
-    $kategori_aset_id = $this->input->post('kategori_id');
-    $kebun_id = $this->input->post('kebun_id');
-    $jumlah_aset = (int) $this->input->post('jumlahaset');
+        $nama_aset = $this->input->post('namaaset');
+        $kategori_aset_id = $this->input->post('kategori_id');
+        $kebun_id = $this->input->post('kebun_id');
+        $jumlah_aset = (int) $this->input->post('jumlahaset');
 
-    // Ambil semua aset dulu
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/aset",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer $token",
-            "Accept: application/json"
-        ],
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $existingAssets = json_decode($response, true) ?: [];
+        // Validasi input kosong
+        if (empty($nama_aset) || empty($kategori_aset_id) || empty($kebun_id) || $jumlah_aset <= 0) {
+            set_alert('danger', 'Kolom wajib dipilih/diisi.');
+            redirect('Aset');
+            return;
+        }
 
-    if (!is_array($existingAssets)) {
-        log_message('error', 'Format response tidak sesuai: ' . $response);
-        $this->session->set_flashdata('error', 'Gagal mengambil data aset dari server.');
-        redirect('Aset');
-        return;
-    }
+        list($status, $existingAssets) = apiRequest("http://103.150.101.10/api/aset");
+        if ($status !== 200 || !is_array($existingAssets)) {
+            log_message('error', 'Gagal mengambil data aset.');
+            set_alert('danger', 'Gagal mengambil data aset dari server.');
+            redirect('Aset');
+            return;
+        }
 
     foreach ($existingAssets as $aset) {
         if (
@@ -119,13 +78,12 @@ class Aset extends CI_Controller
             $aset['kategori_aset']['id'] == $kategori_aset_id &&
             $aset['kebun']['id'] == $kebun_id
         ) {
-            $this->session->set_flashdata('error', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
+            set_alert('danger', 'Aset dengan nama, jenis, dan lokasi kebun yang sama sudah ada.');
             redirect('Aset');
             return;
         }
     }
 
-    // Lanjut tambah aset jika tidak duplikat
     $postData = json_encode([
         'nama_aset' => $nama_aset,
         'kategori_aset_id' => $kategori_aset_id,
@@ -133,26 +91,12 @@ class Aset extends CI_Controller
         'jumlah_aset' => $jumlah_aset
     ]);
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/aset",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $postData,
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer $token",
-            "Accept: application/json",
-            "Content-Type: application/json"
-        ],
-    ]);
-    $result = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
+    list($status, $result) = apiRequest("http://103.150.101.10/api/aset", 'POST', $postData);
 
     if ($status == 201 || $status == 200) {
-        $this->session->set_flashdata('success', 'Aset berhasil ditambahkan.');
+        set_alert('success', 'Aset berhasil ditambahkan.');
     } else {
-        $this->session->set_flashdata('error', 'Gagal menambahkan aset.');
+        set_alert('danger', 'Gagal menambahkan aset.');
     }
 
     redirect('Aset');
@@ -170,26 +114,12 @@ public function editAset()
         'kebun_id' => $kebun_id
     ]);
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/aset/$id",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "PUT",
-        CURLOPT_POSTFIELDS => $data,
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer $token",
-            "Accept: application/json",
-            "Content-Type: application/json"
-        ],
-    ]);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
+    list($status, $response) = apiRequest("http://103.150.101.10/api/aset/$id", 'PUT', $data);
 
     if ($status == 200) {
-        $this->session->set_flashdata('success', 'Aset berhasil diubah.');
+        set_alert('success', 'Aset berhasil diubah.');
     } else {
-        $this->session->set_flashdata('error', 'Gagal mengubah aset.');
+        set_alert('error', 'Gagal mengubah aset.');
     }
 
     redirect('Aset');
@@ -200,24 +130,12 @@ public function deleteAset()
     $token = $this->session->userdata('token');
     $id = $this->input->post('id');
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/aset/$id",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => "DELETE",
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer $token",
-            "Accept: application/json"
-        ],
-    ]);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
+    list($status, $response) = apiRequest("http://103.150.101.10/api/aset/$id", 'DELETE');
 
     if ($status == 200 || $status == 204) {
-        $this->session->set_flashdata('success', 'Aset berhasil dihapus.');
+        set_alert('success', 'Aset berhasil dihapus.');
     } else {
-        $this->session->set_flashdata('error', 'Gagal menghapus aset.');
+        set_alert('error', 'Gagal menghapus aset.');
     }
 
     redirect('Aset');

@@ -12,26 +12,26 @@ class Lupa_sandi extends CI_Controller {
     }
 
     public function request_otp() {
-    $email = $this->input->post('email');
+        $email = $this->input->post('email');
 
-    if (empty($email)) {
-        $this->session->set_flashdata('error', 'Kolom email wajib diisi.');
-        redirect('lupa_sandi');
-    }
+        if (empty($email)) {
+            $this->session->set_flashdata('error', 'Kolom email wajib diisi.');
+            redirect('lupa_sandi');
+        }
 
-    $payload = json_encode([
-        'email' => $email,
-        'intent' => 'forget_password'
-    ]);
+        $payload = json_encode([
+            'email' => $email,
+            'intent' => 'forget_password'
+        ]);
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $this->api_base . '/otp/request');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
-    ]);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->api_base . '/otp/request');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
 
     $response = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);

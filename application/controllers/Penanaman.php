@@ -15,21 +15,8 @@ class Penanaman extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id');
         if (!$token || !$organisasi_id) redirect('authentication');
 
-        // Ambil data dari API
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/penanaman",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer $token",
-                "Accept: application/json"
-            ],
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $decoded = json_decode($response, true);
-
+        list($status, $decoded) = apiRequest("http://103.150.101.10/api/penanaman");
+    
         // Pastikan hasilnya array of data
         if (is_array($decoded) && isset($decoded[0])) {
             $penanaman = $decoded;

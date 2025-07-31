@@ -1,4 +1,6 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 class Dashboard_model extends CI_Model
 {
     private $db;
@@ -9,6 +11,9 @@ class Dashboard_model extends CI_Model
         $this->db = $this->load->database('default', TRUE);
     }
 
+    /* =========================
+       DAFTAR TAHUN
+    ==========================*/
     public function get_tahun_list($organisasi_id)
     {
         $sql = "
@@ -41,56 +46,62 @@ class Dashboard_model extends CI_Model
         return array_map(fn($t) => ['tahun' => $t], $tahun_tersedia);
     }
 
+    /* =========================
+       DAFTAR BULAN
+    ==========================*/
     public function get_bulan_list($organisasi_id, $tahun = null)
-{
-    $params = [$organisasi_id];
-    $params_duplikat = [$organisasi_id]; // untuk UNION
-    $sql = "
-        SELECT DISTINCT w.bulan
-        FROM fact_panen f
-        JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
-        JOIN dim_user u ON f.sk_user = u.sk_user
-        JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
-        WHERE o.id_organisasi = ?
-    ";
+    {
+        $params = [$organisasi_id];
+        $params_union = [$organisasi_id];
 
-    if ($tahun !== null) {
-        $sql .= " AND w.tahun = ?";
-        $params[] = $tahun;
+        $sql = "
+            SELECT DISTINCT w.bulan
+            FROM fact_panen f
+            JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE o.id_organisasi = ?
+        ";
+
+        if ($tahun !== null) {
+            $sql .= " AND w.tahun = ?";
+            $params[] = $tahun;
+        }
+
+        $sql .= "
+            UNION
+            SELECT DISTINCT w.bulan
+            FROM fact_luas_kebun f
+            JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE o.id_organisasi = ?
+        ";
+
+        if ($tahun !== null) {
+            $sql .= " AND w.tahun = ?";
+            $params_union[] = $tahun;
+        }
+
+        $sql .= " ORDER BY bulan";
+
+        $result = $this->db->query($sql, array_merge($params, $params_union))->result_array();
+        $bulan_tersedia = array_column($result, 'bulan');
+
+        $bulan_saat_ini = (int)date('n');
+        $tahun_saat_ini = (int)date('Y');
+
+        if ($tahun == $tahun_saat_ini && !in_array($bulan_saat_ini, $bulan_tersedia)) {
+            $bulan_tersedia[] = $bulan_saat_ini;
+        }
+
+        sort($bulan_tersedia);
+        return array_map(fn($b) => ['bulan' => $b], $bulan_tersedia);
     }
 
-    $sql .= "
-        UNION
-        SELECT DISTINCT w.bulan
-        FROM fact_luas_kebun f
-        JOIN dim_waktu w ON f.sk_waktu = w.sk_waktu
-        JOIN dim_user u ON f.sk_user = u.sk_user
-        JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
-        WHERE o.id_organisasi = ?
-    ";
-
-    if ($tahun !== null) {
-        $sql .= " AND w.tahun = ?";
-        $params_duplikat[] = $tahun;
-    }
-
-    $sql .= " ORDER BY bulan";
-
-    $result = $this->db->query($sql, array_merge($params, $params_duplikat))->result_array();
-    $bulan_tersedia = array_column($result, 'bulan');
-
-    $bulan_saat_ini = (int)date('n');
-    $tahun_saat_ini = (int)date('Y');
-
-    if ($tahun == $tahun_saat_ini && !in_array($bulan_saat_ini, $bulan_tersedia)) {
-        $bulan_tersedia[] = $bulan_saat_ini;
-    }
-
-    sort($bulan_tersedia);
-    return array_map(fn($b) => ['bulan' => $b], $bulan_tersedia);
-}
-
-
+    /* =========================
+       DAFTAR KEBUN
+    ==========================*/
     public function get_kebun_list($organisasi_id)
     {
         $sql = "
@@ -104,9 +115,12 @@ class Dashboard_model extends CI_Model
         return $this->db->query($sql, [$organisasi_id])->result_array();
     }
 
-     public function get_summary_kebun($organisasi_id = null, $kebun = null, $tahun = null, $bulan = null)
+    /* =========================
+       RINGKASAN KEBUN
+    ==========================*/
+    public function get_summary_kebun($organisasi_id = null, $kebun = null, $tahun = null, $bulan = null)
     {
-        $max_bulan = max($bulan ?? [12]);
+        $max_bulan = is_array($bulan) ? max($bulan) : ($bulan ?? 12);
         $max_tanggal = sprintf('%04d%02d31', $tahun, $max_bulan);
 
         $sql = "
@@ -135,10 +149,9 @@ class Dashboard_model extends CI_Model
             $params[] = $organisasi_id;
         }
 
-        if ($kebun) {
+        if (!empty($kebun)) {
             if (is_array($kebun)) {
-                $placeholders = implode(',', array_fill(0, count($kebun), '?'));
-                $sql .= " AND f.sk_kebun IN ($placeholders)";
+                $sql .= " AND f.sk_kebun IN (" . implode(',', array_fill(0, count($kebun), '?')) . ")";
                 $params = array_merge($params, $kebun);
             } else {
                 $sql .= " AND f.sk_kebun = ?";
@@ -538,5 +551,15 @@ public function get_rata2_panen_mingguan_bulan($tahun, $organisasi_id = null, $k
         return $this->db->get()->result();
     }
 
+    public function get_last_refresh($organisasi_id)
+{
+    $this->db->select('refreshed_at')
+             ->from('dashboard_refresh_log')
+             ->where('id_organisasi', $organisasi_id)
+             ->order_by('refreshed_at', 'DESC')
+             ->limit(1);
+    $query = $this->db->get();
+    return $query->row()->refreshed_at ?? null;
+}
 
 }

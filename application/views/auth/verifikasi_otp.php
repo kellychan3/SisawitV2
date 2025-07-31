@@ -59,20 +59,26 @@ input[type=number] {
         </div>
     </div>
 
-    <!-- Tambahkan script validasi Bootstrap -->
     <script>
-        (() => {
-            'use strict';
+        function validateOtpForm(form) {
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return false;
+            }
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
             const forms = document.querySelectorAll('.needs-validation');
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
+            forms.forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    if (!validateOtpForm(form)) {
                         event.preventDefault();
                         event.stopPropagation();
                     }
-                    form.classList.add('was-validated');
-                }, false);
+                });
             });
-        })();
+        });
     </script>
+
 </body>

@@ -97,62 +97,62 @@
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script>
-        function togglePassword(id, icon) {
-            const input = document.getElementById(id);
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove('bx-show');
-                icon.classList.add('bx-hide');
-            } else {
-                input.type = "password";
-                icon.classList.remove('bx-hide');
-                icon.classList.add('bx-show');
-            }
+    function togglePassword(id, icon) {
+        const input = document.getElementById(id);
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        icon.classList.toggle('bx-show', !isPassword);
+        icon.classList.toggle('bx-hide', isPassword);
+    }
+
+    function validateResetPasswordForm() {
+        let isValid = true;
+
+        const password = document.getElementById('password');
+        const confirm = document.getElementById('password_konfirmasi');
+        const passwordError = document.getElementById('passwordError');
+        const confirmError = document.getElementById('confirmError');
+
+        // Reset state
+        [password, confirm].forEach(el => el.classList.remove('is-invalid'));
+        passwordError.textContent = '';
+        confirmError.textContent = '';
+
+        // Validasi Password
+        if (!password.value.trim()) {
+            password.classList.add('is-invalid');
+            passwordError.textContent = 'Kolom kata sandi wajib diisi.';
+            isValid = false;
+        } else if (password.value.length < 6) {
+            password.classList.add('is-invalid');
+            passwordError.textContent = 'Kata sandi minimal 6 karakter.';
+            isValid = false;
         }
 
-        document.getElementById('resetPasswordForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // stop default submit
-            let isValid = true;
+        // Validasi Konfirmasi
+        if (!confirm.value.trim()) {
+            confirm.classList.add('is-invalid');
+            confirmError.textContent = 'Kolom konfirmasi wajib diisi.';
+            isValid = false;
+        } else if (confirm.value !== password.value) {
+            confirm.classList.add('is-invalid');
+            confirmError.textContent = 'Konfirmasi kata sandi tidak cocok.';
+            isValid = false;
+        }
 
-            const password = document.getElementById('password');
-            const confirm = document.getElementById('password_konfirmasi');
-            const passwordError = document.getElementById('passwordError');
-            const confirmError = document.getElementById('confirmError');
+        return isValid;
+    }
 
-            // Reset
-            password.classList.remove('is-invalid');
-            confirm.classList.remove('is-invalid');
-            passwordError.textContent = '';
-            confirmError.textContent = '';
-
-            // Validasi Password
-            if (!password.value.trim()) {
-                password.classList.add('is-invalid');
-                passwordError.textContent = 'Kolom kata sandi wajib diisi.';
-                isValid = false;
-            } else if (password.value.length < 6) {
-                password.classList.add('is-invalid');
-                passwordError.textContent = 'Password minimal 6 karakter.';
-                isValid = false;
-            }
-
-            // Validasi Konfirmasi
-            if (!confirm.value.trim()) {
-                confirm.classList.add('is-invalid');
-                confirmError.textContent = 'Kolom konfirmasi wajib diisi.';
-                isValid = false;
-            } else if (confirm.value !== password.value) {
-                confirm.classList.add('is-invalid');
-                confirmError.textContent = 'Konfirmasi password tidak cocok.';
-                isValid = false;
-            }
-
-            if (isValid) {
-                // Kirim form secara manual
-                this.submit();
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('resetPasswordForm');
+        form.addEventListener('submit', function (event) {
+            if (!validateResetPasswordForm()) {
+                event.preventDefault();
             }
         });
-    </script>
+    });
+</script>
+
 </body>
 
 </html>

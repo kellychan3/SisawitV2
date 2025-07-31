@@ -52,7 +52,6 @@
         <i class='bx bx-plus me-2'></i>Tambah Data
       </button>
 
-       <!-- Modal Tambah Aset -->
         <!-- Modal Tambah Aset -->
 <div class="modal fade" id="addAssetModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -65,7 +64,8 @@
                 <form class="row g-3" method="post" action="<?= base_url('Aset/addAset'); ?>">
                     <div class="col-md-6">
                         <label for="namaaset" class="form-label">Nama Aset</label>
-                        <select class="form-control" id="namaaset" name="namaaset" required oninvalid="this.setCustomValidity('Aset wajib dipilih')" oninput="this.setCustomValidity('')">
+                        <select class="form-control" id="namaaset" name="namaaset" 
+                        required oninvalid="this.setCustomValidity('Aset wajib dipilih')" oninput="this.setCustomValidity('')">
                           <option value="">--Pilih Aset--</option>
                           <option value="Urea">Urea</option>
                           <option value="MOP">MOP</option>
@@ -80,11 +80,9 @@
                         <input type="text" class="form-control" id="jenis_aset" disabled>
                         <input type="hidden" id="kategori_id" name="kategori_id">
                     </div>
-                       
                     <div class="col-md-6">
                         <label for="lokasiaset" class="form-label">Kebun</label>
-                        <select class="form-control" id="kebun_id" name="kebun_id" required 
-                                oninvalid="this.setCustomValidity('Kebun wajib dipilih')" 
+                        <select class="form-control" id="kebun_id" name="kebun_id" required oninvalid="this.setCustomValidity('Kebun wajib dipilih')" 
                                 oninput="this.setCustomValidity('')" disabled>
                             <option value="">--Pilih Kebun--</option>
                             <?php foreach ($kebun as $k): ?>
@@ -95,10 +93,9 @@
                     <div class="col-md-6">
                         <label for="jumlahaset" class="form-label">Jumlah Aset (Pupuk: Kg)</label>
                         <input type="number" class="form-control" id="jumlahaset" name="jumlahaset" required 
-       min="0" oninvalid="this.setCustomValidity('Harap isi jumlah dengan angka')" 
-       oninput="this.setCustomValidity('')" disabled>
+                            min="0" oninvalid="this.setCustomValidity('Harap isi jumlah dengan angka')" 
+                            oninput="this.setCustomValidity('')" disabled>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -139,7 +136,7 @@
             </div>
 
             <div class="col-md-6">
-              <label for="edit_jumlahaset" class="form-label">Jumlah Aset</label>
+              <label for="edit_jumlahaset" class="form-label">Jumlah Aset (Kg)</label>
               <input type="number" class="form-control" id="edit_jumlahaset" name="jumlah_aset" required>
             </div>
           </div>
@@ -368,16 +365,13 @@ $(document).ready(function () {
         }
     });
 
-    // Pada bagian script Anda
-$('#jumlahaset').on('input', function(e) {
-    // Hapus karakter non-digit
-    this.value = this.value.replace(/[^0-9]/g, '');
-    
-    // Jika ingin batasan minimal (contoh: tidak boleh 0)
-    if (this.value <= 0) {
-        this.value = '';
-    }
-});
+    $('#jumlahaset').on('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        if (this.value <= 0) {
+            this.value = '';
+        }
+    });
 
     // Inisialisasi modal
     const editModal = new bootstrap.Modal(document.getElementById('editAssetModal'));

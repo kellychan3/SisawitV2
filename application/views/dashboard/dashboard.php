@@ -58,38 +58,38 @@
                             <!-- Bulan -->
                             <div class="field">
                                 <label for="bulan">Bulan</label>
-                                <div class="custom-dropdown">
+                                 <div class="custom-dropdown">
                                     <?php
                                         $bulan_indonesia = [
-                                            1 => 'Januari',
-                                            2 => 'Februari',
-                                            3 => 'Maret',
-                                            4 => 'April',
-                                            5 => 'Mei',
-                                            6 => 'Juni',
-                                            7 => 'Juli',
-                                            8 => 'Agustus',
-                                            9 => 'September',
-                                            10 => 'Oktober',
-                                            11 => 'November',
-                                            12 => 'Desember'
+                                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                                            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
                                         ];
 
                                         $bulan_valid = array_column($bulan_list, 'bulan');
-                                        $bulan_terpilih = array_intersect((array)$filter['bulan'], $bulan_valid);
-                                        $label_bulan = empty($bulan_terpilih) ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
+                                        $bulan_terpilih = isset($filter['bulan']) ? (array)$filter['bulan'] : [];
+                                        $bulan_terpilih = array_intersect($bulan_terpilih, $bulan_valid);
+                                        
+                                        // Hitung apakah semua bulan terpilih
+                                        $semua_bulan_terpilih = !empty($bulan_valid) && count($bulan_terpilih) === count($bulan_valid);
+                                        $label_bulan = $semua_bulan_terpilih ? 'Semua' : 'Dipilih (' . count($bulan_terpilih) . ')';
                                     ?>
                                     <div class="dropdown-label" onclick="toggleDropdown('bulan')">
                                         <?= $label_bulan ?> ▾
                                     </div>
                                     <div class="dropdown-checkboxes" id="dropdown-bulan">
+                                        <label class="select-all-label">
+                                            <input type="checkbox" id="select-all-bulan" 
+                                                <?= $semua_bulan_terpilih ? 'checked' : '' ?>>
+                                            <strong>Semua</strong>
+                                        </label>
                                         <?php foreach($bulan_list as $b): 
                                             $bulan_num = (int)$b['bulan'];
                                             $nama_bulan = $bulan_indonesia[$bulan_num];
                                         ?>
                                             <label>
                                                 <input type="checkbox" name="bulan[]" value="<?= $bulan_num ?>"
-                                                    <?= (is_array($filter['bulan']) && in_array($bulan_num, $filter['bulan'])) ? 'checked' : '' ?>>
+                                                    <?= in_array($bulan_num, $bulan_terpilih) ? 'checked' : '' ?>>
                                                 <?= $nama_bulan ?>
                                             </label>
                                         <?php endforeach; ?>
@@ -105,12 +105,18 @@
                                         $kebun_valid = array_column($kebun_list, 'sk_kebun');
                                         $filter_kebun = isset($filter['kebun']) ? (array)$filter['kebun'] : [];
                                         $kebun_terpilih = array_intersect($filter_kebun, $kebun_valid);
-                                        $label_kebun = empty($kebun_terpilih) ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
+                                        $semua_kebun_terpilih = count($kebun_terpilih) === count($kebun_valid);
+                                        $label_kebun = $semua_kebun_terpilih ? 'Semua' : 'Dipilih (' . count($kebun_terpilih) . ')';
                                     ?>
                                     <div class="dropdown-label" onclick="toggleDropdown('kebun')">
                                         <?= $label_kebun ?> ▾
                                     </div>
                                     <div class="dropdown-checkboxes" id="dropdown-kebun">
+                                        <label class="select-all-label">
+                                            <input type="checkbox" id="select-all-kebun" 
+                                                <?= $semua_kebun_terpilih ? 'checked' : '' ?>>
+                                            <strong>Semua</strong>
+                                        </label>
                                         <?php foreach($kebun_list as $k): ?>
                                             <label>
                                                 <input type="checkbox" name="kebun[]" value="<?= $k['sk_kebun']; ?>"
@@ -287,6 +293,60 @@ document.addEventListener('click', function(event) {
     });
 });
 
+</script>
+
+<script>
+// Fungsi untuk handle "Pilih Semua" pada checkbox
+function setupSelectAll(selectAllId, checkboxName) {
+    const selectAll = document.getElementById(selectAllId);
+    const checkboxes = document.querySelectorAll(`input[name="${checkboxName}[]"]`);
+    const dropdownLabel = document.querySelector(`.dropdown-label[onclick*="${checkboxName}"]`);
+
+    // Handle ketika "Pilih Semua" dicentang
+    selectAll.addEventListener('change', function() {
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateLabel(checkboxName);
+        submitForm();
+    });
+
+    // Handle ketika checkbox individual diubah
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAll.checked = allChecked;
+            updateLabel(checkboxName);
+            submitForm();
+        });
+    });
+
+    // Fungsi untuk update label dropdown
+    function updateLabel(type) {
+        const checkboxes = document.querySelectorAll(`input[name="${type}[]"]:checked`);
+        const totalCheckboxes = document.querySelectorAll(`input[name="${type}[]"]`).length;
+        const label = document.querySelector(`.dropdown-label[onclick*="${type}"]`);
+        
+        if (checkboxes.length === totalCheckboxes || checkboxes.length === 0) {
+            label.textContent = 'Semua ▾';
+        } else {
+            label.textContent = `Dipilih (${checkboxes.length}) ▾`;
+        }
+    }
+
+    // Fungsi untuk submit form
+    function submitForm() {
+        setTimeout(() => {
+            document.querySelector('.filter-form form').submit();
+        }, 300);
+    }
+}
+
+// Inisialisasi untuk bulan dan kebun
+document.addEventListener('DOMContentLoaded', function() {
+    setupSelectAll('select-all-bulan', 'bulan');
+    setupSelectAll('select-all-kebun', 'kebun');
+});
 </script>
 
 <script>

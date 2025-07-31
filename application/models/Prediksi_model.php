@@ -26,8 +26,6 @@ public function has_prediksi_data($organisasi_id)
     return $this->db->count_all_results() > 0;
 }
 
-
-
 public function get_available_years()
 {
     $this->db->select('DISTINCT(LEFT(sk_waktu, 4)) AS tahun');
