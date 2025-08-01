@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
 }
+
 body {
     font-family: sans-serif;
     margin: 0;
@@ -10,39 +11,53 @@ body {
     overflow-x: hidden;
 }
 
-/* Resume Title & Chart Title */
 .resume-title,
 .dashboard-box h3 {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #1A0066;
 }
+
 .resume-title {
     color: white;
     padding: 6px;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
-/* Dashboard Container */
 .dashboard-container-row {
     display: flex;
-    flex-wrap: nowrap; /* penting agar tidak pindah baris */
+    flex-wrap: nowrap;
     gap: 24px;
     align-items: stretch;
+    height: 300px !important;
 }
 
-/* Resume Box */
+.dashboard-container-row > * {
+    height: 300px !important;
+    overflow: auto;
+}
+
+.dashboard-container-row .resume-box,
+.dashboard-container-row .kebun-filter-box,
+.dashboard-container-row .chart-box {
+    height: 100% !important;
+    overflow: auto;
+}
+
 .resume-box {
-    flex: 0 0 300px; /* tetap kiri, ukuran tetap */
+    flex: 0 0 250px;
     max-width: 300px;
+    min-width: 300px;
     background-color: white;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    min-width: 300px;
+    max-height: 160px;
 }
+
 .resume-box .title-box {
     background: #1F049A;
 }
+
 .resume-box .info-box {
     background: white;
     color: #1A0066;
@@ -51,16 +66,17 @@ body {
     text-align: left;
     border: 1px solid #CCCCCC;
 }
+
 .resume-box .info-box .label {
-    font-size: 11px;
+    font-size: 10px;
     color: #555;
 }
+
 .resume-box .info-box .value {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
 }
 
-/* Chart Box */
 .chart-box {
     flex: 1;
     background-color: white;
@@ -70,47 +86,50 @@ body {
     flex-direction: column;
     min-width: 300px;
 }
+
 .chart-box canvas {
     flex-grow: 1;
     width: 100% !important;
     height: auto !important;
-    max-height: 320px;
+    max-height: 240px;
 }
 
-/* Filter Bar (atas) */
 .filter-box {
     display: flex;
     background-color: #1F049A;
-    padding: 10px;
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 15px;
 }
+
 .refresh-form {
     flex: 0 0 auto;
 }
+
 .filter-form {
     flex: 1;
     display: flex;
     justify-content: flex-end;
 }
+
 .filter-box .field {
     display: flex;
     flex-direction: column;
 }
+
 .filter-box label {
     color: white;
     font-weight: bold;
     text-align: left;
 }
+
 .filter-box select {
     width: 160px;
     height: 30px;
 }
 
-/* Left Column Container */
 .left-column {
     flex: 0 0 300px;
     max-width: 300px;
@@ -119,11 +138,9 @@ body {
     gap: 15px;
 }
 
-/* Kebun Filter Box */
-/* Kebun Filter Box - Modified for alternating colors only */
 .kebun-filter-box {
     background-color: white;
-    padding: 10px; /* Changed from 15px to 0 since we'll pad the labels instead */
+    padding: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
@@ -131,39 +148,26 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 11px;
+    font-size: 12px;
     color: #555;
     padding: 5px;
     margin: 0;
 }
 
-/* Alternating row colors */
 .kebun-filter-box label:nth-child(even) {
-    background-color: #f8f8f8; /* Light gray for even rows */
+    background-color: #f8f8f8;
 }
 
-/* Keep white for odd rows (default) */
 .kebun-filter-box label:nth-child(odd) {
     background-color: white;
 }
 
-/* Hover effect */
 .kebun-filter-box label:hover {
-    background-color: #f0f0f0; /* Slightly darker gray on hover */
+    background-color: #f0f0f0;
 }
 
 .kebun-filter-box input[type="checkbox"] {
     margin-left: 10px;
-    /* Keep existing checkbox styles */
-}
-
-/* Adjust the resume box to remove fixed height */
-.resume-box {
-    flex: 0 0 auto; /* Changed from fixed height */
-    max-width: 300px;
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    min-width: 300px;
 }
 
 .filter-kebun-box label {
