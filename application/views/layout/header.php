@@ -37,7 +37,6 @@
 				<div class="mobile-toggle-menu d-lg-none">
 					<i class='bx bx-menu'></i>
 				</div>
-				<!-- Your top bar content here -->
 			</nav>
 		</div>
 
@@ -57,7 +56,7 @@
 				<li>
 					<a href="<?= base_url('Dashboard'); ?>">
 						<i class="fa-solid fa-square-poll-vertical"></i>
-						<span class="menu-text">Dashboard</span>
+						<span class="menu-text">Dashboard Hasil Panen</span>
 					</a>
 				</li>
 				
@@ -151,12 +150,11 @@
 		<!--page wrapper -->
 		<div class="page-wrapper">
 			<div class="page-content">
-				<!-- Your page content here -->
+
 			</div>
 		</div>
 	</div>
 
-	<!-- At the end of your body tag, ensure this order -->
 <script src="<?= base_url('assets/'); ?>js/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('assets/'); ?>plugins/metismenu/js/metisMenu.min.js"></script>

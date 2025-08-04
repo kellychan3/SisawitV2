@@ -30,17 +30,15 @@ body {
     flex-wrap: nowrap;
     gap: 24px;
     align-items: stretch;
-    height: 300px !important;
+    height: 310px !important;
 }
 
 .dashboard-container-row > * {
-    height: 300px !important;
-    overflow: auto;
+    height: 310px !important;
 }
 
 .dashboard-container-row .resume-box,
-.dashboard-container-row .kebun-filter-box,
-.dashboard-container-row .chart-box {
+.dashboard-container-row .kebun-filter-box{
     height: 100% !important;
     overflow: auto;
 }
@@ -68,7 +66,7 @@ body {
 }
 
 .resume-box .info-box .label {
-    font-size: 10px;
+    font-size: 11px;
     color: #555;
 }
 
@@ -102,6 +100,7 @@ body {
     flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 15px;
+    padding: 10px;
 }
 
 .refresh-form {
@@ -148,7 +147,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 12px;
+    font-size: 11px;
     color: #555;
     padding: 5px;
     margin: 0;

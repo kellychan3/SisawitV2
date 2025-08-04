@@ -516,48 +516,28 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>Data Ada?</from>
+      <to>sk_user</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>Filter Null</from>
-      <to>Format JSON</to>
+      <to>Output Kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Format JSON</from>
-      <to>JSON input</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>JSON input</from>
-      <to>MJSV Nama Kebun</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Jumlah prediksi berubah</from>
-      <to>Insert / update</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>REST API Prediksi</from>
-      <to>Filter Null</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select values</from>
+      <from>Output Kebun</from>
       <to>sk_kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>REST API Kebun</from>
+      <to>Filter Null</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>Seleksi Kolom Kebun</from>
-      <to>fact_prediksi_panen</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Tidak Ada Data di DB</from>
-      <to>Jumlah prediksi berubah</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Tidak Ada Data di DB</from>
-      <to>Seleksi Kolom Kebun</to>
+      <to>fact_luas_kebun</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -566,48 +546,83 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>dim_user_db</from>
+      <to>sk_user</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>fact_luas_kebun_db</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>sk_kebun</from>
+      <to>Data Ada?</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Token Login</from>
+      <to>REST API Kebun</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Seleksi Kolom Kebun 3</from>
+      <to>fact_luas_kebun 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>tanggal api null</from>
+      <to>Seleksi Kolom Kebun</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Seleksi Kolom Kebun 2</from>
+      <to>fact_luas_kebun 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>tanggal api null</from>
+      <to>Seleksi Kolom Kebun 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Data belum ada di db</from>
+      <to>tanggal api null</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Luas berubah di API</from>
+      <to>Seleksi Kolom Kebun 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>dim_waktu_db</from>
       <to>sk_waktu</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>fact prediksi panen db</from>
-      <to>jumlah </to>
+      <from>dim_waktu_db 2</from>
+      <to>sk_waktu up</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>jumlah </from>
-      <to>Tidak Ada Data di DB</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>sk_kebun</from>
+      <from>sk_user</from>
       <to>sk_waktu</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>sk_waktu</from>
-      <to>jumlah </to>
+      <to>sk_waktu up</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Token Login</from>
-      <to>REST API Prediksi</to>
+      <from>sk_waktu up</from>
+      <to>Data belum ada di db</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>dim_kebun_db 2</from>
-      <to>sk_kebun 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>MJSV Nama Kebun</from>
-      <to>sk_kebun 2</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>sk_kebun 2</from>
-      <to>Select values</to>
+      <from>sk_waktu up</from>
+      <to>Luas berubah di API</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -638,7 +653,7 @@
     </fields>
     <data>
       <line>
-        <item>{"no_hp":"pemilik1@example.com","password":"password"}</item>
+        <item>{"no_hp":"keli@gmail.com","password":"password"}</item>
       </line>
     </data>
     <attributes/>
@@ -652,380 +667,6 @@
     <GUI>
       <xloc>96</xloc>
       <yloc>48</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Filter Null</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Format JSON</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>response_body</leftvalue>
-            <function>&lt;></function>
-            <rightvalue/>
-            <value>
-              <name>constant</name>
-              <type>String</type>
-              <text>[]</text>
-              <length>-1</length>
-              <precision>-1</precision>
-              <isnull>N</isnull>
-              <mask/>
-            </value>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>602</xloc>
-      <yloc>280</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Format JSON</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var resultArray = [];
-
-if (response_body != null &amp;&amp; 
-    (response_body.substring(0, 1) == "{" || response_body.substring(0, 1) == "[")) {
-
-  var json = JSON.parse(response_body);
-  var i = 0;
-  var kebun;
-  var bulan;
-  var bulanData;
-  var rf;
-
-  for (kebun in json) {
-    bulanData = json[kebun];
-    for (bulan in bulanData) {
-      rf = bulanData[bulan]["RF"];
-
-      resultArray[i] = new Object();
-      resultArray[i]["kebun"] = kebun;
-      resultArray[i]["waktu"] = bulan;
-      resultArray[i]["jumlah_prediksi"] = rf;
-      i = i + 1;
-    }
-  }
-
-  json_result = JSON.stringify(resultArray);
-
-} else {
-  json_result = "[]";
-}
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>json_result</name>
-        <rename>json_result</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>762</xloc>
-      <yloc>280</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Insert / update</name>
-    <type>InsertUpdate</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema>dw_sawit</schema>
-      <table>fact_prediksi_panen</table>
-      <key>
-        <name>sk_kebun</name>
-        <field>sk_kebun</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <key>
-        <name>sk_waktu</name>
-        <field>sk_waktu</field>
-        <condition>=</condition>
-        <name2/>
-      </key>
-      <value>
-        <name>jumlah_prediksi_panen</name>
-        <rename>jumlah_prediksi_panen_api</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1466</xloc>
-      <yloc>680</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>JSON input</name>
-    <type>JsonInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <include>N</include>
-    <include_field/>
-    <rownum>N</rownum>
-    <addresultfile>N</addresultfile>
-    <readurl>N</readurl>
-    <removeSourceField>N</removeSourceField>
-    <IsIgnoreEmptyFile>N</IsIgnoreEmptyFile>
-    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
-    <ignoreMissingPath>Y</ignoreMissingPath>
-    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
-    <includeNulls>N</includeNulls>
-    <rownum_field/>
-    <file>
-      <name/>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-    </file>
-    <fields>
-      <field>
-        <name>nama_kebun_api</name>
-        <path>$[*].kebun</path>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>waktu_api</name>
-        <path>$[*].waktu</path>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-      <field>
-        <name>jumlah_prediksi_panen_api</name>
-        <path>$[*].jumlah_prediksi</path>
-        <type>Number</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-    </fields>
-    <limit>0</limit>
-    <IsInFields>Y</IsInFields>
-    <IsAFile>N</IsAFile>
-    <valueField>json_result</valueField>
-    <shortFileFieldName/>
-    <pathFieldName/>
-    <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
-    <uriNameFieldName/>
-    <rootUriNameFieldName/>
-    <extensionFieldName/>
-    <sizeFieldName/>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>906</xloc>
-      <yloc>280</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Jumlah prediksi berubah</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Insert / update</send_true_to>
-    <send_false_to/>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>jumlah_prediksi_panen_api</leftvalue>
-            <function>&lt;></function>
-            <rightvalue>jumlah_prediksi_panen_db</rightvalue>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1274</xloc>
-      <yloc>680</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>MJSV Nama Kebun</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>// Cek apakah nama_kebun_api null
-if (nama_kebun_api != null) {
-  nama_kebun_lengkap = "Kebun " + nama_kebun_api.replace("K", "");
-} else {
-  nama_kebun_lengkap = "Kebun Tidak Diketahui"; // fallback atau kosongkan
-}
-
-// Format waktu dengan tambahan "-01"
-if (waktu_api != null) {
-  waktu_lengkap = waktu_api + "-01";
-} else {
-  waktu_lengkap = null; // atau isi default tanggal jika perlu
-}
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>nama_kebun_lengkap</name>
-        <rename>nama_kebun_lengkap</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>waktu_lengkap</name>
-        <rename>waktu_lengkap</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1066</xloc>
-      <yloc>280</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1108,64 +749,8 @@ if (waktu_api != null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
+      <xloc>416</xloc>
       <yloc>48</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>REST API Prediksi</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <applicationType>TEXT PLAIN</applicationType>
-    <method>GET</method>
-    <url>http://103.150.101.10/api/predict-result/harvest?model=rf&amp;refresh=false</url>
-    <urlInField>N</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField/>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      <header>
-        <field>token_bearer</field>
-        <name>Authorization</name>
-      </header>
-    </headers>
-    <parameters>
-      </parameters>
-    <matrixParameters>
-      </matrixParameters>
-    <result>
-      <name>response_body</name>
-      <code/>
-      <response_time/>
-      <response_header/>
-    </result>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>458</xloc>
-      <yloc>280</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1226,144 +811,6 @@ if (waktu_api != null) {
     </GUI>
   </step>
   <step>
-    <name>Select values</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>sk_organisasi</name>
-      </field>
-      <field>
-        <name>jumlah_prediksi_panen_api</name>
-      </field>
-      <field>
-        <name>nama_kebun_lengkap</name>
-      </field>
-      <field>
-        <name>waktu_lengkap</name>
-      </field>
-      <select_unspecified>N</select_unspecified>
-      <meta>
-        <name>waktu_lengkap</name>
-        <rename>waktu_lengkap</rename>
-        <type>Date</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask>yyyy-MM-dd</conversion_mask>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>650</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Seleksi Kolom Kebun</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>jumlah_prediksi_panen_api</name>
-        <rename>jumlah_prediksi_panen</rename>
-      </field>
-      <field>
-        <name>sk_kebun</name>
-      </field>
-      <field>
-        <name>sk_waktu</name>
-      </field>
-      <field>
-        <name>sk_organisasi</name>
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1466</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Tidak Ada Data di DB</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <send_true_to>Seleksi Kolom Kebun</send_true_to>
-    <send_false_to>Jumlah prediksi berubah</send_false_to>
-    <compare>
-      <condition>
-        <negated>N</negated>
-        <conditions>
-          <condition>
-            <negated>N</negated>
-            <leftvalue>jumlah_prediksi_panen_db</leftvalue>
-            <function>IS NULL</function>
-            <rightvalue/>
-          </condition>
-        </conditions>
-      </condition>
-    </compare>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1274</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Token Login</name>
     <type>ScriptValueMod</type>
     <description/>
@@ -1405,8 +852,422 @@ token_bearer = "Bearer " + token;
       </output>
     </remotesteps>
     <GUI>
-      <xloc>752</xloc>
+      <xloc>528</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Data Ada?</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>fact_luas_kebun_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>N</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>sk_kebun_api</name>
+        <field>sk_kebun</field>
+      </key>
+      <value>
+        <name>sk_fact_luas_kebun</name>
+        <rename>sk_fact_luas_kebun_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>sk_waktu</name>
+        <rename>sk_waktu_db</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+      <value>
+        <name>luas_kebun</name>
+        <rename>luas_kebun_db</rename>
+        <default/>
+        <type>Number</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Data belum ada di db</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>tanggal api null</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
+            <function>IS NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1280</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Filter Null</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Output Kebun</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>result_kebun</leftvalue>
+            <function>&lt;></function>
+            <rightvalue/>
+            <value>
+              <name>constant</name>
+              <type>String</type>
+              <text>[]</text>
+              <length>-1</length>
+              <precision>-1</precision>
+              <isnull>N</isnull>
+              <mask/>
+            </value>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>224</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Luas berubah di API</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kebun 3</send_true_to>
+    <send_false_to/>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <leftvalue>luas_kebun_api</leftvalue>
+            <function>&lt;></function>
+            <rightvalue>luas_kebun_db</rightvalue>
+          </condition>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>sk_fact_luas_kebun_db</leftvalue>
+            <function>IS NOT NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1280</xloc>
+      <yloc>544</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Output Kebun</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <removeSourceField>N</removeSourceField>
+    <IsIgnoreEmptyFile>N</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>Y</ignoreMissingPath>
+    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
+    <includeNulls>N</includeNulls>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+    </file>
+    <fields>
+      <field>
+        <name>id_kebun_api</name>
+        <path>$.[*]id</path>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>tanggal_api</name>
+        <path>$.[*]tanggal_akuisisi</path>
+        <type>Date</type>
+        <format>yyyy-MM-dd</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>id_user_api</name>
+        <path>$.[*].added_by.user_id</path>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>luas_kebun_api</name>
+        <path>$.[*]luas_kebun_ha</path>
+        <type>Number</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>tanggal_update_api</name>
+        <path>$.[*]updated_at</path>
+        <type>Date</type>
+        <format>yyyy-MM-dd</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>result_kebun</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>REST API Kebun</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <applicationType>TEXT PLAIN</applicationType>
+    <method>GET</method>
+    <url>http://103.150.101.10/api/kebun</url>
+    <urlInField>N</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField/>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      <header>
+        <field>token_bearer</field>
+        <name>Authorization</name>
+      </header>
+    </headers>
+    <parameters>
+      </parameters>
+    <matrixParameters>
+      </matrixParameters>
+    <result>
+      <name>result_kebun</name>
+      <code/>
+      <response_time/>
+      <response_header/>
+    </result>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Seleksi Kolom Kebun</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>sk_kebun_api</name>
+        <rename>sk_kebun</rename>
+      </field>
+      <field>
+        <name>sk_user</name>
+        <rename/>
+      </field>
+      <field>
+        <name>sk_waktu_api_update</name>
+        <rename>sk_waktu</rename>
+      </field>
+      <field>
+        <name>luas_kebun_api</name>
+        <rename>luas_kebun</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1648</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1538,13 +1399,13 @@ FROM dw_sawit.dim_kebun
       </output>
     </remotesteps>
     <GUI>
-      <xloc>778</xloc>
-      <yloc>424</yloc>
+      <xloc>464</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>dim_kebun_db 2</name>
+    <name>dim_user_db</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1556,9 +1417,10 @@ FROM dw_sawit.dim_kebun
     </partitioning>
     <connection>dw_sawit_new</connection>
     <sql>SELECT
-  sk_organisasi
-, id_organisasi
-FROM dw_sawit.dim_organisasi
+  sk_user
+, id_user
+, sk_organisasi
+FROM dw_sawit.dim_user
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -1570,11 +1432,11 @@ FROM dw_sawit.dim_organisasi
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>sk_organisasi</name>
+        <name>sk_user</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
-        <comments>sk_organisasi</comments>
+        <origin>dim_user_db</origin>
+        <comments>sk_user</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -1593,11 +1455,34 @@ FROM dw_sawit.dim_organisasi
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>id_organisasi</name>
+        <name>id_user</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>dim_kebun_db 2</origin>
-        <comments>id_organisasi</comments>
+        <origin>dim_user_db</origin>
+        <comments>id_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_organisasi</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_user_db</origin>
+        <comments>sk_organisasi</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -1623,8 +1508,570 @@ FROM dw_sawit.dim_organisasi
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1232</xloc>
-      <yloc>160</yloc>
+      <xloc>800</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <schema>dw_sawit</schema>
+    <table>fact_luas_kebun</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>sk_fact_kebun</column_name>
+        <stream_name>sk_fact_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_kebun</column_name>
+        <stream_name>sk_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_user</column_name>
+        <stream_name>sk_user</stream_name>
+      </field>
+      <field>
+        <column_name>sk_waktu</column_name>
+        <stream_name>sk_waktu</stream_name>
+      </field>
+      <field>
+        <column_name>luas_kebun_ha</column_name>
+        <stream_name>luas_kebun_ha</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1840</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun_db</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <sql>SELECT
+  sk_fact_luas_kebun
+, sk_kebun
+, sk_user
+, sk_waktu
+, luas_kebun
+FROM dw_sawit.fact_luas_kebun
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_fact_luas_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_fact_luas_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_kebun</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_kebun</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_user</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_user</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>sk_waktu</name>
+        <length>15</length>
+        <precision>0</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>sk_waktu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>luas_kebun</name>
+        <length>22</length>
+        <precision>-1</precision>
+        <origin>fact_luas_kebun_db</origin>
+        <comments>luas_kebun</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_kebun</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_kebun_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_kebun_api</name>
+        <field>id_kebun</field>
+      </key>
+      <value>
+        <name>sk_kebun</name>
+        <rename>sk_kebun_api</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>sk_user</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_user_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>id_user_api</name>
+        <field>id_user</field>
+      </key>
+      <value>
+        <name>sk_user</name>
+        <rename>sk_user</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>800</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Seleksi Kolom Kebun 3</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>sk_kebun_api</name>
+        <rename>sk_kebun</rename>
+      </field>
+      <field>
+        <name>sk_user</name>
+        <rename/>
+      </field>
+      <field>
+        <name>sk_waktu_api_update</name>
+        <rename>sk_waktu</rename>
+      </field>
+      <field>
+        <name>luas_kebun_api</name>
+        <rename>luas_kebun</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1488</xloc>
+      <yloc>544</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun 3</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <schema>dw_sawit</schema>
+    <table>fact_luas_kebun</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>sk_fact_kebun</column_name>
+        <stream_name>sk_fact_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_kebun</column_name>
+        <stream_name>sk_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_user</column_name>
+        <stream_name>sk_user</stream_name>
+      </field>
+      <field>
+        <column_name>sk_waktu</column_name>
+        <stream_name>sk_waktu</stream_name>
+      </field>
+      <field>
+        <column_name>luas_kebun_ha</column_name>
+        <stream_name>luas_kebun_ha</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1712</xloc>
+      <yloc>544</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>tanggal api null</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <send_true_to>Seleksi Kolom Kebun</send_true_to>
+    <send_false_to>Seleksi Kolom Kebun 2</send_false_to>
+    <compare>
+      <condition>
+        <negated>N</negated>
+        <conditions>
+          <condition>
+            <negated>N</negated>
+            <operator>AND</operator>
+            <leftvalue>tanggal_api</leftvalue>
+            <function>IS NULL</function>
+            <rightvalue/>
+          </condition>
+        </conditions>
+      </condition>
+    </compare>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1456</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Seleksi Kolom Kebun 2</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>sk_kebun_api</name>
+        <rename>sk_kebun</rename>
+      </field>
+      <field>
+        <name>sk_user</name>
+        <rename/>
+      </field>
+      <field>
+        <name>sk_waktu_api_akuisisi</name>
+        <rename>sk_waktu</rename>
+      </field>
+      <field>
+        <name>luas_kebun_api</name>
+        <rename>luas_kebun</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1648</xloc>
+      <yloc>432</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>fact_luas_kebun 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>dw_sawit_new</connection>
+    <schema>dw_sawit</schema>
+    <table>fact_luas_kebun</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>N</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>sk_fact_kebun</column_name>
+        <stream_name>sk_fact_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_kebun</column_name>
+        <stream_name>sk_kebun</stream_name>
+      </field>
+      <field>
+        <column_name>sk_user</column_name>
+        <stream_name>sk_user</stream_name>
+      </field>
+      <field>
+        <column_name>sk_waktu</column_name>
+        <stream_name>sk_waktu</stream_name>
+      </field>
+      <field>
+        <column_name>luas_kebun_ha</column_name>
+        <stream_name>luas_kebun_ha</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1840</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1851,13 +2298,55 @@ FROM dw_sawit.dim_waktu
       </output>
     </remotesteps>
     <GUI>
-      <xloc>922</xloc>
-      <yloc>424</yloc>
+      <xloc>944</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>fact prediksi panen db</name>
+    <name>sk_waktu</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <from>dim_waktu_db</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>tanggal_api</name>
+        <field>tanggal</field>
+      </key>
+      <value>
+        <name>sk_waktu</name>
+        <rename>sk_waktu_api_akuisisi</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>944</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>dim_waktu_db 2</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1869,12 +2358,14 @@ FROM dw_sawit.dim_waktu
     </partitioning>
     <connection>dw_sawit_new</connection>
     <sql>SELECT
-  sk_fact_prediksi
-, sk_kebun
-, sk_waktu
-, sk_organisasi
-, jumlah_prediksi_panen
-FROM dw_sawit.fact_prediksi_panen
+  sk_waktu
+, tanggal
+, tahun
+, bulan
+, minggu
+, hari
+, minggu_ke_dalam_bulan
+FROM dw_sawit.dim_waktu
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -1883,52 +2374,6 @@ FROM dw_sawit.fact_prediksi_panen
     <lazy_conversion_active>N</lazy_conversion_active>
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
-      <value-meta>
-        <type>BigNumber</type>
-        <storagetype>normal</storagetype>
-        <name>sk_fact_prediksi</name>
-        <length>16</length>
-        <precision>0</precision>
-        <origin>dim_waktu_db 2</origin>
-        <comments>sk_fact_prediksi</comments>
-        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
-      <value-meta>
-        <type>Integer</type>
-        <storagetype>normal</storagetype>
-        <name>sk_kebun</name>
-        <length>9</length>
-        <precision>0</precision>
-        <origin>dim_waktu_db 2</origin>
-        <comments>sk_kebun</comments>
-        <conversion_Mask>####0;-####0</conversion_Mask>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_ID</date_format_locale>
-        <date_format_timezone>Asia/Jakarta</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
       <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
@@ -1953,13 +2398,36 @@ FROM dw_sawit.fact_prediksi_panen
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
       <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>tanggal</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>tanggal</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
         <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>sk_organisasi</name>
+        <name>tahun</name>
         <length>9</length>
         <precision>0</precision>
         <origin>dim_waktu_db 2</origin>
-        <comments>sk_organisasi</comments>
+        <comments>tahun</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -1976,14 +2444,83 @@ FROM dw_sawit.fact_prediksi_panen
         <lenient_string_to_number>N</lenient_string_to_number>
       </value-meta>
       <value-meta>
-        <type>Number</type>
+        <type>Integer</type>
         <storagetype>normal</storagetype>
-        <name>jumlah_prediksi_panen</name>
-        <length>15</length>
-        <precision>2</precision>
+        <name>bulan</name>
+        <length>9</length>
+        <precision>0</precision>
         <origin>dim_waktu_db 2</origin>
-        <comments>jumlah_prediksi_panen</comments>
-        <conversion_Mask>####0.0#########;-####0.0#########</conversion_Mask>
+        <comments>bulan</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>minggu</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>minggu</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>hari</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>hari</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_ID</date_format_locale>
+        <date_format_timezone>Asia/Jakarta</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>minggu_ke_dalam_bulan</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>dim_waktu_db 2</origin>
+        <comments>minggu_ke_dalam_bulan</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
         <currency_symbol/>
@@ -2008,77 +2545,13 @@ FROM dw_sawit.fact_prediksi_panen
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1098</xloc>
-      <yloc>424</yloc>
+      <xloc>1104</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>fact_prediksi_panen</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>dw_sawit_new</connection>
-    <schema>dw_sawit</schema>
-    <table>fact_prediksi_panen</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-      <field>
-        <column_name>sk_fact_kebun</column_name>
-        <stream_name>sk_fact_kebun</stream_name>
-      </field>
-      <field>
-        <column_name>sk_kebun</column_name>
-        <stream_name>sk_kebun</stream_name>
-      </field>
-      <field>
-        <column_name>sk_user</column_name>
-        <stream_name>sk_user</stream_name>
-      </field>
-      <field>
-        <column_name>sk_waktu</column_name>
-        <stream_name>sk_waktu</stream_name>
-      </field>
-      <field>
-        <column_name>luas_kebun_ha</column_name>
-        <stream_name>luas_kebun_ha</stream_name>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1674</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>jumlah </name>
+    <name>sk_waktu up</name>
     <type>StreamLookup</type>
     <description/>
     <distribute>N</distribute>
@@ -2088,153 +2561,19 @@ FROM dw_sawit.fact_prediksi_panen
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <from>fact prediksi panen db</from>
+    <from>dim_waktu_db 2</from>
     <input_sorted>N</input_sorted>
     <preserve_memory>Y</preserve_memory>
     <sorted_list>N</sorted_list>
     <integer_pair>N</integer_pair>
     <lookup>
       <key>
-        <name>sk_kebun</name>
-        <field>sk_kebun</field>
-      </key>
-      <key>
-        <name>sk_waktu</name>
-        <field>sk_waktu</field>
-      </key>
-      <value>
-        <name>jumlah_prediksi_panen</name>
-        <rename>jumlah_prediksi_panen_db</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1098</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sk_kebun</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_kebun_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>N</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>nama_kebun_lengkap</name>
-        <field>nama_kebun</field>
-      </key>
-      <key>
-        <name>sk_organisasi</name>
-        <field>sk_organisasi</field>
-      </key>
-      <value>
-        <name>sk_kebun</name>
-        <rename>sk_kebun</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>778</xloc>
-      <yloc>552</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sk_kebun 2</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_kebun_db 2</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>N</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>id_organisasi</name>
-        <field>id_organisasi</field>
-      </key>
-      <value>
-        <name>sk_organisasi</name>
-        <rename>sk_organisasi</rename>
-        <default/>
-        <type>Integer</type>
-      </value>
-    </lookup>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1232</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>sk_waktu</name>
-    <type>StreamLookup</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <from>dim_waktu_db</from>
-    <input_sorted>N</input_sorted>
-    <preserve_memory>Y</preserve_memory>
-    <sorted_list>N</sorted_list>
-    <integer_pair>N</integer_pair>
-    <lookup>
-      <key>
-        <name>waktu_lengkap</name>
+        <name>tanggal_update_api</name>
         <field>tanggal</field>
       </key>
       <value>
         <name>sk_waktu</name>
-        <rename>sk_waktu</rename>
+        <rename>sk_waktu_api_update</rename>
         <default/>
         <type>Integer</type>
       </value>
@@ -2248,8 +2587,8 @@ FROM dw_sawit.fact_prediksi_panen
       </output>
     </remotesteps>
     <GUI>
-      <xloc>922</xloc>
-      <yloc>552</yloc>
+      <xloc>1104</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

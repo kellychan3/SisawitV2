@@ -373,3 +373,74 @@ table th, table td {
     padding: 8px;
     border: 1px solid #ccc;
 }
+
+/* Dashboard Guide Styles */
+.dashboard-guide {
+    background-color: #ffffff;
+    border-left: 4px solid #1F049A;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.guide-header {
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+    background-color: #1F049A;
+    color: white;
+    cursor: pointer;
+}
+
+.guide-header h3 {
+    margin: 0;
+    font-size: 14px;
+    flex-grow: 1;
+    color: white;
+    font-weight: bold;
+}
+
+.guide-icon {
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.guide-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.guide-content {
+    padding: 5px 15px;
+}
+
+.guide-tip {
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1A0066;
+}
+
+.guide-tip strong {
+    color: #1F049A;
+}
+
+/* Untuk state collapsed */
+.dashboard-guide.collapsed {
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.dashboard-guide.collapsed .guide-content {
+    display: none;
+}
+
+.dashboard-guide.collapsed .guide-toggle {
+    transform: rotate(45deg);
+}

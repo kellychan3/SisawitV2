@@ -19,6 +19,23 @@
 <body>
     <div class="page-wrapper">
         <div class="page-content">
+            <div class="dashboard-guide">
+    <div class="guide-header">
+        <span class="guide-icon">ℹ️</span>
+        <h3>Panduan Dashboard</h3>
+        <button class="guide-toggle">×</button>
+    </div>
+    <div class="guide-content" style="font-size:14px; line-height:1.5;">
+    <div class="guide-tip">
+        📊 <strong>Filter Data:</strong> Data dan grafik akan otomatis menyesuaikan berdasarkan pilihan Anda.
+    </div>
+    <div class="guide-tip">
+        🔄 <strong>Perbarui Data:</strong> Klik "Perbarui Dashboard" untuk data terbaru.
+    </div>
+</div>
+
+</div>
+
             <div class="filter-box">
                 <div class="refresh-form">
                     <form method="post" action="<?= base_url('dashboard/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
@@ -733,7 +750,31 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
-
+<script>
+// Toggle guide visibility
+document.addEventListener('DOMContentLoaded', function() {
+    const guide = document.querySelector('.dashboard-guide');
+    const toggleBtn = document.querySelector('.guide-toggle');
+    
+    if (guide && toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            guide.classList.toggle('collapsed');
+        });
+        
+        // Simpan state di localStorage
+        const guideState = localStorage.getItem('dashboardGuideCollapsed');
+        if (guideState === 'true') {
+            guide.classList.add('collapsed');
+        }
+        
+        guide.addEventListener('transitionend', function() {
+            if (guide.classList.contains('collapsed')) {
+                localStorage.setItem('dashboardGuideCollapsed', 'true');
+            } else {
+                localStorage.setItem('dashboardGuideCollapsed', 'false');
+            }
+        });
+    }
+});
+</script>
 </body>
-</html>

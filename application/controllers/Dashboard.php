@@ -81,7 +81,7 @@ class Dashboard extends CI_Controller
 
         // === Data utama dashboard ===
         $data['panen_per_bulan']         = $this->Dashboard_model->get_total_panen_per_bulan($organisasi_id, $tahun, $bulan, $kebun);
-        $data['luas_kebun']              = $this->Dashboard_model->get_luas_kebun_persentase($organisasi_id, $kebun);
+        $data['luas_kebun']              = $this->Dashboard_model->get_luas_kebun_persentase($organisasi_id, $kebun, $tahun);
         $data['summary_kebun']           = $this->Dashboard_model->get_summary_kebun($organisasi_id, $kebun, $tahun, $bulan);
         $data['persediaan_pupuk']        = $this->Dashboard_model->get_persediaan_pupuk($organisasi_id, $kebun);
         $data['persentase_panen_kebun']  = $this->Dashboard_model->get_persen_panen_per_kebun($organisasi_id, $tahun, $bulan, $kebun);

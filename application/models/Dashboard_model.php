@@ -118,54 +118,82 @@ class Dashboard_model extends CI_Model
     /* =========================
        RINGKASAN KEBUN
     ==========================*/
-    public function get_summary_kebun($organisasi_id = null, $kebun = null, $tahun = null, $bulan = null)
-    {
-        $max_bulan = is_array($bulan) ? max($bulan) : ($bulan ?? 12);
-        $max_tanggal = sprintf('%04d%02d31', $tahun, $max_bulan);
-
-        $sql = "
-            SELECT 
-                COUNT(DISTINCT f.sk_kebun) AS jumlah_kebun,
+    public function get_summary_kebun($organisasi_id = null, $kebun = null, $tahun = null)
+{
+    $sql = "SELECT 
+                COUNT(*) AS jumlah_kebun,
                 SUM(f.luas_kebun) AS total_luas
             FROM (
-                SELECT f1.*
+                SELECT f1.sk_kebun, f1.luas_kebun, f1.sk_user
                 FROM fact_luas_kebun f1
-                INNER JOIN (
-                    SELECT sk_kebun, MAX(COALESCE(sk_waktu, 0)) AS max_waktu
-                    FROM fact_luas_kebun
-                    WHERE COALESCE(sk_waktu, 0) <= ?
-                    GROUP BY sk_kebun
-                ) latest ON f1.sk_kebun = latest.sk_kebun AND COALESCE(f1.sk_waktu, 0) = latest.max_waktu
-            ) f
-            LEFT JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
-            LEFT JOIN dim_organisasi o ON k.sk_organisasi = o.sk_organisasi
-            WHERE 1=1
-        ";
-
-        $params = [$max_tanggal];
-
-        if ($organisasi_id !== null) {
-            $sql .= " AND o.id_organisasi = ?";
-            $params[] = $organisasi_id;
-        }
-
-        if (!empty($kebun)) {
-            if (is_array($kebun)) {
-                $sql .= " AND f.sk_kebun IN (" . implode(',', array_fill(0, count($kebun), '?')) . ")";
-                $params = array_merge($params, $kebun);
-            } else {
-                $sql .= " AND f.sk_kebun = ?";
-                $params[] = $kebun;
-            }
-        }
-
-        $result = $this->db->query($sql, $params)->row();
-
-        return (object)[
-            'jumlah_kebun' => $result->jumlah_kebun ?? 0,
-            'total_luas'   => $result->total_luas ?? 0,
-        ];
+                WHERE ";
+    
+    // Logika untuk filter tahun
+    if ($tahun !== null) {
+        $sql .= "(
+                    -- Untuk tahun tertentu, ambil data dengan tahun yang sesuai
+                    (YEAR(f1.sk_waktu) = ? AND f1.sk_fact_luas_kebun = (
+                        SELECT MAX(f2.sk_fact_luas_kebun)
+                        FROM fact_luas_kebun f2
+                        WHERE YEAR(f2.sk_waktu) = YEAR(f1.sk_waktu)
+                        AND f2.sk_kebun = f1.sk_kebun
+                    ))
+                    OR
+                    -- Untuk kebun yang tidak ada data di tahun tersebut, ambil data terakhir sebelum tahun tersebut
+                    (NOT EXISTS (
+                        SELECT 1 FROM fact_luas_kebun f3 
+                        WHERE YEAR(f3.sk_waktu) = ? 
+                        AND f3.sk_kebun = f1.sk_kebun
+                    ) AND f1.sk_fact_luas_kebun = (
+                        SELECT MAX(f4.sk_fact_luas_kebun)
+                        FROM fact_luas_kebun f4
+                        WHERE YEAR(f4.sk_waktu) <= ?
+                        AND f4.sk_kebun = f1.sk_kebun
+                    ))
+                )";
+        $params[] = $tahun;
+        $params[] = $tahun;
+        $params[] = $tahun;
+    } else {
+        // Jika tidak ada filter tahun, ambil data terbaru (sk_fact_luas_kebun terbesar)
+        $sql .= "f1.sk_fact_luas_kebun = (
+                    SELECT MAX(f2.sk_fact_luas_kebun)
+                    FROM fact_luas_kebun f2
+                    WHERE f2.sk_kebun = f1.sk_kebun
+                )";
     }
+
+    $sql .= ") f
+            JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE 1=1";
+
+    $params = $params ?? [];
+
+    if ($organisasi_id !== null) {
+        $sql .= " AND o.id_organisasi = ?";
+        $params[] = $organisasi_id;
+    }
+
+    if ($kebun) {
+        if (is_array($kebun)) {
+            $placeholders = implode(',', array_fill(0, count($kebun), '?'));
+            $sql .= " AND k.sk_kebun IN ($placeholders)";
+            $params = array_merge($params, $kebun);
+        } else {
+            $sql .= " AND k.sk_kebun = ?";
+            $params[] = $kebun;
+        }
+    }
+
+    $result = $this->db->query($sql, $params)->row();
+
+    return (object)[
+        'jumlah_kebun' => $result->jumlah_kebun ?? 0,
+        'total_luas'   => $result->total_luas ?? 0,
+    ];
+}
 
     public function get_total_panen_per_bulan($organisasi_id = null, $tahun = null, $bulan = null, $kebun = null)
     {
@@ -182,9 +210,9 @@ class Dashboard_model extends CI_Model
 
         if (!empty($kebun)) {
         if (is_array($kebun)) {
-            $this->db->where_in('f.sk_kebun', $kebun); // Perbaikan di sini
+            $this->db->where_in('f.sk_kebun', $kebun);
         } else {
-            $this->db->where('f.sk_kebun', $kebun); // Perbaikan di sini
+            $this->db->where('f.sk_kebun', $kebun); 
         }
     }
 
@@ -372,37 +400,75 @@ public function get_rata2_panen_mingguan_bulan($tahun, $organisasi_id = null, $k
     return $total_panen / $jumlah_minggu;
 }
 
-    public function get_luas_kebun_persentase($organisasi_id = null, $kebun = null)
-    {
-        $sql = "SELECT k.nama_kebun, SUM(f.luas_kebun) as total_luas
-                FROM fact_luas_kebun f
-                JOIN dim_kebun k ON f.sk_kebun = k.sk_kebun
-                JOIN dim_user u ON f.sk_user = u.sk_user
-                JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
-                WHERE 1=1";
-
-        $params = [];
-
-        if ($organisasi_id !== null) {
-                $sql .= " AND o.id_organisasi = ?";
-                $params[] = $organisasi_id;
-            }
-
-        if ($kebun) {
-            if (is_array($kebun)) {
-                $placeholders = implode(',', array_fill(0, count($kebun), '?'));
-                $sql .= " AND k.sk_kebun IN ($placeholders)";
-                $params = array_merge($params, $kebun);
-            } else {
-                $sql .= " AND k.sk_kebun = ?";
-                $params[] = $kebun;
-            }
-        }
-
-        $sql .= " GROUP BY k.sk_kebun";
-
-        return $this->db->query($sql, $params)->result();
+    public function get_luas_kebun_persentase($organisasi_id = null, $kebun = null, $tahun = null)
+{
+    $sql = "SELECT k.nama_kebun, f.luas_kebun as total_luas
+            FROM dim_kebun k
+            JOIN (
+                SELECT f1.sk_kebun, f1.luas_kebun, f1.sk_user
+                FROM fact_luas_kebun f1
+                WHERE ";
+    
+    // Logika untuk filter tahun
+    if ($tahun !== null) {
+        $sql .= "(
+                    -- Untuk tahun tertentu, ambil data dengan tahun yang sesuai
+                    (YEAR(f1.sk_waktu) = ? AND f1.sk_fact_luas_kebun = (
+                        SELECT MAX(f2.sk_fact_luas_kebun)
+                        FROM fact_luas_kebun f2
+                        WHERE YEAR(f2.sk_waktu) = YEAR(f1.sk_waktu)
+                        AND f2.sk_kebun = f1.sk_kebun
+                    ))
+                    OR
+                    -- Untuk kebun yang tidak ada data di tahun tersebut, ambil data terakhir sebelum tahun tersebut
+                    (NOT EXISTS (
+                        SELECT 1 FROM fact_luas_kebun f3 
+                        WHERE YEAR(f3.sk_waktu) = ? 
+                        AND f3.sk_kebun = f1.sk_kebun
+                    ) AND f1.sk_fact_luas_kebun = (
+                        SELECT MAX(f4.sk_fact_luas_kebun)
+                        FROM fact_luas_kebun f4
+                        WHERE YEAR(f4.sk_waktu) <= ?
+                        AND f4.sk_kebun = f1.sk_kebun
+                    ))
+                )";
+        $params[] = $tahun;
+        $params[] = $tahun;
+        $params[] = $tahun;
+    } else {
+        // Jika tidak ada filter tahun, ambil data terbaru (sk_fact_luas_kebun terbesar)
+        $sql .= "f1.sk_fact_luas_kebun = (
+                    SELECT MAX(f2.sk_fact_luas_kebun)
+                    FROM fact_luas_kebun f2
+                    WHERE f2.sk_kebun = f1.sk_kebun
+                )";
     }
+
+    $sql .= ") f ON f.sk_kebun = k.sk_kebun
+            JOIN dim_user u ON f.sk_user = u.sk_user
+            JOIN dim_organisasi o ON u.sk_organisasi = o.sk_organisasi
+            WHERE 1=1";
+
+    $params = $params ?? [];
+
+    if ($organisasi_id !== null) {
+        $sql .= " AND o.id_organisasi = ?";
+        $params[] = $organisasi_id;
+    }
+
+    if ($kebun) {
+        if (is_array($kebun)) {
+            $placeholders = implode(',', array_fill(0, count($kebun), '?'));
+            $sql .= " AND k.sk_kebun IN ($placeholders)";
+            $params = array_merge($params, $kebun);
+        } else {
+            $sql .= " AND k.sk_kebun = ?";
+            $params[] = $kebun;
+        }
+    }
+
+    return $this->db->query($sql, $params)->result();
+}
 
     public function get_persediaan_pupuk($organisasi_id = null, $kebun = null)
 {

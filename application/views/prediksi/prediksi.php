@@ -116,7 +116,7 @@
             </div>
 
             <div class="dashboard-box chart-box" style="margin-top:15px;">
-                    <h3>Tren Panen Aktual 2024–2025 & Prediksi Tahun 2025</h3>
+                    <h3>Tren Panen Aktual <?= $filter['tahun']-1 ?>–<?= $filter['tahun'] ?> & Prediksi Tahun <?= $filter['tahun'] ?></h3>
                     <canvas id="lineChart"></canvas>
             </div>
 
@@ -133,93 +133,11 @@
     </div>
     
 <script>
-const ctx = document.getElementById('panenChart').getContext('2d');
-const bulanLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-
-const prediksiData = <?= json_encode(array_map(fn($i) => $prediksi[$i] ?? 0, range(1,12))) ?>;
-const aktualData = <?= json_encode(array_map(fn($i) => $aktual[$i] ?? 0, range(1,12))) ?>;
-
-// Buat chart
-const panenChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: bulanLabels,
-        datasets: [
-            {
-                label: 'Aktual',
-                data: aktualData,
-                backgroundColor: aktualData.map((val, i) => 
-                    val >= prediksiData[i] ? '#1cc88a' : '#e74a3b'
-                ),
-                barThickness: 20,
-                categoryPercentage: 0.6,
-                barPercentage: 0.9
-            },
-            {
-                label: 'Prediksi',
-                data: prediksiData,
-                backgroundColor: '#3c36aeff',
-                barThickness: 20,
-                categoryPercentage: 0.6,
-                barPercentage: 0.9
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false // Nonaktifkan legend default
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let label = context.dataset.label || '';
-                        if (label) {
-                            label += ': ';
-                        }
-                        if (context.parsed.y !== null) {
-                            label += context.parsed.y.toLocaleString() + ' kg';
-                            
-                            if (context.datasetIndex === 0) {
-                                const prediksiVal = prediksiData[context.dataIndex];
-                                const aktualVal = aktualData[context.dataIndex];
-                                const selisih = aktualVal - prediksiVal;
-                                if (selisih > 0) {
-                                    label += ' (↑ ' + Math.abs(selisih).toLocaleString() + ' kg)';
-                                } else if (selisih < 0) {
-                                    label += ' (↓ ' + Math.abs(selisih).toLocaleString() + ' kg)';
-                                } else {
-                                    label += ' (Tepat)';
-                                }
-                            }
-                        }
-                        return label;
-                    }
-                }
-            }
-        },
-        scales: {
-            x: {
-                stacked: false,
-                grid: { display: false }
-            },
-            y: {
-                beginAtZero: true,
-                grid: { display: true },
-                title: {
-                    display: false,
-                    text: 'Hasil Panen (Kg)'
-                },
-                ticks: {
-                    callback: function(value) {
-                        return value.toLocaleString() + ' kg';
-                    }
-                }
-            }
-        }
-    }
-});
+// Deklarasi variabel global untuk kedua chart
+const bulanLabelsBar = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+const prediksiDataGlobal = <?= json_encode(array_map(fn($i) => $prediksi[$i] ?? 0, range(1,12))) ?>;
+const aktualDataGlobal = <?= json_encode(array_map(fn($i) => $aktual[$i] ?? 0, range(1,12))) ?>;
+const aktualSebelumnyaDataGlobal = <?= json_encode(array_map(fn($i) => $aktual_sebelumnya[$i] ?? 0, range(1,12))) ?>;
 
 // Fungsi untuk membuat custom legend
 function createCustomLegend() {
@@ -271,99 +189,205 @@ function createCustomLegend() {
     legendContainer.appendChild(legendWrapper);
 }
 
-// Panggil fungsi setelah chart selesai render
-setTimeout(createCustomLegend, 500);
-</script>
-
-<script>
-const timelineCtx = document.getElementById('lineChart').getContext('2d');
-
-new Chart(timelineCtx, {
-    type: 'line',
-    data: {
-        labels: <?= json_encode($timeline['labels']) ?>,
-        datasets: [
-            {
-                label: 'Aktual (2024-2025)',
-                data: <?= json_encode($timeline['aktual']) ?>,
-                borderColor: '#1cc88a',
-                backgroundColor: 'transparent',
-                tension: 0.3,
-                borderWidth: 2,
-                fill: false,
-                pointBackgroundColor: <?= json_encode($timeline['pointColors']) ?>,
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 1,
-                pointRadius: 5,
-                pointHoverRadius: 7
-            },
-            {
-                label: 'Prediksi (2025)',
-                data: <?= json_encode($timeline['prediksi']) ?>,
-                borderColor: '#3c36aeff',
-                backgroundColor: 'transparent',
-                tension: 0.3,
-                borderWidth: 2,
-                borderDash: [5, 3],
-                fill: true,
-                pointRadius: 3 
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                align: 'start'
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let label = context.dataset.label || '';
-                        if (label) {
-                            label += ': ';
-                        }
-                        if (context.parsed.y !== null) {
-                            label += context.parsed.y.toLocaleString() + ' kg';
-                            
-                            // Tambahkan indikator lebih tinggi/rendah untuk aktual 2025
-                            if (context.datasetIndex === 0 && context.dataIndex >= 12) {
-                                const prediksi = context.chart.data.datasets[1].data[context.dataIndex];
-                                const selisih = context.parsed.y - prediksi;
-                                if (selisih > 0) {
-                                    label += ' (↑ ' + Math.abs(selisih).toLocaleString() + ' kg)';
-                                } else if (selisih < 0) {
-                                    label += ' (↓ ' + Math.abs(selisih).toLocaleString() + ' kg)';
-                                } else {
-                                    label += ' (Tepat)';
+// Chart 1: Bar Chart (Prediksi vs Aktual)
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('panenChart').getContext('2d');
+    const panenChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: bulanLabelsBar,
+            datasets: [
+                {
+                    label: 'Aktual',
+                    data: aktualDataGlobal,
+                    backgroundColor: aktualDataGlobal.map((val, i) => 
+                        val >= prediksiDataGlobal[i] ? '#1cc88a' : '#e74a3b'
+                    ),
+                    barThickness: 20,
+                    categoryPercentage: 0.6,
+                    barPercentage: 0.9
+                },
+                {
+                    label: 'Prediksi',
+                    data: prediksiDataGlobal,
+                    backgroundColor: '#3c36aeff',
+                    barThickness: 20,
+                    categoryPercentage: 0.6,
+                    barPercentage: 0.9
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toLocaleString() + ' kg';
+                                
+                                if (context.datasetIndex === 0) {
+                                    const prediksiVal = prediksiDataGlobal[context.dataIndex];
+                                    const aktualVal = aktualDataGlobal[context.dataIndex];
+                                    const selisih = aktualVal - prediksiVal;
+                                    if (selisih > 0) {
+                                        label += ' (↑ ' + Math.abs(selisih).toLocaleString() + ' kg)';
+                                    } else if (selisih < 0) {
+                                        label += ' (↓ ' + Math.abs(selisih).toLocaleString() + ' kg)';
+                                    } else {
+                                        label += ' (Tepat)';
+                                    }
                                 }
                             }
+                            return label;
                         }
-                        return label;
-                    }
-                }
-            }
-        },
-        scales: {
-            x: {
-                grid: { 
-                    display: true,
-                    color: function(context) {
-                        return context.index === 11 ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)';
                     }
                 }
             },
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value) {
-                        return value.toLocaleString() + ' kg';
+            scales: {
+                x: {
+                    stacked: false,
+                    grid: { display: false }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { display: true },
+                    title: {
+                        display: false,
+                        text: 'Hasil Panen (Kg)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + ' kg';
+                        }
                     }
                 }
             }
         }
-    }
+    });
+
+    // Panggil fungsi setelah chart selesai render
+    setTimeout(createCustomLegend, 500);
+});
+
+// Chart 2: Line Chart (Tren Panen)
+document.addEventListener('DOMContentLoaded', function() {
+    const bulanLabelsLine = [
+        'Jan <?= $filter['tahun']-1 ?>', 'Feb <?= $filter['tahun']-1 ?>', 'Mar <?= $filter['tahun']-1 ?>', 
+        'Apr <?= $filter['tahun']-1 ?>', 'Mei <?= $filter['tahun']-1 ?>', 'Jun <?= $filter['tahun']-1 ?>', 
+        'Jul <?= $filter['tahun']-1 ?>', 'Agu <?= $filter['tahun']-1 ?>', 'Sep <?= $filter['tahun']-1 ?>', 
+        'Okt <?= $filter['tahun']-1 ?>', 'Nov <?= $filter['tahun']-1 ?>', 'Des <?= $filter['tahun']-1 ?>',
+        'Jan <?= $filter['tahun'] ?>', 'Feb <?= $filter['tahun'] ?>', 'Mar <?= $filter['tahun'] ?>', 
+        'Apr <?= $filter['tahun'] ?>', 'Mei <?= $filter['tahun'] ?>', 'Jun <?= $filter['tahun'] ?>', 
+        'Jul <?= $filter['tahun'] ?>', 'Agu <?= $filter['tahun'] ?>', 'Sep <?= $filter['tahun'] ?>', 
+        'Okt <?= $filter['tahun'] ?>', 'Nov <?= $filter['tahun'] ?>', 'Des <?= $filter['tahun'] ?>'
+    ];
+
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: bulanLabelsLine,
+            datasets: [
+                {
+                    label: 'Aktual',
+                    data: [...aktualSebelumnyaDataGlobal, ...aktualDataGlobal],
+                    borderColor: '#1cc88a',
+                    backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: false,
+                    pointBackgroundColor: [...aktualSebelumnyaDataGlobal.map(() => '#1cc88a'), 
+                                        ...aktualDataGlobal.map((val, i) => 
+                        val >= prediksiDataGlobal[i] ? '#1cc88a' : '#e74a3b'
+                    )],
+                    pointBorderColor: '#fff',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                },
+                {
+                    label: 'Prediksi',
+                    data: [...Array(12).fill(null), ...prediksiDataGlobal],
+                    borderColor: '#3c36ae',
+                    backgroundColor: 'rgba(60, 54, 174, 0.1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    tension: 0.3,
+                    fill: false,
+                    pointBackgroundColor: [...Array(12).fill('#3c36ae'), 
+                                        ...prediksiDataGlobal.map(() => '#3c36ae')],
+                    pointBorderColor: '#fff',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toLocaleString() + ' kg';
+                                
+                                if (context.datasetIndex === 0 && context.dataIndex >= 12) {
+                                    const prediksiVal = prediksiDataGlobal[context.dataIndex-12];
+                                    const aktualVal = aktualDataGlobal[context.dataIndex-12];
+                                    const selisih = aktualVal - prediksiVal;
+                                    if (selisih > 0) {
+                                        label += ' (↑ ' + Math.abs(selisih).toLocaleString() + ' kg)';
+                                    } else if (selisih < 0) {
+                                        label += ' (↓ ' + Math.abs(selisih).toLocaleString() + ' kg)';
+                                    } else {
+                                        label += ' (Tepat)';
+                                    }
+                                }
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 20
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { display: true },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + ' kg';
+                        }
+                    }
+                }
+            }
+        }
+    });
 });
 </script>
 
