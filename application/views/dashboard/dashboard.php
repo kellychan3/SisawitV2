@@ -27,7 +27,7 @@
     </div>
     <div class="guide-content" style="font-size:14px; line-height:1.5;">
     <div class="guide-tip">
-        📊 <strong>Filter Data:</strong> Data dan grafik akan otomatis menyesuaikan berdasarkan pilihan Anda.
+        📊 <strong>Filter Data:</strong> Data dan grafik akan otomatis menyesuaikan berdasarkan pilihan Anda. Anda dapat memilih filter Tahun, Bulan, dan Kebun.
     </div>
     <div class="guide-tip">
         🔄 <strong>Perbarui Data:</strong> Klik "Perbarui Dashboard" untuk data terbaru.
