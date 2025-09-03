@@ -1,6 +1,6 @@
 # 🌴 Sisawitv2
 
-**Sisawitv2** adalah Aplikasi Sistem Informasi Produktivitas Kelapa Sawit yang dibangun dengan **CodeIgniter 3**, menggunakan skema **data warehouse** dan lingkungan yang terintegrasi dengan **Docker** untuk kemudahan pengembangan dan deployment.
+**Sisawitv2** adalah Sistem Monitoring Produktivitas Kelapa Sawit yang dibangun dengan CodeIgniter 3 menggunakan skema data warehouse (fact constellation) dan lingkungan yang terintegrasi dengan Docker untuk kemudahan pengembangan dan deployment. Sisawit digunakan untuk monitoring hasil panen bulanan & mingguan, kontribusi panen tiap kebun, & aset perkebunan kelapa sawit. 
 
 ## Requirement
 - PHP 8.0
