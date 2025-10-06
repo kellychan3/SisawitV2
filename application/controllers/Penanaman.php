@@ -15,7 +15,7 @@ class Penanaman extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id');
         if (!$token || !$organisasi_id) redirect('authentication');
 
-        list($status, $decoded) = apiRequest("http://103.150.101.10/api/penanaman");
+        list($status, $decoded) = apiRequest("http://160.187.144.173/api/penanaman");
     
         // Pastikan hasilnya array of data
         if (is_array($decoded) && isset($decoded[0])) {

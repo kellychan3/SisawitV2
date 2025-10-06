@@ -19,7 +19,7 @@ class Pemupukan extends CI_Controller
         }
 
         // ✅ Ambil data pakai helper apiRequest
-        list($status, $decoded) = apiRequest("http://103.150.101.10/api/pemupukan");
+        list($status, $decoded) = apiRequest("http://160.187.144.173/api/pemupukan");
 
         // ✅ Cek status response
         if ($status != 200 || !is_array($decoded)) {

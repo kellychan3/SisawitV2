@@ -502,7 +502,7 @@
     
     if (kebunId) {
       $.ajax({
-        url: 'http://103.150.101.10/api/blok-kebun?kebun=' + kebunId,
+        url: 'http://160.187.144.173/api/blok-kebun?kebun=' + kebunId,
         method: 'GET',
         headers: {
           "Authorization": "Bearer <?= $this->session->userdata('token') ?>",

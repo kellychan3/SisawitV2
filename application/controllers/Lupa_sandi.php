@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Lupa_sandi extends CI_Controller {
 
-    private $api_base = 'http://103.150.101.10/api'; // Ganti sesuai kebutuhan
+    private $api_base = 'http://160.187.144.173/api'; // Ganti sesuai kebutuhan
 
     public function index() {
         $this->load->view('layout/auth_header');

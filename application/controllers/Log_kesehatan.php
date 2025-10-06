@@ -18,7 +18,7 @@ class Log_kesehatan extends CI_Controller
         // Ambil data aset
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/kesehatan",
+            CURLOPT_URL => "http://160.187.144.173/api/kesehatan",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",

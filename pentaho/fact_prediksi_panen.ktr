@@ -1036,7 +1036,7 @@ if (waktu_api != null) {
     </partitioning>
     <applicationType>TEXT PLAIN</applicationType>
     <method>GET</method>
-    <url>http://103.150.101.10/api/predict-result/harvest?model=rf&amp;refresh=false</url>
+    <url>http://160.187.144.173/api/predict-result/harvest?model=rf&amp;refresh=false</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

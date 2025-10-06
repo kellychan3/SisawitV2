@@ -919,7 +919,7 @@
     </partitioning>
     <applicationType>TEXT PLAIN</applicationType>
     <method>GET</method>
-    <url>http://103.150.101.10/api/kebun</url>
+    <url>http://160.187.144.173/api/kebun</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

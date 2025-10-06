@@ -10,13 +10,13 @@ class Aset extends CI_Controller
 
     private function getKategori()
     {
-        list($status, $data) = apiRequest("http://103.150.101.10/api/kategori-aset");
+        list($status, $data) = apiRequest("http://160.187.144.173/api/kategori-aset");
         return $data ?: [];
     }
 
     private function getKebun()
     {
-        list($status, $data) = apiRequest("http://103.150.101.10/api/kebun");
+        list($status, $data) = apiRequest("http://160.187.144.173/api/kebun");
         return $data ?: [];
     }
 
@@ -26,7 +26,7 @@ class Aset extends CI_Controller
         $organisasi_id = $this->session->userdata('organisasi_id');
         if (!$token || !$organisasi_id) redirect('authentication');
 
-        list($status, $allAssets) = apiRequest("http://103.150.101.10/api/aset");
+        list($status, $allAssets) = apiRequest("http://160.187.144.173/api/aset");
         $allAssets = $allAssets ?: [];
 
         $data['asset'] = $allAssets;
@@ -62,7 +62,7 @@ class Aset extends CI_Controller
             return;
         }
 
-        list($status, $existingAssets) = apiRequest("http://103.150.101.10/api/aset");
+        list($status, $existingAssets) = apiRequest("http://160.187.144.173/api/aset");
         if ($status !== 200 || !is_array($existingAssets)) {
             log_message('error', 'Gagal mengambil data aset.');
             set_alert('danger', 'Gagal mengambil data aset dari server.');
@@ -91,7 +91,7 @@ class Aset extends CI_Controller
         'jumlah_aset' => $jumlah_aset
     ]);
 
-    list($status, $result) = apiRequest("http://103.150.101.10/api/aset", 'POST', $postData);
+    list($status, $result) = apiRequest("http://160.187.144.173/api/aset", 'POST', $postData);
 
     if ($status == 201 || $status == 200) {
         set_alert('success', 'Aset berhasil ditambahkan.');
@@ -114,7 +114,7 @@ public function editAset()
         'kebun_id' => $kebun_id
     ]);
 
-    list($status, $response) = apiRequest("http://103.150.101.10/api/aset/$id", 'PUT', $data);
+    list($status, $response) = apiRequest("http://160.187.144.173/api/aset/$id", 'PUT', $data);
 
     if ($status == 200) {
         set_alert('success', 'Aset berhasil diubah.');
@@ -130,7 +130,7 @@ public function deleteAset()
     $token = $this->session->userdata('token');
     $id = $this->input->post('id');
 
-    list($status, $response) = apiRequest("http://103.150.101.10/api/aset/$id", 'DELETE');
+    list($status, $response) = apiRequest("http://160.187.144.173/api/aset/$id", 'DELETE');
 
     if ($status == 200 || $status == 204) {
         set_alert('success', 'Aset berhasil dihapus.');
@@ -146,7 +146,7 @@ public function getAllAssets()
     $token = $this->session->userdata('token');
     $curl = curl_init();
     curl_setopt_array($curl, [
-        CURLOPT_URL => "http://103.150.101.10/api/aset",
+        CURLOPT_URL => "http://160.187.144.173/api/aset",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             "Authorization: Bearer $token",

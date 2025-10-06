@@ -7,7 +7,7 @@ class Login_model extends CI_Model
     {
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/login",
+            CURLOPT_URL => "http://160.187.144.173/api/login",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

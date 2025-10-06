@@ -777,7 +777,7 @@
     </partitioning>
     <applicationType>TEXT PLAIN</applicationType>
     <method>GET</method>
-    <url>http://103.150.101.10/api/organisasi/users</url>
+    <url>http://160.187.144.173/api/organisasi/users</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

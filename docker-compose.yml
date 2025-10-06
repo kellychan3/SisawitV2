@@ -12,7 +12,7 @@ services:
       - db
     networks:
       - sisawitnet
-      - app_network
+      # - app_network
   db:
     image: mysql:8.0
     command: --sql-mode=""

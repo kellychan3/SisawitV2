@@ -19,7 +19,7 @@ class Log_pengguna extends CI_Controller
         // Ambil data dari API
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/log",
+            CURLOPT_URL => "http://160.187.144.173/api/log",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",

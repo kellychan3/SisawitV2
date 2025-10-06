@@ -34,7 +34,7 @@ class Kesehatan extends CI_Controller
         $curl = curl_init();
         
         curl_setopt_array($curl, [
-            CURLOPT_URL => 'http://103.150.101.10/api/kebun',
+            CURLOPT_URL => 'http://160.187.144.173/api/kebun',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",
@@ -94,7 +94,7 @@ class Kesehatan extends CI_Controller
 
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL => "http://103.150.101.10/api/kesehatan",
+            CURLOPT_URL => "http://160.187.144.173/api/kesehatan",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_HTTPHEADER => [
