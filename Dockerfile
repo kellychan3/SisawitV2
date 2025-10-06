@@ -53,6 +53,12 @@ RUN echo "session.save_path = \"/var/www/html/application/cache\"" \
     >> /usr/local/etc/php/conf.d/docker-php-session.ini
 
 # ===============================
+# Buat folder log untuk aplikasi
+# ===============================
+RUN mkdir -p /var/www/html/application/logs && \
+    chown -R www-data:www-data /var/www/html/application/logs
+
+# ===============================
 # Salin Pentaho PDI ZIP dan unzip
 # ===============================
 COPY pentaho/pdi.zip /opt/
