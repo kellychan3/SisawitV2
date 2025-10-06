@@ -12,9 +12,9 @@ services:
       - db
     networks:
       - sisawitnet
-      # - app_network
+      - app_network
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     command: --sql-mode=""
     restart: always
     environment:
