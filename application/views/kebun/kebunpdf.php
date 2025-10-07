@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <h3 style="text-align: center;">Laporan Data Kebun SisawitV2</h3>
+    <h3 style="text-align: center;">Laporan Data Kebun SawitXplain</h3>
     <table>
         <thead>
             <tr>

@@ -12,24 +12,24 @@ services:
       - db
     networks:
       - sisawitnet
-      - app_network
+      # - app_network
   db:
     image: mysql:5.7
     command: --sql-mode=""
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
-      - data:/var/lib/mysql
+      - data_2:/var/lib/mysql
       - ./docker/mysql-init:/docker-entrypoint-initdb.d
     networks:
       - sisawitnet
 
 volumes:
-  data:
+  data_2:
 
 networks:
   sisawitnet:

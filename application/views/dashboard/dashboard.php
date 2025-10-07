@@ -15,6 +15,72 @@
 
 
     <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <style>
+        /* === Refresh Section Styles === */
+        .refresh-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            backdrop-filter: blur(6px);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .refresh-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.4;
+            font-size: 13px;
+        }
+
+        .refresh-info label:first-child {
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .refresh-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .refresh-icon {
+            font-size: 16px;
+        }
+
+        .refresh-status {
+            margin-top: 8px;
+            font-size: 13px;
+            font-style: italic;
+            color: #f8f8f8;
+        }
+    </style>
+
 </head>
 <body>
     <div class="page-wrapper">
@@ -38,22 +104,26 @@
 
             <div class="filter-box">
                 <div class="refresh-form">
-                    <form method="post" action="<?= base_url('dashboard/refresh_data'); ?>" style="display: flex; align-items: center; gap: 16px; padding: 8px 16px;">
-    
-                        <?php if ($last_updated): ?>
-                            <div style="display: flex; flex-direction: column; justify-content: center; font-family: inherit; font-size: 13px; color: white; line-height: 1.4;">
-                                <label>Terakhir Diperbarui</label>
-                                <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
-                            </div>
-                        <?php endif; ?>
+                    <form id="refreshForm" method="post">
+    <div class="refresh-card">
+        <?php if ($last_updated): ?>
+            <div class="refresh-info">
+                <label>Terakhir Diperbarui</label>
+                <label><?= date('d/m/Y H:i:s', strtotime($last_updated)) ?></label>
+            </div>
+        <?php endif; ?>
 
-                        <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user'); ?>">
+        <input type="hidden" name="id_user" value="<?= $this->session->userdata('id_user'); ?>">
 
-                        <button type="submit" style="padding: 6px 12px; background-color: white; color: black; font-weight: 600; border: none; cursor: pointer;">
-                            🔄 Perbarui Dashboard
-                        </button>
-                        
-                    </form>
+        <button type="submit" class="refresh-btn" id="refreshButton">
+            <span class="refresh-icon">🔄</span>
+            <span class="refresh-text">Perbarui Dashboard</span>
+        </button>
+    </div>
+
+    <div id="refreshStatus" class="refresh-status"></div>
+</form>
+
 
                 </div>
      
@@ -778,4 +848,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<script>
+$(document).ready(function() {
+    $('#refreshForm').on('submit', function(e) {
+        e.preventDefault(); // cegah form reload halaman
+
+        const btn = $('#refreshButton');
+        const statusDiv = $('#refreshStatus');
+        const formData = $(this).serialize();
+
+        // Ubah tampilan tombol jadi loading
+        btn.prop('disabled', true);
+        btn.html('<span class="refresh-icon">⏳</span> Memproses...');
+        statusDiv.text('Dashboard sedang diproses... silakan tunggu sebentar.');
+
+        $.post('<?= base_url("dashboard/refresh_data"); ?>', formData, function(response) {
+            // Setelah proses berhasil, tampilkan pesan sukses
+            statusDiv.text('✅ Dashboard sedang diproses di latar belakang. Silakan reload halaman ini beberapa saat lagi untuk melihat hasilnya.');
+        }).fail(function() {
+            // Jika error
+            statusDiv.text('❌ Terjadi kesalahan saat memulai proses refresh.');
+        }).always(function() {
+            // Kembalikan tombol ke keadaan semula setelah 3 detik
+            setTimeout(() => {
+                btn.prop('disabled', false);
+                btn.html('<span class="refresh-icon">🔄</span> Perbarui Dashboard');
+            }, 3000);
+        });
+    });
+});
+</script>
+
+
 </body>

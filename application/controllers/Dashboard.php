@@ -216,23 +216,24 @@ class Dashboard extends CI_Controller
     }
 
     public function refresh_data()
-    {
-        $user    = $this->getUserData();
-        $id_user = $this->input->post('id_user');
+{
+    $user    = $this->getUserData();
+    $id_user = $this->input->post('id_user');
 
-        // Jalankan Pentaho job utama (default main_job.kjb)
-        if (run_pentaho_job($id_user, 'main_job.kjb')) {
-            $this->db->insert('dashboard_refresh_log', [
-                'id_organisasi' => $user['organisasi_id'],
-                'id_user'       => $id_user,
-                'refreshed_at'  => date('Y-m-d H:i:s'),
-            ]);
-            set_alert('success', 'Refresh berhasil!');
-        } else {
-            set_alert('danger', 'Refresh gagal. Cek log.');
-        }
+    if (run_pentaho_job($id_user, 'main_job.kjb')) {
+        $this->db->insert('dashboard_refresh_log', [
+            'id_organisasi' => $user['organisasi_id'],
+            'id_user'       => $id_user,
+            'refreshed_at'  => date('Y-m-d H:i:s'),
+        ]);
 
-        redirect('dashboard');
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error']);
     }
+}
+
+
+
 
 }

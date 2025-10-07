@@ -47,7 +47,7 @@
 					<img src="<?= base_url(); ?>assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
 				</div>
 				<div>
-					<h4 class="logo-text"><strong>SisawitV2</strong></h4>
+					<h4 class="logo-text"><strong>SawitXplain</strong></h4>
 				</div>
 			</div>
 			
