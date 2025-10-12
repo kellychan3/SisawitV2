@@ -23,7 +23,7 @@
                             <div class="card-body">
                                 <div class="border p-4 rounded">
                                     <div class="text-center">
-                                        <h3 class="">Sisawit V2 - Masuk</h3>
+                                        <h3 class="">SawitXplain - Masuk</h3>
                                     </div>
 
                                     <?= $this->session->flashdata('message'); ?>
