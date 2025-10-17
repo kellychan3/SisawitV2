@@ -3,7 +3,7 @@
 ## 📚 Table of Contents
 
 - [Project Overview](#project-overview)
-- [Project Statement](#project-statement)
+- [Problem Statement](#project-statement)
 - [Objectives](#objectives)
 - [System Architecture](#system-architecture)
 - [Tech Stack](#tech-stack)
@@ -69,14 +69,12 @@ SisawitV2 consists of four integrated components:
 - Login using:
     - Email: pemilik1@example.com
     - Password: password
+- **Main Dashboard (Harvest Data)**
+  <img width="1578" height="853" alt="Screenshot 2025-08-29 095419" src="https://github.com/user-attachments/assets/05ee70f8-405e-4468-97c5-3266031aab2c" />
+- **Prediction Dashboard (Forecasted Yield)**
+  <img width="1441" height="828" alt="Screenshot 2025-08-29 095459" src="https://github.com/user-attachments/assets/6f851e79-313b-465b-8035-37b0d47365a3" />
 
-**Main Dashboard (Harvest Data)**
-<img width="1578" height="853" alt="Screenshot 2025-08-29 095419" src="https://github.com/user-attachments/assets/05ee70f8-405e-4468-97c5-3266031aab2c" />
-
-**Prediction Dashboard (Forecasted Yield)**
-<img width="1441" height="828" alt="Screenshot 2025-08-29 095459" src="https://github.com/user-attachments/assets/6f851e79-313b-465b-8035-37b0d47365a3" />
-
-## Instalation
+## Installation
 #### 1. Clone Repository
 
 ```bash
