@@ -46,7 +46,8 @@ To develop a Business Intelligence (BI) dashboard that comprehensively displays 
 
 ## System Architecture
 SisawitV2 consists of four integrated components:
-<img width="848" height="462" alt="image" src="https://github.com/user-attachments/assets/ca4d5f87-7189-494c-a022-fbebcaa0b2ca" />
+<img width="885" height="496" alt="image" src="https://github.com/user-attachments/assets/68c81292-2e94-4edf-bf10-26336463c7b8" />
+
 - SawitKu (Mobile App): Serves as the input platform for field operational data, including planting, fertilizing, and harvesting activities.
 - Pentaho Data Integration (ETL): Performs the Extract, Transform, and Load (ETL) process to move and structure data according to the defined data warehouse schema.
   <img width="1738" height="547" alt="Screenshot 2025-10-17 163000" src="https://github.com/user-attachments/assets/3822aac0-03a2-46bc-aa79-44d4b37391e7" />
