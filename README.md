@@ -46,15 +46,13 @@ To develop a Business Intelligence (BI) dashboard that comprehensively displays 
 
 ## System Architecture
 SisawitV2 consists of four integrated components:
+<img width="848" height="462" alt="image" src="https://github.com/user-attachments/assets/ca4d5f87-7189-494c-a022-fbebcaa0b2ca" />
 - SawitKu (Mobile App): Serves as the input platform for field operational data, including planting, fertilizing, and harvesting activities.
 - Pentaho Data Integration (ETL): Performs the Extract, Transform, and Load (ETL) process to move and structure data according to the defined data warehouse schema.
   <img width="1738" height="547" alt="Screenshot 2025-10-17 163000" src="https://github.com/user-attachments/assets/3822aac0-03a2-46bc-aa79-44d4b37391e7" />
-
 - MySQL Data Warehouse: Acts as the repository that stores integrated and structured plantation data for analysis.
   <img width="824" height="740" alt="Fact Constellation drawio (1)" src="https://github.com/user-attachments/assets/2d1d1693-271e-44e2-9ee6-b9c2ed6e2a83" />
-
 - SisawitV2 Dashboard (Web App): Visualizes harvest results and yield predictions through an interactive BI dashboard. Additional plantation data such as planting and fertilizing records are accessible through dedicated table views in the side menu.
-<img width="848" height="462" alt="image" src="https://github.com/user-attachments/assets/ca4d5f87-7189-494c-a022-fbebcaa0b2ca" />
 
 ## Tech Stack
 - Frontend: PHP 8.0
