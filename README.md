@@ -1,5 +1,4 @@
-<img width="1738" height="547" alt="Screenshot 2025-10-17 163000" src="https://github.com/user-attachments/assets/316c6541-93b9-43bd-be9c-c7fbf5585c53" /><img width="848" height="462" alt="image" src="https://github.com/user-attachments/assets/6c5bb92d-26b5-4b05-8726-bca934237f2a" /># 🌴 SisawitV2 - Palm Oil Productivity Monitoring System (Version 2)
-
+# 🌴 SisawitV2 - Palm Oil Productivity Monitoring System (Version 2)
 
 ## 📚 Table of Contents
 
